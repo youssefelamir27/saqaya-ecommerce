@@ -1,19 +1,18 @@
 <template>
   <div id="app">
-    <AppHeader />
-    <main class="page-content">
+    <MainLayout>
       <router-view />
-    </main>
-    <AppFooter />
+    </MainLayout>
   </div>
 </template>
+
 <script>
-import AppHeader from './components/Global/Header.vue';
-import AppFooter from './components/Global/Footer.vue';
+import MainLayout from '@/layout/MainLayout.vue';
+
 export default {
+  name: 'App',
   components: {
-    AppHeader,
-    AppFooter,
+    MainLayout,
   },
 };
 </script>
@@ -24,6 +23,7 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   display: flex;
@@ -46,9 +46,5 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
-}
-.page-content {
-  flex: 1;
-  padding-top: 100px;
 }
 </style>
