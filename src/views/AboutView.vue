@@ -26,8 +26,8 @@
       </div>
       <div class="story-image">
         <img
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80"
-          alt="Shopping women"
+          src="https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp"
+          alt="Our products"
         />
       </div>
     </section>
@@ -113,24 +113,33 @@ export default {
         { icon: '🛍️', value: '45.5k', label: 'Customer active in our site' },
         { icon: '💵', value: '25k', label: 'Annual gross sale in our site' },
       ],
-      team: [
-        {
-          name: 'Tom Cruise',
-          role: 'Founder & Chairman',
-          image: 'https://randomuser.me/api/portraits/men/32.jpg',
-        },
-        {
-          name: 'Emma Watson',
-          role: 'Managing Director',
-          image: 'https://randomuser.me/api/portraits/women/44.jpg',
-        },
-        {
-          name: 'Will Smith',
-          role: 'Product Designer',
-          image: 'https://randomuser.me/api/portraits/men/68.jpg',
-        },
-      ],
+      team: [],
     };
+  },
+
+  async mounted() {
+    await this.fetchTeam();
+  },
+
+  methods: {
+    async fetchTeam() {
+      try {
+        const res = await fetch('https://dummyjson.com/users?limit=3');
+        const data = await res.json();
+        const roles = [
+          'Founder & Chairman',
+          'Managing Director',
+          'Product Designer',
+        ];
+        this.team = data.users.map((user, i) => ({
+          name: `${user.firstName} ${user.lastName}`,
+          role: roles[i],
+          image: user.image,
+        }));
+      } catch (err) {
+        console.error('Error fetching team:', err);
+      }
+    },
   },
 };
 </script>
@@ -369,5 +378,14 @@ export default {
 .service-item p {
   font-size: 13px;
   color: #777777;
+}
+@media (max-width: 640px) {
+  .story-section {
+    grid-template-columns: 1fr;
+    gap: 0px;
+  }
+  .stats-section {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>

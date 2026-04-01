@@ -5,7 +5,7 @@ import ProductsView from '@/views/ProductsView.vue';
 import ErrorView from '@/views/ErrorView.vue';
 import ContactView from '@/views/ContactView.vue';
 import AboutView from '@/views/AboutView.vue';
-import ViewProduct from '@/views/ViewProduct.vue';
+import productDetailView from '@/views/ProductDetailView.vue';
 import CartView from '@/views/CartView.vue';
 Vue.use(VueRouter);
 
@@ -43,7 +43,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/product/:id',
     name: 'view-product',
-    component: ViewProduct,
+    component: productDetailView,
   },
   {
     path: '*',
