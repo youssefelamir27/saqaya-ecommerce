@@ -10,10 +10,7 @@
     <div class="contact-wrapper">
       <!-- Left Image -->
       <div class="contact-image">
-        <img
-          src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80"
-          alt="Contact us"
-        />
+        <img :src="contactImage" alt="Contact us" />
       </div>
 
       <!-- Right Content -->
@@ -21,7 +18,9 @@
         <!-- Call Us -->
         <div class="contact-card">
           <div class="contact-card-header">
-            <div class="card-icon">📞</div>
+            <div class="card-icon">
+              <i class="fas fa-phone" style="color: white"></i>
+            </div>
             <h3>Call us</h3>
           </div>
           <p>We are available 24/7, 7 days a week.</p>
@@ -75,6 +74,7 @@ export default {
 
   data() {
     return {
+      contactImage: '',
       form: {
         name: '',
         email: '',
@@ -83,7 +83,24 @@ export default {
     };
   },
 
+  async mounted() {
+    await this.fetchContactImage();
+  },
+
   methods: {
+    async fetchContactImage() {
+      try {
+        const res = await fetch(
+          'https://dummyjson.com/products/category/home-decoration'
+        );
+        console.log('Fetch response:', res);
+        const data = await res.json();
+        this.contactImage = data.products[1].images;
+      } catch (err) {
+        console.error('Error fetching image:', err);
+      }
+    },
+
     sendMessage() {
       if (!this.form.name || !this.form.email || !this.form.message) {
         alert('Please fill in all fields.');
@@ -274,6 +291,15 @@ export default {
 .send-btn:hover {
   background: #c03333;
 }
+@media (max-width: 1000px) {
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .contact-image {
+    display: none;
+  }
+}
+
 @media (max-width: 850px) {
   .form-row {
     grid-template-columns: 1fr;
