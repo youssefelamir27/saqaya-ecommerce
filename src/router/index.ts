@@ -6,6 +6,7 @@ import ErrorView from '@/views/ErrorView.vue';
 import ContactView from '@/views/ContactView.vue';
 import AboutView from '@/views/AboutView.vue';
 import ViewProduct from '@/views/ViewProduct.vue';
+import CartView from '@/views/CartView.vue';
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -30,9 +31,9 @@ const routes: Array<RouteConfig> = [
     component: ContactView,
   },
   {
-    path: '/error',
-    name: 'error',
-    component: ErrorView,
+    path: '/cart',
+    name: 'cart',
+    component: CartView,
   },
   {
     path: '/products',
