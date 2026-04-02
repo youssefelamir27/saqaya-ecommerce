@@ -238,6 +238,12 @@ export default {
         { name: 'Skincare', icon: '🧴' },
         { name: 'Tools', icon: '🪞' },
       ],
+      cart: localStorage.getItem('cart')
+        ? JSON.parse(localStorage.getItem('cart'))
+        : [],
+      quantity: localStorage.getItem('cartquantity')
+        ? JSON.parse(localStorage.getItem('cartquantity'))
+        : 0,
     };
   },
 
@@ -249,8 +255,8 @@ export default {
     async fetchProducts() {
       try {
         const [beautyRes, fragranceRes] = await Promise.all([
-          fetch('https://dummyjson.com/products/category/beauty?limit=20'),
-          fetch('https://dummyjson.com/products/category/fragrances?limit=20'),
+          fetch('https://dummyjson.com/products/category/beauty'),
+          fetch('https://dummyjson.com/products/category/fragrances'),
         ]);
 
         const beautyData = await beautyRes.json();
@@ -280,7 +286,11 @@ export default {
     },
 
     addToCart(product) {
-      this.$store.dispatch('addToCart', product);
+      this.cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+      this.quantity++;
+      localStorage.setItem('cartquantity', JSON.stringify(this.quantity));
+      window.dispatchEvent(new Event('cart-updated'));
       alert(`${product.title} added to cart!`);
     },
 
