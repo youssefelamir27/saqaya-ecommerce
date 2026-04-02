@@ -1,71 +1,90 @@
 <template>
   <footer class="footer">
-    <div class="footer-main">
-      <div class="footer-col">
-        <h3 class="footer-logo">Exclusive</h3>
-        <h4>Subscribe</h4>
-        <p>Get 10% off your first order</p>
-        <div class="email-input">
-          <input type="text" placeholder="Enter your email" />
-          <i class="fas fa-paper-plane"></i>
+    <div class="footer__main">
+      <!-- Subscribe Column -->
+      <div class="footer__col">
+        <h3 class="footer__logo">Exclusive</h3>
+        <h4 class="footer__col-title">Subscribe</h4>
+        <p class="footer__col-text">Get 10% off your first order</p>
+        <div class="footer__email">
+          <input
+            class="footer__email-input"
+            type="text"
+            placeholder="Enter your email"
+          />
+          <i class="footer__email-icon fas fa-paper-plane"></i>
         </div>
       </div>
 
-      <div class="footer-col">
-        <h4>Support</h4>
-        <p>111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.</p>
-        <p>exclusive@gmail.com</p>
-        <p>+88015-88888-9999</p>
+      <!-- Support Column -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Support</h4>
+        <p class="footer__col-text">
+          111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
+        </p>
+        <p class="footer__col-text">exclusive@gmail.com</p>
+        <p class="footer__col-text">+88015-88888-9999</p>
       </div>
 
-      <div class="footer-col">
-        <h4>Account</h4>
-        <ul>
-          <li>My Account</li>
-          <li>Login / Register</li>
-          <li>Cart</li>
-          <li>Wishlist</li>
-          <li>Shop</li>
+      <!-- Account Column -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Account</h4>
+        <ul class="footer__list">
+          <li class="footer__list-item">My Account</li>
+          <li class="footer__list-item">Login / Register</li>
+          <li class="footer__list-item">Cart</li>
+          <li class="footer__list-item">Wishlist</li>
+          <li class="footer__list-item">Shop</li>
         </ul>
       </div>
 
-      <div class="footer-col">
-        <h4>Quick Link</h4>
-        <ul>
-          <li>Privacy Policy</li>
-          <li>Terms Of Use</li>
-          <li>FAQ</li>
-          <li>Contact</li>
+      <!-- Quick Link Column -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Quick Link</h4>
+        <ul class="footer__list">
+          <li class="footer__list-item">Privacy Policy</li>
+          <li class="footer__list-item">Terms Of Use</li>
+          <li class="footer__list-item">FAQ</li>
+          <li class="footer__list-item">Contact</li>
         </ul>
       </div>
 
-      <div class="footer-col">
-        <h4>Download App</h4>
-        <p class="app-save">Save $3 with App New User Only</p>
-        <div class="qr-row">
-          <div class="qr-placeholder"></div>
-          <div class="store-btns">
-            <div class="store-btn">
-              <i class="fab fa-google-play"></i>
-              <span>GET IT ON<br /><strong>Google Play</strong></span>
+      <!-- Download App Column -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Download App</h4>
+        <p class="footer__col-text footer__col-text--muted">
+          Save $3 with App New User Only
+        </p>
+        <div class="footer__qr">
+          <div class="footer__qr-placeholder"></div>
+          <div class="footer__store-btns">
+            <div class="footer__store-btn">
+              <i class="footer__store-icon fab fa-google-play"></i>
+              <span class="footer__store-text"
+                >GET IT ON<br /><strong>Google Play</strong></span
+              >
             </div>
-            <div class="store-btn">
-              <i class="fab fa-apple"></i>
-              <span>Download on the<br /><strong>App Store</strong></span>
+            <div class="footer__store-btn">
+              <i class="footer__store-icon fab fa-apple"></i>
+              <span class="footer__store-text"
+                >Download on the<br /><strong>App Store</strong></span
+              >
             </div>
           </div>
         </div>
-        <div class="social-icons">
-          <i class="fab fa-facebook-f"></i>
-          <i class="fab fa-twitter"></i>
-          <i class="fab fa-instagram"></i>
-          <i class="fab fa-linkedin-in"></i>
+        <div class="footer__social">
+          <i class="footer__social-icon fab fa-facebook-f"></i>
+          <i class="footer__social-icon fab fa-twitter"></i>
+          <i class="footer__social-icon fab fa-instagram"></i>
+          <i class="footer__social-icon fab fa-linkedin-in"></i>
         </div>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <p>&#169; Copyright Rimel 2022. All right reserved</p>
+    <div class="footer__bottom">
+      <p class="footer__bottom-text">
+        &#169; Copyright Rimel 2022. All right reserved
+      </p>
     </div>
   </footer>
 </template>
@@ -77,13 +96,15 @@ export default {
 </script>
 
 <style scoped>
+/* Block */
 .footer {
-  background-color: black;
+  background-color: #000000;
   color: #ffffff;
   margin-top: 80px;
 }
 
-.footer-main {
+/* Elements */
+.footer__main {
   display: flex;
   justify-content: space-between;
   padding: 60px 80px;
@@ -91,34 +112,40 @@ export default {
   flex-wrap: nowrap;
 }
 
-.footer-col {
+.footer__col {
   display: flex;
   flex-direction: column;
   gap: 16px;
   min-width: 160px;
 }
 
-.footer-logo {
+.footer__logo {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 1px;
   margin: 0;
 }
 
-.footer-col h4 {
+.footer__col-title {
   font-size: 16px;
   font-weight: 600;
   margin: 0;
 }
 
-.footer-col p {
+.footer__col-text {
   font-size: 13px;
   color: #cccccc;
   margin: 0;
   line-height: 1.6;
 }
 
-.email-input {
+/* Modifier */
+.footer__col-text--muted {
+  font-size: 11px;
+  color: #aaaaaa;
+}
+
+.footer__email {
   display: flex;
   align-items: center;
   border: 1px solid #ffffff;
@@ -127,7 +154,7 @@ export default {
   gap: 8px;
 }
 
-.email-input input {
+.footer__email-input {
   background: transparent;
   border: none;
   outline: none;
@@ -136,17 +163,17 @@ export default {
   width: 100%;
 }
 
-.email-input input::placeholder {
+.footer__email-input::placeholder {
   color: #aaaaaa;
 }
 
-.email-input .fa-paper-plane {
+.footer__email-icon {
   color: #ffffff;
   cursor: pointer;
   font-size: 14px;
 }
 
-.footer-col ul {
+.footer__list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -155,29 +182,24 @@ export default {
   gap: 12px;
 }
 
-.footer-col ul li {
+.footer__list-item {
   font-size: 13px;
   color: #cccccc;
   cursor: pointer;
   transition: color 0.2s;
 }
 
-.footer-col ul li:hover {
+.footer__list-item:hover {
   color: #ffffff;
 }
 
-.app-save {
-  font-size: 11px;
-  color: #aaaaaa;
-}
-
-.qr-row {
+.footer__qr {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
-.qr-placeholder {
+.footer__qr-placeholder {
   width: 60px;
   height: 60px;
   background-color: #ffffff;
@@ -185,13 +207,13 @@ export default {
   flex-shrink: 0;
 }
 
-.store-btns {
+.footer__store-btns {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.store-btn {
+.footer__store-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -202,127 +224,117 @@ export default {
   cursor: pointer;
 }
 
-.store-btn i {
+.footer__store-icon {
   font-size: 18px;
   color: #ffffff;
 }
 
-.store-btn span {
+.footer__store-text {
   font-size: 10px;
   color: #ffffff;
   line-height: 1.4;
 }
 
-.social-icons {
+.footer__social {
   display: flex;
   gap: 16px;
   margin-top: 8px;
   justify-content: center;
 }
 
-.social-icons i {
+.footer__social-icon {
   font-size: 16px;
   cursor: pointer;
   color: #cccccc;
   transition: color 0.2s;
 }
 
-.social-icons i:hover {
+.footer__social-icon:hover {
   color: #ffffff;
 }
 
-.footer-bottom {
+.footer__bottom {
   border-top: 1px solid #333333;
   text-align: center;
   padding: 20px;
 }
 
-.footer-bottom p {
+.footer__bottom-text {
   font-size: 13px;
   color: #888888;
   margin: 0;
 }
+
 /* Tablet */
 @media (max-width: 1024px) {
-  .footer-main {
+  .footer__main {
     padding: 40px 40px;
     gap: 24px;
   }
 
-  .footer-col {
+  .footer__col {
     min-width: 140px;
   }
 }
-/* ///////////////////// */
+/* exclusive for 892 widtg */
 @media (max-width: 892px) {
-  .footer-main {
-    display: flex;
+  .footer__main {
     justify-content: space-around;
     flex-wrap: wrap;
-    padding: 40px 40px;
-    gap: 24px;
-  }
-
-  .footer-col:nth-child(-n + 2) {
-    min-width: 140px;
   }
 }
+
 /* Mobile */
 @media (max-width: 768px) {
-  .footer-main {
-    display: flex;
+  .footer__main {
     flex-direction: column;
     padding: 40px 24px;
     gap: 32px;
   }
 
-  .footer-col {
+  .footer__col {
     width: 100%;
     min-width: unset;
   }
 
-  .email-input {
+  .footer__email {
     width: 100%;
   }
 
-  .qr-row {
+  .footer__qr {
     flex-direction: row;
     justify-content: center;
   }
 
-  .social-icons {
+  .footer__social {
     justify-content: center;
   }
 
-  .footer-bottom p {
+  .footer__bottom-text {
     font-size: 12px;
   }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
-  .footer-main {
+  .footer__main {
     padding: 32px 16px;
   }
 
-  .footer-logo {
+  .footer__logo {
     font-size: 18px;
   }
 
-  .qr-row {
+  .footer__qr {
     flex-direction: column;
     justify-content: center;
   }
 
-  .store-btns {
+  .footer__store-btns {
     width: 100%;
   }
 
-  .store-btn {
-    justify-content: center;
-  }
-
-  .social-icons {
+  .footer__store-btn {
     justify-content: center;
   }
 }

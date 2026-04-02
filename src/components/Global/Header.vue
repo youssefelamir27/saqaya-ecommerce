@@ -1,49 +1,67 @@
 <template>
   <div class="header">
-    <div class="header-container">
+    <div class="header__container">
       <!-- Logo -->
-      <h6 class="logo">Exclusive</h6>
+      <h6 class="header__logo">Exclusive</h6>
 
       <!-- Desktop Navigation -->
-      <nav class="nav" :class="{ active: isMenuOpen }">
-        <router-link to="/" @click="closeMenu" exact>Home</router-link>
-        <router-link to="/contact" @click="closeMenu">Contact</router-link>
-        <router-link to="/about" @click="closeMenu">About</router-link>
+      <nav class="header__nav" :class="{ 'header__nav--open': isMenuOpen }">
+        <router-link class="header__nav-link" to="/" @click="closeMenu" exact
+          >Home</router-link
+        >
+        <router-link class="header__nav-link" to="/contact" @click="closeMenu"
+          >Contact</router-link
+        >
+        <router-link class="header__nav-link" to="/about" @click="closeMenu"
+          >About</router-link
+        >
 
-        <!-- Mobile Search and Cart (visible only on mobile) -->
-        <div class="mobile-actions">
-          <div class="search-bar-mobile">
-            <input type="text" placeholder="What are you looking for?" />
-            <i class="fas fa-search"></i>
+        <!-- Mobile Search and Cart -->
+        <div class="header__mobile-actions">
+          <div class="header__search header__search--mobile">
+            <input
+              class="header__search-input"
+              type="text"
+              placeholder="What are you looking for?"
+            />
+            <i class="header__search-icon fas fa-search"></i>
           </div>
-          <div class="cart-icon-mobile">
+          <div class="header__cart header__cart--mobile">
             <i class="fas fa-cart-plus"></i>
-            <span class="cart-badge" v-if="!isErrorPage">2</span>
+            <span class="header__cart-badge" v-if="!isErrorPage">{{
+              quantity
+            }}</span>
           </div>
         </div>
       </nav>
 
       <!-- Desktop Right Side -->
-      <div class="desktop-actions">
-        <div class="search-bar">
-          <input type="text" placeholder="What are you looking for?" />
-          <i class="fas fa-search"></i>
+      <div class="header__actions">
+        <div class="header__search">
+          <input
+            class="header__search-input"
+            type="text"
+            placeholder="What are you looking for?"
+          />
+          <i class="header__search-icon fas fa-search"></i>
         </div>
-        <div class="cart-icon">
+        <div class="header__cart">
           <i class="fas fa-cart-plus"></i>
-          <span class="cart-badge" v-if="!isErrorPage">2</span>
+          <span class="header__cart-badge" v-if="!isErrorPage">{{
+            quantity
+          }}</span>
         </div>
       </div>
 
-      <!-- Hamburger Menu Button (Mobile) -->
+      <!-- Hamburger -->
       <button
-        class="hamburger"
+        class="header__hamburger"
+        :class="{ 'header__hamburger--active': isMenuOpen }"
         @click="toggleMenu"
-        :class="{ active: isMenuOpen }"
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
       </button>
     </div>
   </div>
@@ -55,6 +73,9 @@ export default {
   data() {
     return {
       isMenuOpen: false,
+      quantity: localStorage.getItem('cartquantity')
+        ? JSON.parse(localStorage.getItem('cartquantity'))
+        : 0,
     };
   },
   computed: {
@@ -65,24 +86,26 @@ export default {
   methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
-      if (this.isMenuOpen) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
+      document.body.style.overflow = this.isMenuOpen ? 'hidden' : '';
     },
     closeMenu() {
       this.isMenuOpen = false;
       document.body.style.overflow = '';
     },
+    syncCartQuantity() {
+      this.quantity = localStorage.getItem('cartquantity')
+        ? JSON.parse(localStorage.getItem('cartquantity'))
+        : 0;
+    },
   },
-  beforeUnmount() {
-    document.body.style.overflow = '';
+  created() {
+    window.addEventListener('cart-updated', this.syncCartQuantity);
   },
 };
 </script>
 
-<style scoped>
+<style>
+/* Block */
 .header {
   background-color: #ffffff;
   border-bottom: 1px solid #f0f0f0;
@@ -94,7 +117,8 @@ export default {
   z-index: 1000;
 }
 
-.header-container {
+/* Elements */
+.header__container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -105,8 +129,7 @@ export default {
   gap: 2rem;
 }
 
-/* Logo */
-.logo {
+.header__logo {
   font-size: 22px;
   font-weight: 700;
   color: #000000;
@@ -115,15 +138,14 @@ export default {
   flex-shrink: 0;
 }
 
-/* Desktop Navigation */
-.nav {
+.header__nav {
   display: flex;
   align-items: center;
   gap: 40px;
   flex: 1;
 }
 
-.nav a {
+.header__nav-link {
   text-decoration: none;
   color: #000000;
   font-size: 15px;
@@ -131,7 +153,7 @@ export default {
   position: relative;
 }
 
-.nav a::after {
+.header__nav-link::after {
   content: '';
   width: 0;
   height: 2px;
@@ -139,22 +161,21 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  transition: 1s;
+  transition: width 1s;
 }
 
-.nav a.router-link-active::after {
+.header__nav-link.router-link-active::after {
   width: 100%;
 }
 
-/* Desktop Actions */
-.desktop-actions {
+.header__actions {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   flex-shrink: 0;
 }
 
-.search-bar {
+.header__search {
   display: flex;
   align-items: center;
   background-color: #f5f5f5;
@@ -163,7 +184,7 @@ export default {
   width: 240px;
 }
 
-.search-bar input {
+.header__search-input {
   border: none;
   background: transparent;
   outline: none;
@@ -172,37 +193,37 @@ export default {
   width: 100%;
 }
 
-.search-bar input::placeholder {
+.header__search-input::placeholder {
   color: #999999;
 }
 
-.search-bar .fa-search {
+.header__search-icon {
   color: #000000;
   font-size: 14px;
   cursor: pointer;
   transition: color 0.3s;
 }
 
-.search-bar .fa-search:hover {
+.header__search-icon:hover {
   color: #42b983;
 }
 
-.cart-icon {
+.header__cart {
   position: relative;
   cursor: pointer;
 }
 
-.cart-icon .fa-cart-plus {
+.header__cart .fa-cart-plus {
   font-size: 20px;
   color: #000000;
   transition: color 0.3s;
 }
 
-.cart-icon:hover .fa-cart-plus {
+.header__cart:hover .fa-cart-plus {
   color: #42b983;
 }
 
-.cart-badge {
+.header__cart-badge {
   position: absolute;
   top: -8px;
   right: -8px;
@@ -218,12 +239,11 @@ export default {
   justify-content: center;
 }
 
-/* Mobile elements - hidden by default */
-.mobile-actions {
+.header__mobile-actions {
   display: none;
 }
 
-.hamburger {
+.header__hamburger {
   display: none;
   flex-direction: column;
   gap: 4px;
@@ -234,56 +254,57 @@ export default {
   flex-shrink: 0;
 }
 
-.hamburger span {
+.header__hamburger-line {
   width: 25px;
   height: 2px;
   background-color: #000000;
   transition: all 0.3s ease;
+  display: block;
 }
 
-.hamburger.active span:nth-child(1) {
+/* Modifiers */
+.header__hamburger--active .header__hamburger-line:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
 
-.hamburger.active span:nth-child(2) {
+.header__hamburger--active .header__hamburger-line:nth-child(2) {
   opacity: 0;
 }
 
-.hamburger.active span:nth-child(3) {
+.header__hamburger--active .header__hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Tablet Styles */
+/* Tablet */
 @media (max-width: 992px) {
-  .header-container {
+  .header__container {
     gap: 1rem;
     padding: 0 1.5rem;
   }
 
-  .nav {
+  .header__nav {
     gap: 30px;
   }
 
-  .search-bar {
+  .header__search {
     width: 200px;
   }
 }
 
-/* Mobile Styles */
+/* Mobile */
 @media (max-width: 768px) {
-  .header-container {
+  .header__container {
     padding: 0 1rem;
   }
 
-  /* Hide desktop navigation and actions */
-  .nav {
+  .header__nav {
     position: fixed;
     top: 0;
     left: -100%;
     width: 80%;
     max-width: 350px;
     height: 100vh;
-    background-color: white;
+    background-color: #ffffff;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     transition: left 0.3s ease;
     z-index: 999;
@@ -294,85 +315,11 @@ export default {
     overflow-y: auto;
   }
 
-  .nav.active {
+  .header__nav--open {
     left: 0;
   }
 
-  .nav a {
-    font-size: 18px;
-    width: 100%;
-    padding: 0.5rem 0;
-  }
-
-  .desktop-actions {
-    display: none;
-  }
-
-  /* Show mobile actions */
-  .mobile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .search-bar-mobile {
-    display: flex;
-    align-items: center;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    padding: 10px 12px;
-    gap: 0.5rem;
-    width: 100%;
-  }
-
-  .search-bar-mobile input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 14px;
-  }
-
-  .search-bar-mobile input::placeholder {
-    color: #999999;
-  }
-
-  .search-bar-mobile .fa-search {
-    color: #000000;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .cart-icon-mobile {
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-    width: fit-content;
-  }
-
-  .cart-icon-mobile .fa-cart-plus {
-    font-size: 24px;
-    color: #000000;
-  }
-
-  .cart-icon-mobile .cart-badge {
-    top: -10px;
-    right: -10px;
-    width: 18px;
-    height: 18px;
-    font-size: 11px;
-  }
-
-  /* Show hamburger button */
-  .hamburger {
-    display: flex;
-    z-index: 1001;
-  }
-
-  /* Overlay when menu is open */
-  .nav.active::before {
+  .header__nav--open::before {
     content: '';
     position: fixed;
     top: 0;
@@ -382,36 +329,89 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
   }
+
+  .header__nav-link {
+    font-size: 18px;
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+
+  .header__actions {
+    display: none;
+  }
+
+  .header__mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .header__search--mobile {
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .header__search--mobile .header__search-input {
+    font-size: 14px;
+  }
+
+  .header__search--mobile .header__search-icon {
+    font-size: 16px;
+  }
+
+  .header__cart--mobile {
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .header__cart--mobile .fa-cart-plus {
+    font-size: 24px;
+  }
+
+  .header__cart--mobile .header__cart-badge {
+    top: -10px;
+    right: -10px;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  .header__hamburger {
+    display: flex;
+    z-index: 1001;
+  }
 }
 
-/* Small Mobile Styles */
+/* Small Mobile */
 @media (max-width: 480px) {
-  .header-container {
+  .header__container {
     padding: 0 0.75rem;
   }
 
-  .logo {
+  .header__logo {
     font-size: 18px;
   }
 
-  .nav {
+  .header__nav {
     width: 85%;
     padding: 70px 1.5rem 1.5rem;
   }
 
-  .nav a {
+  .header__nav-link {
     font-size: 16px;
   }
 
-  .search-bar-mobile {
+  .header__search--mobile {
     padding: 8px 12px;
   }
 
-  .search-bar-mobile input {
+  .header__search--mobile .header__search-input {
     font-size: 13px;
   }
 
-  .cart-icon-mobile .fa-cart-plus {
+  .header__cart--mobile .fa-cart-plus {
     font-size: 22px;
   }
 }
