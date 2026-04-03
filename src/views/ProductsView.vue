@@ -17,6 +17,7 @@
     <div v-if="loading" class="loading">Loading all products...</div>
 
     <div v-else class="products-grid">
+      <!-- iterating through all products -->
       <div
         v-for="product in allProducts"
         :key="product.id"
