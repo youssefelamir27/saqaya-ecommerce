@@ -101,6 +101,9 @@ export default {
   created() {
     window.addEventListener('cart-updated', this.syncCartQuantity);
   },
+  beforeUnmount() {
+    window.removeEventListener('cart-updated', this.syncCartQuantity);
+  },
 };
 </script>
 
