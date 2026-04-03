@@ -1,6 +1,5 @@
 <template>
   <div class="products-page">
-    <!-- Header -->
     <div class="products-header">
       <div class="title-badge">
         <span class="badge-bar"></span>
@@ -13,11 +12,9 @@
       </p>
     </div>
 
-    <!-- Products Grid -->
     <div v-if="loading" class="loading">Loading all products...</div>
 
     <div v-else class="products-grid">
-      <!-- iterating through all products -->
       <div
         v-for="product in allProducts"
         :key="product.id"
@@ -56,7 +53,7 @@
             <span
               v-for="star in 5"
               :key="star"
-              :class="['star', { filled: star <= Math.round(product.rating) }]"
+              :class="['star', { filled: star <= roundedRating(product) }]"
               >★</span
             >
             <span class="rating-num">({{ product.rating }})</span>
@@ -65,7 +62,7 @@
       </div>
     </div>
 
-    <div v-if="!loading && allProducts.length === 0" class="no-products">
+    <div v-if="!loading && hasNoProducts" class="no-products">
       No products found.
     </div>
   </div>
@@ -82,6 +79,12 @@ export default {
     };
   },
 
+  computed: {
+    hasNoProducts() {
+      return this.allProducts.length === 0;
+    },
+  },
+
   async mounted() {
     await this.fetchAllProducts();
   },
@@ -93,19 +96,18 @@ export default {
           fetch('https://dummyjson.com/products/category/beauty'),
           fetch('https://dummyjson.com/products/category/fragrances'),
         ]);
-
         const beautyData = await beautyRes.json();
         const fragranceData = await fragranceRes.json();
-
-        // Combine both categories
-        let products = [...beautyData.products, ...fragranceData.products];
-
-        this.allProducts = products;
+        this.allProducts = [...beautyData.products, ...fragranceData.products];
       } catch (error) {
         console.error('Error fetching all products:', error);
       } finally {
         this.loading = false;
       }
+    },
+
+    roundedRating(product) {
+      return Math.round(product.rating);
     },
 
     getDiscount(product) {
@@ -124,7 +126,6 @@ export default {
 
     addToWishlist(product) {
       console.log('Added to wishlist:', product.title);
-      // TODO: connect to real wishlist store later
     },
 
     goToProduct(id) {
@@ -135,7 +136,6 @@ export default {
 </script>
 
 <style scoped>
-/* Reuse the exact same styles from your homepage */
 .products-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -179,20 +179,18 @@ export default {
   margin: auto;
 }
 
-/* Products Grid - Responsive */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
 }
 
-/* Product Card - Exact same as homepage */
 .product-card {
   cursor: pointer;
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s;
-  background: #fff;
+  background: #ffffff;
 }
 
 .product-card:hover {
@@ -224,13 +222,12 @@ export default {
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
 }
 
 .discount-badge {
   background: #db4444;
 }
-
 .new-badge {
   background: #00a651;
 }
@@ -255,7 +252,7 @@ export default {
   height: 36px;
   border-radius: 50%;
   border: none;
-  background: #fff;
+  background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   font-size: 15px;
@@ -267,8 +264,8 @@ export default {
   left: 0;
   width: 100%;
   padding: 12px;
-  background: #000;
-  color: #fff;
+  background: #000000;
+  color: #ffffff;
   border: none;
   font-size: 13.5px;
   font-weight: 500;
@@ -308,7 +305,7 @@ export default {
 }
 
 .price-original {
-  color: #999;
+  color: #999999;
   text-decoration: line-through;
   font-size: 13px;
 }
@@ -320,36 +317,32 @@ export default {
 }
 
 .star {
-  color: #ccc;
+  color: #cccccc;
   font-size: 13.5px;
 }
-
 .star.filled {
   color: #ffad33;
 }
-
 .rating-num {
   font-size: 12.5px;
-  color: #999;
+  color: #999999;
   margin-left: 6px;
 }
 
-/* Loading & Empty States */
 .loading {
   text-align: center;
   padding: 80px 20px;
   font-size: 16px;
-  color: #777;
+  color: #777777;
 }
 
 .no-products {
   text-align: center;
   padding: 60px;
-  color: #888;
+  color: #888888;
   font-size: 18px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .products-page {
     padding: 1rem;

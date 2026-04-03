@@ -81,10 +81,7 @@
               <span
                 v-for="star in 5"
                 :key="star"
-                :class="[
-                  'star',
-                  { filled: star <= Math.round(product.rating) },
-                ]"
+                :class="['star', { filled: star <= roundedRating(product) }]"
                 >★</span
               >
               <span class="rating-num">({{ product.rating }})</span>
@@ -117,7 +114,7 @@
           v-for="cat in categories"
           :key="cat.name"
           :class="['category-card', { active: activeCategory === cat.name }]"
-          @click="activeCategory = cat.name"
+          @click="setActiveCategory(cat.name)"
         >
           <span class="cat-icon">{{ cat.icon }}</span>
           <p>{{ cat.name }}</p>
@@ -180,10 +177,7 @@
               <span
                 v-for="star in 5"
                 :key="star"
-                :class="[
-                  'star',
-                  { filled: star <= Math.round(product.rating) },
-                ]"
+                :class="['star', { filled: star <= roundedRating(product) }]"
                 >★</span
               >
               <span class="rating-num">({{ product.rating }})</span>
@@ -258,14 +252,9 @@ export default {
           fetch('https://dummyjson.com/products/category/beauty'),
           fetch('https://dummyjson.com/products/category/fragrances'),
         ]);
-
         const beautyData = await beautyRes.json();
-        console.log(beautyData);
         const fragranceData = await fragranceRes.json();
-        console.log(fragranceData);
-
         const allProducts = [...beautyData.products, ...fragranceData.products];
-
         this.flashProducts = allProducts.slice(0, 10);
         this.exploreProducts = allProducts.slice(0, 8);
       } catch (err) {
@@ -273,6 +262,10 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    roundedRating(product) {
+      return Math.round(product.rating);
     },
 
     getDiscount(product) {
@@ -283,6 +276,10 @@ export default {
       return (product.price * (1 - product.discountPercentage / 100)).toFixed(
         2
       );
+    },
+
+    setActiveCategory(name) {
+      this.activeCategory = name;
     },
 
     addToCart(product) {
@@ -322,7 +319,6 @@ export default {
   padding: 2rem;
 }
 
-/* Hero */
 .hero-section {
   background: #000000;
   border-radius: 8px;
@@ -388,7 +384,6 @@ export default {
   background: #ffffff;
 }
 
-/* Section headers */
 .title-badge {
   display: flex;
   align-items: center;
@@ -445,7 +440,6 @@ export default {
   color: #ffffff;
 }
 
-/* Flash sales & explore slider */
 .products-slider {
   display: flex;
   gap: 20px;
@@ -459,7 +453,6 @@ export default {
   display: none;
 }
 
-/* Products grid */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -467,7 +460,6 @@ export default {
   margin-bottom: 2rem;
 }
 
-/* Product card */
 .product-card {
   min-width: 220px;
   cursor: pointer;
@@ -619,7 +611,6 @@ export default {
   margin-left: 4px;
 }
 
-/* Categories */
 .categories {
   margin-bottom: 4rem;
 }
@@ -667,7 +658,6 @@ export default {
   margin: 0;
 }
 
-/* Services */
 .services {
   display: flex;
   justify-content: center;
@@ -695,13 +685,11 @@ export default {
   font-weight: 700;
   margin-bottom: 6px;
 }
-
 .service-item p {
   font-size: 13px;
   color: #777777;
 }
 
-/* View all */
 .view-all {
   text-align: center;
   margin-top: 2rem;

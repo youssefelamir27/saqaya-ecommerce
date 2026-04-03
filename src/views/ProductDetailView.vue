@@ -6,14 +6,14 @@
       <span> / </span>
       <router-link to="/products">Products</router-link>
       <span> / </span>
-      <span class="current">{{ product ? product.title : '...' }}</span>
+      <span class="current">{{ productTitle }}</span>
     </div>
 
     <!-- Error -->
     <div v-if="error" class="error">{{ error }}</div>
 
     <!-- Product -->
-    <div v-else class="product-wrapper">
+    <div v-else-if="product" class="product-wrapper">
       <!-- Left: Images -->
       <div class="product-images">
         <img :src="selectedImage" :alt="product.title" class="main-image" />
@@ -24,7 +24,7 @@
             :src="img"
             :alt="product.title"
             :class="['thumb', { active: selectedImage === img }]"
-            @click="selectedImage = img"
+            @click="selectImage(img)"
           />
         </div>
       </div>
@@ -37,21 +37,19 @@
           <span
             v-for="star in 5"
             :key="star"
-            :class="['star', { filled: star <= Math.round(product.rating) }]"
+            :class="['star', { filled: star <= roundedRating }]"
             >★</span
           >
           <span class="rating-count">({{ product.rating }} reviews)</span>
-          <span class="stock" :class="{ 'low-stock': product.stock < 10 }">
+          <span class="stock" :class="{ 'stock--low': isLowStock }">
             {{ product.availabilityStatus }}
           </span>
         </div>
 
         <div class="price-row">
-          <span class="current-price">${{ getDiscountedPrice() }}</span>
+          <span class="current-price">${{ discountedPrice }}</span>
           <span class="original-price">${{ product.price }}</span>
-          <span class="discount-badge"
-            >-{{ Math.round(product.discountPercentage) }}%</span
-          >
+          <span class="discount-badge">-{{ roundedDiscount }}%</span>
         </div>
 
         <p class="description">{{ product.description }}</p>
@@ -79,7 +77,7 @@
     </div>
 
     <!-- Reviews -->
-    <div v-if="product && product.reviews.length" class="reviews-section">
+    <div v-if="product && hasReviews" class="reviews-section">
       <h2>Customer Reviews</h2>
       <div class="reviews-grid">
         <div
@@ -99,9 +97,7 @@
             </div>
           </div>
           <p class="review-comment">{{ review.comment }}</p>
-          <p class="review-date">
-            {{ new Date(review.date).toLocaleDateString() }}
-          </p>
+          <p class="review-date">{{ formatDate(review.date) }}</p>
         </div>
       </div>
     </div>
@@ -121,19 +117,47 @@ export default {
     };
   },
 
+  computed: {
+    productTitle() {
+      return this.product ? this.product.title : '...';
+    },
+
+    roundedRating() {
+      return this.product ? Math.round(this.product.rating) : 0;
+    },
+
+    roundedDiscount() {
+      return this.product ? Math.round(this.product.discountPercentage) : 0;
+    },
+
+    isLowStock() {
+      return this.product ? this.product.stock < 10 : false;
+    },
+
+    discountedPrice() {
+      if (!this.product) return '0.00';
+      return (
+        this.product.price *
+        (1 - this.product.discountPercentage / 100)
+      ).toFixed(2);
+    },
+
+    hasReviews() {
+      return this.product && this.product.reviews.length > 0;
+    },
+  },
+
   mounted() {
     this.fetchProduct();
   },
 
   methods: {
     async fetchProduct() {
-      this.loading = true;
       this.error = null;
       try {
         const id = this.$route.params.id;
         const res = await fetch(`https://dummyjson.com/products/${id}`);
         const data = await res.json();
-        console.log('Fetched product:', data);
         this.product = data;
         this.selectedImage = data.thumbnail;
       } catch (err) {
@@ -141,11 +165,12 @@ export default {
       }
     },
 
-    getDiscountedPrice() {
-      return (
-        this.product.price *
-        (1 - this.product.discountPercentage / 100)
-      ).toFixed(2);
+    selectImage(img) {
+      this.selectedImage = img;
+    },
+
+    formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString();
     },
 
     increaseQty() {
@@ -193,19 +218,13 @@ export default {
   font-weight: 500;
 }
 
-.loading,
 .error {
   text-align: center;
   padding: 80px;
   font-size: 16px;
-  color: #999999;
-}
-
-.error {
   color: #db4444;
 }
 
-/* Product wrapper */
 .product-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -213,7 +232,6 @@ export default {
   margin-bottom: 60px;
 }
 
-/* Images */
 .main-image {
   width: 100%;
   height: 400px;
@@ -247,7 +265,6 @@ export default {
   border-color: #db4444;
 }
 
-/* Info */
 .product-info h1 {
   font-size: 24px;
   font-weight: 700;
@@ -283,7 +300,7 @@ export default {
   border-radius: 4px;
 }
 
-.stock.low-stock {
+.stock--low {
   color: #db4444;
   background: #fef0f0;
 }
@@ -388,7 +405,6 @@ export default {
   background: #c03333;
 }
 
-/* Reviews */
 .reviews-section {
   margin-top: 40px;
 }
