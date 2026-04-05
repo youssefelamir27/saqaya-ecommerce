@@ -6,6 +6,8 @@ import store from './store';
 // import the font awesome css file
 import './assets/all.css';
 
+// import the main scss file
+import './styles/main.scss';
 Vue.config.productionTip = false;
 
 new Vue({

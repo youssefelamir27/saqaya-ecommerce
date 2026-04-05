@@ -1,0 +1,118 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.product-card {
+  cursor: pointer;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  @include card-hover;
+
+  &__image-wrapper {
+    position: relative;
+    background: $color-gray-light;
+    height: 200px;
+    @include flex-center;
+    overflow: hidden;
+    border-radius: $border-radius-md;
+
+    img {
+      max-height: 160px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &:hover &__actions {
+    opacity: 1;
+  }
+
+  &__action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: $border-radius-full;
+    background: $color-white;
+    font-size: $font-size-base;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__cart-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: $color-black;
+    color: $color-white;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &:hover &__cart-btn {
+    opacity: 1;
+  }
+
+  &__info {
+    padding: 12px 4px;
+  }
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-black;
+    margin: 0 0 6px;
+    @include text-truncate;
+  }
+
+  &__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+
+    &--current {
+      color: $color-primary;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-md;
+    }
+
+    &--original {
+      color: $color-gray-mid;
+      text-decoration: line-through;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+.star {
+  color: #cccccc;
+  font-size: $font-size-sm;
+
+  &--filled {
+    color: #ffad33;
+  }
+}
+
+.rating-num {
+  font-size: 12px;
+  color: $color-gray-mid;
+  margin-left: 4px;
+}

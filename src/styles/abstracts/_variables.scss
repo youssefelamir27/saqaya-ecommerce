@@ -1,0 +1,54 @@
+// Colors
+$color-primary: #db4444;
+$color-primary-dark: #c03333;
+$color-black: #000000;
+$color-white: #ffffff;
+$color-gray-light: #f5f5f5;
+$color-gray-mid: #999999;
+$color-gray-dark: #444444;
+$color-success: #00a651;
+$color-text: #2c3e50;
+$color-border: #e5e5e5;
+$color-footer-bg: #000000;
+$color-footer-text: #cccccc;
+
+// Typography
+$font-family-base: 'Avenir', Helvetica, Arial, sans-serif;
+$font-size-xs: 11px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-md: 15px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-2xl: 22px;
+$font-size-3xl: 24px;
+$font-size-4xl: 2rem;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 40px;
+$spacing-3xl: 60px;
+$spacing-4xl: 80px;
+
+// Border radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-full: 50%;
+
+// Breakpoints
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1024px;
+
+// Layout
+$max-width: 1200px;
+$header-height: 70px;
