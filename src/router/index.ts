@@ -1,12 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import ProductsView from '@/views/ProductsView.vue';
-import ErrorView from '@/views/ErrorView.vue';
-import ContactView from '@/views/ContactView.vue';
-import AboutView from '@/views/AboutView.vue';
-import productDetailView from '@/views/ProductDetailView.vue';
-import CartView from '@/views/CartView.vue';
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -18,37 +13,32 @@ const routes: Array<RouteConfig> = [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () =>
-    //   import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
-    component: AboutView,
+    component: () => import('@/views/AboutView.vue'),
   },
   {
     path: '/contact',
-    // name: 'contact',
-    component: ContactView,
+    name: 'contact',
+    component: () => import('@/views/ContactView.vue'),
   },
   {
     path: '/cart',
     name: 'cart',
-    component: CartView,
+    component: () => import('@/views/CartView.vue'),
   },
   {
     path: '/products',
     name: 'products',
-    component: ProductsView,
+    component: () => import('@/views/ProductsView.vue'),
   },
   {
     path: '/product/:id',
     name: 'view-product',
-    component: productDetailView,
+    component: () => import('@/views/ProductDetailView.vue'),
   },
   {
     path: '*',
     name: 'ErrorPage',
-    component: ErrorView,
+    component: () => import('@/views/ErrorView.vue'),
   },
 ];
 
