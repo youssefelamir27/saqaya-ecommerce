@@ -1,66 +1,72 @@
 <template>
-  <div class="contact-page">
+  <div class="contact">
     <!-- Breadcrumb -->
-    <div class="breadcrumb">
+    <div class="contact__breadcrumb">
       <router-link to="/">Home</router-link>
       <span> / </span>
-      <span class="current">Contact</span>
+      <span class="contact__breadcrumb-current">Contact</span>
     </div>
 
-    <div class="contact-wrapper">
+    <div class="contact__wrapper">
       <!-- Left Image -->
-      <div class="contact-image">
+      <div class="contact__image">
         <img :src="contactImage" alt="Contact us" />
       </div>
 
       <!-- Right Content -->
-      <div class="contact-right">
+      <div class="contact__right">
         <!-- Call Us -->
-        <div class="contact-card">
-          <div class="contact-card-header">
-            <div class="card-icon">
+        <div class="contact__card">
+          <div class="contact__card-header">
+            <div class="contact__card-icon">
               <i class="fas fa-phone" style="color: white"></i>
             </div>
             <h3>Call us</h3>
           </div>
-          <p>We are available 24/7, 7 days a week.</p>
-          <p>Phone: +8801611112222</p>
+          <p class="contact__card-text">
+            We are available 24/7, 7 days a week.
+          </p>
+          <p class="contact__card-text">Phone: +8801611112222</p>
         </div>
 
-        <hr class="card-divider" />
+        <hr class="contact__divider" />
 
         <!-- Write To Us -->
-        <div class="contact-card">
-          <div class="contact-card-header">
-            <div class="card-icon">✉️</div>
+        <div class="contact__card">
+          <div class="contact__card-header">
+            <div class="contact__card-icon">✉️</div>
             <h3>Write To US</h3>
           </div>
-          <p>Fill out our form and we will contact you within 24 hours.</p>
+          <p class="contact__card-text">
+            Fill out our form and we will contact you within 24 hours.
+          </p>
 
-          <div class="form-row">
+          <div class="contact__form-row">
             <input
               v-model="form.name"
               type="text"
               placeholder="Your Name *"
-              class="form-input"
+              class="contact__input"
             />
             <input
               v-model="form.email"
               type="email"
               placeholder="Your Email *"
-              class="form-input"
+              class="contact__input"
             />
           </div>
 
           <textarea
             v-model="form.message"
             placeholder="Your Message"
-            class="form-textarea"
+            class="contact__textarea"
             rows="6"
           ></textarea>
 
-          <div class="form-actions">
-            <button class="send-btn" @click="sendMessage">Send Message</button>
+          <div class="contact__form-actions">
+            <button class="contact__submit-btn" @click="sendMessage">
+              Send Message
+            </button>
           </div>
         </div>
       </div>
@@ -71,36 +77,27 @@
 <script>
 export default {
   name: 'ContactView',
-
   data() {
     return {
       contactImage: '',
-      form: {
-        name: '',
-        email: '',
-        message: '',
-      },
+      form: { name: '', email: '', message: '' },
     };
   },
-
   async mounted() {
     await this.fetchContactImage();
   },
-
   methods: {
     async fetchContactImage() {
       try {
         const res = await fetch(
           'https://dummyjson.com/products/category/home-decoration'
         );
-        console.log('Fetch response:', res);
         const data = await res.json();
-        this.contactImage = data.products[1].images;
+        this.contactImage = data.products[1].images[0];
       } catch (err) {
         console.error('Error fetching image:', err);
       }
     },
-
     sendMessage() {
       if (!this.form.name || !this.form.email || !this.form.message) {
         alert('Please fill in all fields.');

@@ -1,15 +1,17 @@
 <template>
   <div class="error-page">
-    <div class="breadcrumb">
+    <div class="error-page__breadcrumb">
       <router-link to="/">Home</router-link>
       <span> / </span>
-      <span style="font-weight: bold; opacity: 1; color: black">404 Error</span>
+      <span class="error-page__breadcrumb-current">404 Error</span>
     </div>
 
-    <div class="error-content">
+    <div class="error-page__content">
       <h1>404 Not Found</h1>
       <p>Your visited page not found. You may go home page.</p>
-      <router-link to="/" class="home-btn">Back to home page</router-link>
+      <router-link to="/" class="error-page__home-btn"
+        >Back to home page</router-link
+      >
     </div>
   </div>
 </template>

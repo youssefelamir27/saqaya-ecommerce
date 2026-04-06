@@ -2,13 +2,13 @@
 
 // Responsive breakpoints
 @mixin respond-to($breakpoint) {
-  @if $breakpoint == 'sm' {
+  @if $breakpoint == sm {
     @media (max-width: $breakpoint-sm) { @content; }
-  } @else if $breakpoint == 'md' {
+  } @else if $breakpoint == md {
     @media (max-width: $breakpoint-md) { @content; }
-  } @else if $breakpoint == 'lg' {
+  } @else if $breakpoint == lg {
     @media (max-width: $breakpoint-lg) { @content; }
-  } @else if $breakpoint == 'xl' {
+  } @else if $breakpoint == xl {
     @media (max-width: $breakpoint-xl) { @content; }
   }
 }
@@ -60,4 +60,23 @@
   padding: 3px 8px;
   border-radius: $border-radius-sm;
   color: $color-white;
+}
+// Breadcrumb base style
+@mixin breadcrumb-base {
+  font-size: 13px;
+  color: #999999;
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+}
+//link base style
+@mixin link-base($color: #999999, $hover-color: #000000) {
+  text-decoration: none;
+  color: $color;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $hover-color;
+  }
 }

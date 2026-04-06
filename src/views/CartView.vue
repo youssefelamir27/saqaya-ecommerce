@@ -1,6 +1,9 @@
 <template>
-  <h2>this is cart product</h2>
+  <div class="cart">
+    <h2>Cart</h2>
+  </div>
 </template>
+
 <script>
 export default {
   name: 'CartView',

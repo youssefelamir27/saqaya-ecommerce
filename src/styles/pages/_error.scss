@@ -1,60 +1,57 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Error Page — BEM
+
 .error-page {
   min-height: 10vh;
-  padding: 40px 80px;
-  position: relative;
-}
+  padding: 40px $spacing-4xl;
 
-.breadcrumb {
-  font-size: 13px;
-  color: #999999;
-  margin-bottom: 80px;
-  position: absolute;
-  top: 0;
-  left: 80px;
-}
+  &__breadcrumb {
+    @include breadcrumb-base;
 
-.breadcrumb a {
-  text-decoration: none;
-  color: #999999;
-}
+    a {
+      @include link-base;
+    }
+  }
 
-.breadcrumb a:hover {
-  color: #000000;
-}
+  &__breadcrumb-current {
+    font-weight: $font-weight-bold;
+    color: $color-black;
+  }
 
-.error-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 24px;
-}
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: $spacing-lg;
 
-.error-content h1 {
-  font-size: 80px;
-  font-weight: 700;
-  color: #000000;
-  margin: 0;
-}
+    h1 {
+      font-size: 80px;
+      font-weight: $font-weight-bold;
+      color: $color-black;
+      margin: 0;
+    }
 
-.error-content p {
-  font-size: 15px;
-  color: #444444;
-  margin: 0;
-}
+    p {
+      font-size: $font-size-md;
+      color: $color-gray-dark;
+      margin: 0;
+    }
+  }
 
-.home-btn {
-  background-color: #db4444;
-  color: #ffffff;
-  text-decoration: none;
-  padding: 14px 40px;
-  border-radius: 4px;
-  font-size: 15px;
-  margin-top: 16px;
-  transition: background-color 0.2s;
-}
+  &__home-btn {
+    background-color: $color-primary;
+    color: $color-white;
+    text-decoration: none;
+    padding: 14px 40px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-md;
+    margin-top: $spacing-md;
+    transition: background-color 0.2s;
 
-.home-btn:hover {
-  background-color: #c03333;
+    &:hover { background-color: $color-primary-dark; }
+  }
 }
