@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vue/composition-api": "^1.7.2",
+    "axios": "^1.14.0",
     "core-js": "^3.8.3",
     "sass": "^1.99.0",
     "sass-loader": "^16.0.7",
