@@ -41,10 +41,7 @@
             @click="handleCartClick"
           >
             <i class="fas fa-cart-plus"></i>
-            <span
-              class="header__cart-badge"
-              v-if="!isErrorPage && cartItemCount > 0"
-            >
+            <span class="header__cart-badge" v-if="showCartBadge">
               {{ cartItemCount }}
             </span>
           </div>
@@ -63,10 +60,7 @@
         </div>
         <div class="header__cart" @click="handleCartClick">
           <i class="fas fa-cart-plus"></i>
-          <span
-            class="header__cart-badge"
-            v-if="!isErrorPage && cartItemCount > 0"
-          >
+          <span class="header__cart-badge" v-if="showCartBadge">
             {{ cartItemCount }}
           </span>
         </div>
@@ -103,11 +97,14 @@ export default Vue.extend({
     cartItemCount(): number {
       return this.$store.getters['cart/cartItemCount'];
     },
+    isSideCartOpen(): boolean {
+      return this.$store.getters['cart/isSideCartOpen'];
+    },
     isErrorPage(): boolean {
       return this.$route.name === 'ErrorPage';
     },
-    isSideCartOpen(): boolean {
-      return this.$store.getters['cart/isSideCartOpen'];
+    showCartBadge(): boolean {
+      return !this.isErrorPage && this.cartItemCount > 0;
     },
   },
 
