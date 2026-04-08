@@ -6,13 +6,23 @@
 
       <!-- Desktop Navigation -->
       <nav class="header__nav" :class="{ 'header__nav--open': isMenuOpen }">
-        <router-link class="header__nav-link" to="/" @click="closeMenu" exact
+        <router-link
+          class="header__nav-link"
+          to="/"
+          @click.native="closeMenu"
+          exact
           >Home</router-link
         >
-        <router-link class="header__nav-link" to="/contact" @click="closeMenu"
+        <router-link
+          class="header__nav-link"
+          to="/contact"
+          @click.native="closeMenu"
           >Contact</router-link
         >
-        <router-link class="header__nav-link" to="/about" @click="closeMenu"
+        <router-link
+          class="header__nav-link"
+          to="/about"
+          @click.native="closeMenu"
           >About</router-link
         >
 
@@ -26,11 +36,17 @@
             />
             <i class="header__search-icon fas fa-search"></i>
           </div>
-          <div class="header__cart header__cart--mobile">
+          <div
+            class="header__cart header__cart--mobile"
+            @click="handleCartClick"
+          >
             <i class="fas fa-cart-plus"></i>
-            <span class="header__cart-badge" v-if="!isErrorPage">{{
-              quantity
-            }}</span>
+            <span
+              class="header__cart-badge"
+              v-if="!isErrorPage && cartItemCount > 0"
+            >
+              {{ cartItemCount }}
+            </span>
           </div>
         </div>
       </nav>
@@ -45,11 +61,14 @@
           />
           <i class="header__search-icon fas fa-search"></i>
         </div>
-        <div class="header__cart">
+        <div class="header__cart" @click="handleCartClick">
           <i class="fas fa-cart-plus"></i>
-          <span class="header__cart-badge" v-if="!isErrorPage">{{
-            quantity
-          }}</span>
+          <span
+            class="header__cart-badge"
+            v-if="!isErrorPage && cartItemCount > 0"
+          >
+            {{ cartItemCount }}
+          </span>
         </div>
       </div>
 
@@ -67,42 +86,49 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+import { mapActions } from 'vuex';
+
+export default Vue.extend({
   name: 'AppHeader',
+
   data() {
     return {
       isMenuOpen: false,
-      quantity: localStorage.getItem('cartquantity')
-        ? JSON.parse(localStorage.getItem('cartquantity'))
-        : 0,
     };
   },
+
   computed: {
-    isErrorPage() {
+    cartItemCount(): number {
+      return this.$store.getters['cart/cartItemCount'];
+    },
+    isErrorPage(): boolean {
       return this.$route.name === 'ErrorPage';
     },
+    isSideCartOpen(): boolean {
+      return this.$store.getters['cart/isSideCartOpen'];
+    },
   },
+
   methods: {
-    toggleMenu() {
+    ...mapActions('cart', ['toggleSideCart']),
+
+    handleCartClick(): void {
+      const willOpen = !this.isSideCartOpen;
+      this.toggleSideCart();
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+    },
+
+    toggleMenu(): void {
       this.isMenuOpen = !this.isMenuOpen;
       document.body.style.overflow = this.isMenuOpen ? 'hidden' : '';
     },
-    closeMenu() {
+
+    closeMenu(): void {
       this.isMenuOpen = false;
       document.body.style.overflow = '';
     },
-    syncCartQuantity() {
-      this.quantity = localStorage.getItem('cartquantity')
-        ? JSON.parse(localStorage.getItem('cartquantity'))
-        : 0;
-    },
   },
-  created() {
-    window.addEventListener('cart-updated', this.syncCartQuantity);
-  },
-  beforeUnmount() {
-    window.removeEventListener('cart-updated', this.syncCartQuantity);
-  },
-};
+});
 </script>
