@@ -12,25 +12,17 @@
       </p>
     </div>
 
-    <div v-if="loading" class="loading">Loading all products...</div>
+    <div v-if="isLoading" class="loading">Loading all products...</div>
 
     <div v-else class="products-grid">
       <div
-        v-for="product in allProducts"
+        v-for="product in productList"
         :key="product.id"
         class="product-card"
         @click="goToProduct(product.id)"
       >
         <div class="product-card__image-wrapper">
-          <span
-            v-if="product.isNew"
-            class="product-card__badge product-card__badge--new"
-            >NEW</span
-          >
-          <span
-            v-else
-            class="product-card__badge product-card__badge--discount"
-          >
+          <span class="product-card__badge product-card__badge--discount">
             -{{ getDiscount(product) }}%
           </span>
 
@@ -48,7 +40,7 @@
 
           <button
             class="product-card__cart-btn"
-            @click.stop="addToCart(product)"
+            @click.stop="handleAddToCart(product)"
           >
             Add To Cart
           </button>
@@ -82,65 +74,83 @@
       </div>
     </div>
 
-    <div v-if="!loading && hasNoProducts" class="no-products">
+    <div v-if="!isLoading && hasNoProducts" class="no-products">
       No products found.
     </div>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+import { mapActions } from 'vuex';
+
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  thumbnail: string;
+}
+
+export default Vue.extend({
   name: 'ProductsView',
-  data() {
-    return {
-      allProducts: [],
-      loading: true,
-    };
-  },
+
   computed: {
-    hasNoProducts() {
-      return this.allProducts.length === 0;
+    productList(): Product[] {
+      return this.$store.getters['products/productList'];
+    },
+    isLoading(): boolean {
+      return this.$store.getters['products/isLoading'];
+    },
+    hasNoProducts(): boolean {
+      return this.productList.length === 0;
     },
   },
+
   async mounted() {
-    await this.fetchAllProducts();
+    if (this.productList.length === 0) {
+      await this.fetchAllProducts();
+    }
   },
+
   methods: {
-    async fetchAllProducts() {
-      try {
-        const [beautyRes, fragranceRes] = await Promise.all([
-          fetch('https://dummyjson.com/products/category/beauty'),
-          fetch('https://dummyjson.com/products/category/fragrances'),
-        ]);
-        const beautyData = await beautyRes.json();
-        const fragranceData = await fragranceRes.json();
-        this.allProducts = [...beautyData.products, ...fragranceData.products];
-      } catch (error) {
-        console.error('Error fetching all products:', error);
-      } finally {
-        this.loading = false;
-      }
+    ...mapActions('products', ['fetchAllProducts']),
+    ...mapActions('cart', ['addToCart']),
+
+    handleAddToCart(product: Product): void {
+      this.addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discountPercentage: product.discountPercentage,
+        thumbnail: product.thumbnail,
+        quantity: 1,
+      });
     },
-    roundedRating(product) {
-      return Math.round(product.rating);
-    },
-    getDiscount(product) {
-      return Math.round(product.discountPercentage || 0);
-    },
-    getDiscountedPrice(product) {
-      const discount = product.discountPercentage || 0;
-      return (product.price * (1 - discount / 100)).toFixed(2);
-    },
-    addToCart(product) {
-      this.$store.dispatch('addToCart', product);
-      alert(`${product.title} added to cart!`);
-    },
-    addToWishlist(product) {
+
+    addToWishlist(product: Product): void {
       console.log('Added to wishlist:', product.title);
     },
-    goToProduct(id) {
+
+    goToProduct(id: number): void {
       this.$router.push(`/product/${id}`);
     },
+
+    roundedRating(product: Product): number {
+      return Math.round(product.rating);
+    },
+
+    getDiscount(product: Product): number {
+      return Math.round(product.discountPercentage || 0);
+    },
+
+    getDiscountedPrice(product: Product): string {
+      return (
+        product.price *
+        (1 - (product.discountPercentage || 0) / 100)
+      ).toFixed(2);
+    },
   },
-};
+});
 </script>

@@ -74,20 +74,31 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+interface ContactForm {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export default Vue.extend({
   name: 'ContactView',
+
   data() {
     return {
-      contactImage: '',
-      form: { name: '', email: '', message: '' },
+      contactImage: '' as string,
+      form: { name: '', email: '', message: '' } as ContactForm,
     };
   },
+
   async mounted() {
     await this.fetchContactImage();
   },
+
   methods: {
-    async fetchContactImage() {
+    async fetchContactImage(): Promise<void> {
       try {
         const res = await fetch(
           'https://dummyjson.com/products/category/home-decoration'
@@ -98,7 +109,8 @@ export default {
         console.error('Error fetching image:', err);
       }
     },
-    sendMessage() {
+
+    sendMessage(): void {
       if (!this.form.name || !this.form.email || !this.form.message) {
         alert('Please fill in all fields.');
         return;
@@ -107,5 +119,5 @@ export default {
       this.form = { name: '', email: '', message: '' };
     },
   },
-};
+});
 </script>

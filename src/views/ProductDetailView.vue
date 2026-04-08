@@ -9,24 +9,29 @@
       <span class="product-detail__breadcrumb-current">{{ productTitle }}</span>
     </div>
 
+    <!-- Loading -->
+    <div v-if="isLoading" class="loading">Loading product...</div>
+
     <!-- Error -->
-    <div v-if="error" class="product-detail__error">{{ error }}</div>
+    <div v-else-if="hasError" class="product-detail__error">
+      {{ errorMessage }}
+    </div>
 
     <!-- Product -->
-    <div v-else-if="product" class="product-detail__wrapper">
+    <div v-else-if="selectedProduct" class="product-detail__wrapper">
       <!-- Left: Images -->
       <div class="product-detail__images">
         <img
           :src="selectedImage"
-          :alt="product.title"
+          :alt="selectedProduct.title"
           class="product-detail__main-image"
         />
         <div class="product-detail__thumbnails">
           <img
-            v-for="(img, index) in product.images"
+            v-for="(img, index) in selectedProduct.images"
             :key="index"
             :src="img"
-            :alt="product.title"
+            :alt="selectedProduct.title"
             :class="[
               'product-detail__thumb',
               { 'product-detail__thumb--active': selectedImage === img },
@@ -38,7 +43,7 @@
 
       <!-- Right: Info -->
       <div class="product-detail__info">
-        <h1>{{ product.title }}</h1>
+        <h1>{{ selectedProduct.title }}</h1>
 
         <div class="product-detail__rating-row">
           <span
@@ -51,13 +56,13 @@
             >★</span
           >
           <span class="product-detail__rating-count"
-            >({{ product.rating }} reviews)</span
+            >({{ selectedProduct.rating }} reviews)</span
           >
           <span
             class="product-detail__stock"
             :class="{ 'product-detail__stock--low': isLowStock }"
           >
-            {{ product.availabilityStatus }}
+            {{ selectedProduct.availabilityStatus }}
           </span>
         </div>
 
@@ -66,35 +71,42 @@
             >${{ discountedPrice }}</span
           >
           <span class="product-detail__price-original"
-            >${{ product.price }}</span
+            >${{ selectedProduct.price }}</span
           >
           <span class="product-detail__discount-badge"
             >-{{ roundedDiscount }}%</span
           >
         </div>
 
-        <p class="product-detail__description">{{ product.description }}</p>
+        <p class="product-detail__description">
+          {{ selectedProduct.description }}
+        </p>
 
         <hr class="product-detail__divider" />
 
         <div class="product-detail__meta">
-          <p><strong>Brand:</strong> {{ product.brand }}</p>
-          <p><strong>Category:</strong> {{ product.category }}</p>
-          <p><strong>SKU:</strong> {{ product.sku }}</p>
-          <p><strong>Shipping:</strong> {{ product.shippingInformation }}</p>
-          <p><strong>Return Policy:</strong> {{ product.returnPolicy }}</p>
-          <p><strong>Warranty:</strong> {{ product.warrantyInformation }}</p>
+          <p><strong>Brand:</strong> {{ selectedProduct.brand }}</p>
+          <p><strong>Category:</strong> {{ selectedProduct.category }}</p>
+          <p>
+            <strong>Shipping:</strong> {{ selectedProduct.shippingInformation }}
+          </p>
+          <p>
+            <strong>Return Policy:</strong> {{ selectedProduct.returnPolicy }}
+          </p>
+          <p>
+            <strong>Warranty:</strong> {{ selectedProduct.warrantyInformation }}
+          </p>
         </div>
 
         <div class="product-detail__quantity-row">
           <button class="product-detail__qty-btn" @click="decreaseQty">
             -
           </button>
-          <span class="product-detail__qty">{{ quantity }}</span>
+          <span class="product-detail__qty">{{ localQuantity }}</span>
           <button class="product-detail__qty-btn" @click="increaseQty">
             +
           </button>
-          <button class="product-detail__add-btn" @click="addToCart">
+          <button class="product-detail__add-btn" @click="handleAddToCart">
             Add To Cart
           </button>
         </div>
@@ -102,11 +114,11 @@
     </div>
 
     <!-- Reviews -->
-    <div v-if="product && hasReviews" class="reviews">
+    <div v-if="selectedProduct && hasReviews" class="reviews">
       <h2 class="reviews__title">Customer Reviews</h2>
       <div class="reviews__grid">
         <div
-          v-for="(review, index) in product.reviews"
+          v-for="(review, index) in selectedProduct.reviews"
           :key="index"
           class="reviews__card"
         >
@@ -132,71 +144,140 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+import { mapActions } from 'vuex';
+
+interface Review {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+}
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
+  availabilityStatus: string;
+  shippingInformation: string;
+  returnPolicy: string;
+  warrantyInformation: string;
+  reviews: Review[];
+}
+
+export default Vue.extend({
   name: 'ProductDetailView',
+
   data() {
-    return { product: null, error: null, selectedImage: '', quantity: 1 };
+    return {
+      selectedImage: '' as string,
+      localQuantity: 1 as number,
+    };
   },
+
   computed: {
-    productTitle() {
-      return this.product ? this.product.title : '...';
+    selectedProduct(): Product | null {
+      return this.$store.getters['products/selectedProduct'];
     },
-    roundedRating() {
-      return this.product ? Math.round(this.product.rating) : 0;
+    isLoading(): boolean {
+      return this.$store.getters['products/isLoading'];
     },
-    roundedDiscount() {
-      return this.product ? Math.round(this.product.discountPercentage) : 0;
+    hasError(): boolean {
+      return this.$store.getters['products/hasError'];
     },
-    isLowStock() {
-      return this.product ? this.product.stock < 10 : false;
+    errorMessage(): string | null {
+      return this.$store.getters['products/errorMessage'];
     },
-    discountedPrice() {
-      if (!this.product) return '0.00';
+
+    productTitle(): string {
+      return this.selectedProduct ? this.selectedProduct.title : '...';
+    },
+    roundedRating(): number {
+      return this.selectedProduct ? Math.round(this.selectedProduct.rating) : 0;
+    },
+    roundedDiscount(): number {
+      return this.selectedProduct
+        ? Math.round(this.selectedProduct.discountPercentage)
+        : 0;
+    },
+    isLowStock(): boolean {
+      return this.selectedProduct ? this.selectedProduct.stock < 10 : false;
+    },
+    discountedPrice(): string {
+      if (!this.selectedProduct) return '0.00';
       return (
-        this.product.price *
-        (1 - this.product.discountPercentage / 100)
+        this.selectedProduct.price *
+        (1 - this.selectedProduct.discountPercentage / 100)
       ).toFixed(2);
     },
-    hasReviews() {
-      return this.product && this.product.reviews.length > 0;
+    hasReviews(): boolean {
+      return !!(
+        this.selectedProduct && this.selectedProduct.reviews.length > 0
+      );
     },
   },
-  mounted() {
-    this.fetchProduct();
+
+  async mounted() {
+    const id = Number(this.$route.params.id);
+    await this.fetchProductById(id);
+    if (this.selectedProduct) {
+      this.selectedImage = this.selectedProduct.thumbnail;
+    }
   },
-  methods: {
-    async fetchProduct() {
-      this.error = null;
-      try {
-        const id = this.$route.params.id;
-        const res = await fetch(`https://dummyjson.com/products/${id}`);
-        const data = await res.json();
-        this.product = data;
-        this.selectedImage = data.thumbnail;
-      } catch (err) {
-        this.error = 'Failed to load product. Please try again.';
+
+  watch: {
+    selectedProduct(product: Product | null) {
+      if (product && !this.selectedImage) {
+        this.selectedImage = product.thumbnail;
       }
     },
-    selectImage(img) {
+  },
+
+  methods: {
+    ...mapActions('products', ['fetchProductById']),
+    ...mapActions('cart', ['addToCart']),
+
+    selectImage(img: string): void {
       this.selectedImage = img;
     },
-    formatDate(dateStr) {
+
+    formatDate(dateStr: string): string {
       return new Date(dateStr).toLocaleDateString();
     },
-    increaseQty() {
-      if (this.quantity < this.product.stock) this.quantity++;
+
+    increaseQty(): void {
+      if (
+        this.selectedProduct &&
+        this.localQuantity < this.selectedProduct.stock
+      ) {
+        this.localQuantity++;
+      }
     },
-    decreaseQty() {
-      if (this.quantity > 1) this.quantity--;
+
+    decreaseQty(): void {
+      if (this.localQuantity > 1) this.localQuantity--;
     },
-    addToCart() {
-      this.$store.dispatch('addToCart', {
-        ...this.product,
-        quantity: this.quantity,
+
+    handleAddToCart(): void {
+      if (!this.selectedProduct) return;
+      this.addToCart({
+        id: this.selectedProduct.id,
+        title: this.selectedProduct.title,
+        price: this.selectedProduct.price,
+        discountPercentage: this.selectedProduct.discountPercentage,
+        thumbnail: this.selectedProduct.thumbnail,
+        quantity: this.localQuantity,
       });
-      alert(`${this.product.title} added to cart!`);
     },
   },
-};
+});
 </script>

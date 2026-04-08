@@ -103,29 +103,47 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+interface StatItem {
+  icon: string;
+  value: string;
+  label: string;
+}
+
+interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+}
+
+export default Vue.extend({
   name: 'AboutView',
+
   data() {
     return {
-      activeStatIndex: 1,
+      activeStatIndex: 1 as number,
       stats: [
         { icon: '🏪', value: '10.5k', label: 'Sellers active our site' },
         { icon: '💰', value: '33k', label: 'Monthly Product Sale' },
         { icon: '🛍️', value: '45.5k', label: 'Customer active in our site' },
         { icon: '💵', value: '25k', label: 'Annual gross sale in our site' },
-      ],
-      team: [],
+      ] as StatItem[],
+      team: [] as TeamMember[],
     };
   },
+
   async mounted() {
     await this.fetchTeam();
   },
+
   methods: {
-    setActiveStatIndex(index) {
+    setActiveStatIndex(index: number): void {
       this.activeStatIndex = index;
     },
-    async fetchTeam() {
+
+    async fetchTeam(): Promise<void> {
       try {
         const res = await fetch('https://dummyjson.com/users?limit=3');
         const data = await res.json();
@@ -134,7 +152,7 @@ export default {
           'Managing Director',
           'Product Designer',
         ];
-        this.team = data.users.map((user, i) => ({
+        this.team = data.users.map((user: any, i: number) => ({
           name: `${user.firstName} ${user.lastName}`,
           role: roles[i],
           image: user.image,
@@ -144,5 +162,5 @@ export default {
       }
     },
   },
-};
+});
 </script>
