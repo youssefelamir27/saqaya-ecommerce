@@ -1,24 +1,31 @@
 <template>
   <div>
     <AppHeader />
+
+    <SideCart />
+
     <main class="page-content">
       <slot />
     </main>
+
     <AppFooter />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import AppHeader from '@/components/Global/Header.vue';
 import AppFooter from '@/components/Global/Footer.vue';
+import SideCart from '@/components/Cart/SideCart.vue';
 
-export default {
+export default Vue.extend({
   name: 'MainLayout',
   components: {
     AppHeader,
     AppFooter,
+    SideCart,
   },
-};
+});
 </script>
 
 <style scoped>
