@@ -60,15 +60,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-
-interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  discountPercentage: number;
-  thumbnail: string;
-  quantity: number;
-}
+import { CartItem } from '@/types/product';
 
 export default Vue.extend({
   name: 'CartView',
