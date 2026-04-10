@@ -105,19 +105,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-
-interface StatItem {
-  icon: string;
-  value: string;
-  label: string;
-}
-
-interface TeamMember {
-  name: string;
-  role: string;
-  image: string;
-}
-
+import { StatItem, TeamMember } from '@/types/product';
 export default Vue.extend({
   name: 'AboutView',
 

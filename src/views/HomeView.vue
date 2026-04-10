@@ -263,21 +263,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  thumbnail: string;
-}
-
-interface Category {
-  name: string;
-  icon: string;
-}
-
+import { Product, Category } from '@/types/product';
 export default Vue.extend({
   name: 'HomeView',
 

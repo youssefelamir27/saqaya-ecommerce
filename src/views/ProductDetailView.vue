@@ -147,32 +147,32 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
+import { Review, Product } from '@/types/product';
+// interface Review {
+//   rating: number;
+//   comment: string;
+//   date: string;
+//   reviewerName: string;
+// }
 
-interface Review {
-  rating: number;
-  comment: string;
-  date: string;
-  reviewerName: string;
-}
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-  availabilityStatus: string;
-  shippingInformation: string;
-  returnPolicy: string;
-  warrantyInformation: string;
-  reviews: Review[];
-}
+// interface Product {
+//   id: number;
+//   title: string;
+//   description: string;
+//   price: number;
+//   discountPercentage: number;
+//   rating: number;
+//   stock: number;
+//   brand: string;
+//   category: string;
+//   thumbnail: string;
+//   images: string[];
+//   availabilityStatus: string;
+//   shippingInformation: string;
+//   returnPolicy: string;
+//   warrantyInformation: string;
+//   reviews: Review[];
+// }
 
 export default Vue.extend({
   name: 'ProductDetailView',

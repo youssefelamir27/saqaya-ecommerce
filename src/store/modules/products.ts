@@ -3,6 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://dummyjson.com';
 import { Product, ProductsState } from '@/types/product';
 
+////
 const state = (): ProductsState => ({
   productList: [],
   selectedProduct: null,

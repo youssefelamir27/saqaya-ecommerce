@@ -83,15 +83,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  thumbnail: string;
-}
+import { Product } from '@/types/product';
 
 export default Vue.extend({
   name: 'ProductsView',

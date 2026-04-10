@@ -48,3 +48,26 @@ export interface CartState {
   sideCartItems: CartItem[];
   isSideCartOpen: boolean;
 }
+
+export interface Category {
+  name: string;
+  icon: string;
+}
+
+export interface ContactForm {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export interface StatItem {
+  icon: string;
+  value: string;
+  label: string;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+}

@@ -76,12 +76,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-
-interface ContactForm {
-  name: string;
-  email: string;
-  message: string;
-}
+import { ContactForm } from '@/types/product';
 
 export default Vue.extend({
   name: 'ContactView',
