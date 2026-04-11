@@ -1,4 +1,5 @@
 @import '../abstracts/variables';
+@import '../abstracts/mixins';
 
 .btn {
   display: inline-block;
@@ -7,8 +8,9 @@
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   border: none;
+  text-align: center;
 
   &--primary {
     background: $color-primary;
@@ -38,5 +40,27 @@
     &:hover {
       background: $color-gray-dark;
     }
+  }
+
+  &--size-sm {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+  }
+
+  &--size-md {
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-base;
+  }
+
+  &--size-lg {
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-lg;
+  }
+
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 }
