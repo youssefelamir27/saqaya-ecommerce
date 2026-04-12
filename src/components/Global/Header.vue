@@ -6,25 +6,17 @@
 
       <!-- Desktop Navigation -->
       <nav class="header__nav" :class="{ 'header__nav--open': isMenuOpen }">
+        <!--v-for replaces 3 repeated router-link blocks -->
         <router-link
+          v-for="link in navLinks"
+          :key="link.to"
           class="header__nav-link"
-          to="/"
+          :to="link.to"
+          :exact="link.exact"
           @click.native="closeMenu"
-          exact
-          >Home</router-link
         >
-        <router-link
-          class="header__nav-link"
-          to="/contact"
-          @click.native="closeMenu"
-          >Contact</router-link
-        >
-        <router-link
-          class="header__nav-link"
-          to="/about"
-          @click.native="closeMenu"
-          >About</router-link
-        >
+          {{ link.label }}
+        </router-link>
 
         <!-- Mobile Search and Cart -->
         <div class="header__mobile-actions">
@@ -84,12 +76,24 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 
+interface NavLink {
+  label: string;
+  to: string;
+  exact: boolean;
+}
+
 export default Vue.extend({
   name: 'AppHeader',
 
   data() {
     return {
       isMenuOpen: false,
+      // ✅ nav links as data array — easy to add/remove links in one place
+      navLinks: [
+        { label: 'Home', to: '/', exact: true },
+        { label: 'Contact', to: '/contact', exact: false },
+        { label: 'About', to: '/about', exact: false },
+      ] as NavLink[],
     };
   },
 
