@@ -46,6 +46,9 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior() {
+    return { x: 0, y: 0 }; // ← always scroll to top on navigation
+  },
 });
 
 export default router;
