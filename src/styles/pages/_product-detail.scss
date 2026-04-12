@@ -9,8 +9,7 @@
   padding: 2rem 4rem;
 
   &__breadcrumb {
-    font-size: $font-size-sm;
-    color: $color-gray-mid;
+    @include breadcrumb-base;
     margin-bottom: 40px;
 
     a {
@@ -19,8 +18,8 @@
   }
 
   &__breadcrumb-current {
+    font-weight: $font-weight-bold;
     color: $color-black;
-    font-weight: $font-weight-medium;
   }
 
   &__error {
