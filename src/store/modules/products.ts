@@ -1,9 +1,9 @@
 import axios from 'axios';
-
-const BASE_URL = 'https://dummyjson.com';
+import { ActionContext } from 'vuex';
 import { Product, ProductsState } from '@/types/product';
 
-////
+const BASE_URL = 'https://dummyjson.com';
+
 const state = (): ProductsState => ({
   productList: [],
   selectedProduct: null,
@@ -57,12 +57,13 @@ const mutations = {
     state.error = error;
   },
 };
-
+// proper type for action context — replaces { commit }: any
+type ProductsContext = ActionContext<ProductsState, any>;
 const actions = {
-  async fetchAllProducts({ commit }: any) {
+  // ProductsContext used everywhere instead of any
+  async fetchAllProducts({ commit }: ProductsContext) {
     commit('SET_LOADING', true);
     commit('SET_ERROR', null);
-
     try {
       const [beautyRes, fragranceRes] = await Promise.all([
         axios.get(`${BASE_URL}/products/category/beauty`),
@@ -82,7 +83,7 @@ const actions = {
     }
   },
 
-  async fetchProductById({ commit }: any, id: number) {
+  async fetchProductById({ commit }: ProductsContext, id: number) {
     commit('SET_LOADING', true);
     commit('SET_ERROR', null);
     try {
@@ -95,7 +96,7 @@ const actions = {
     }
   },
 
-  setActiveCategory({ commit }: any, category: string) {
+  setActiveCategory({ commit }: ProductsContext, category: string) {
     commit('SET_ACTIVE_CATEGORY', category);
   },
 };

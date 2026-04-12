@@ -1,5 +1,5 @@
 import { CartItem, CartState } from '@/types/product';
-
+import { ActionContext } from 'vuex';
 const state = (): CartState => ({
   sideCartItems: [],
   isSideCartOpen: false,
@@ -63,36 +63,36 @@ const mutations = {
   },
 };
 
+//proper type for action context
+type CartContext = ActionContext<CartState, any>;
 const actions = {
-  addToCart({ commit }: any, product: CartItem) {
+  addToCart({ commit }: CartContext, product: CartItem) {
     commit('ADD_TO_CART', product);
-    // commit('OPEN_SIDE_CART');
   },
 
-  removeFromCart({ commit }: any, productId: number) {
+  removeFromCart({ commit }: CartContext, productId: number) {
     commit('REMOVE_FROM_CART', productId);
   },
 
   updateQuantity(
-    { commit }: any,
+    { commit }: CartContext,
     payload: { productId: number; quantity: number }
   ) {
     commit('UPDATE_QUANTITY', payload);
   },
 
-  clearCart({ commit }: any) {
+  clearCart({ commit }: CartContext) {
     commit('CLEAR_CART');
   },
 
-  toggleSideCart({ commit }: any) {
+  toggleSideCart({ commit }: CartContext) {
     commit('TOGGLE_SIDE_CART');
   },
 
-  closeSideCart({ commit }: any) {
+  closeSideCart({ commit }: CartContext) {
     commit('CLOSE_SIDE_CART');
   },
 };
-
 export default {
   namespaced: true,
   state,
