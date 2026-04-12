@@ -19,22 +19,23 @@
       <!-- Support Column -->
       <div class="footer__col">
         <h4 class="footer__col-title">Support</h4>
-        <p class="footer__col-text">
-          111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
+        <p v-for="info in supportInfo" :key="info" class="footer__col-text">
+          {{ info }}
         </p>
-        <p class="footer__col-text">exclusive@gmail.com</p>
-        <p class="footer__col-text">+88015-88888-9999</p>
       </div>
 
       <!-- Account Column -->
       <div class="footer__col">
         <h4 class="footer__col-title">Account</h4>
         <ul class="footer__list">
-          <li class="footer__list-item">My Account</li>
-          <li class="footer__list-item">Login / Register</li>
-          <li class="footer__list-item">Cart</li>
-          <li class="footer__list-item">Wishlist</li>
-          <li class="footer__list-item">Shop</li>
+          <!--v-for replaces 5 repeated li elements -->
+          <li
+            v-for="item in accountLinks"
+            :key="item"
+            class="footer__list-item"
+          >
+            {{ item }}
+          </li>
         </ul>
       </div>
 
@@ -42,10 +43,10 @@
       <div class="footer__col">
         <h4 class="footer__col-title">Quick Link</h4>
         <ul class="footer__list">
-          <li class="footer__list-item">Privacy Policy</li>
-          <li class="footer__list-item">Terms Of Use</li>
-          <li class="footer__list-item">FAQ</li>
-          <li class="footer__list-item">Contact</li>
+          <!--v-for replaces 4 repeated li elements -->
+          <li v-for="item in quickLinks" :key="item" class="footer__list-item">
+            {{ item }}
+          </li>
         </ul>
       </div>
 
@@ -58,25 +59,26 @@
         <div class="footer__qr">
           <div class="footer__qr-placeholder"></div>
           <div class="footer__store-btns">
-            <div class="footer__store-btn">
-              <i class="footer__store-icon fab fa-google-play"></i>
-              <span class="footer__store-text"
-                >GET IT ON<br /><strong>Google Play</strong></span
-              >
-            </div>
-            <div class="footer__store-btn">
-              <i class="footer__store-icon fab fa-apple"></i>
-              <span class="footer__store-text"
-                >Download on the<br /><strong>App Store</strong></span
-              >
+            <!--v-for replaces 2 repeated store button blocks -->
+            <div
+              v-for="store in storeButtons"
+              :key="store.label"
+              class="footer__store-btn"
+            >
+              <i :class="`footer__store-icon fab ${store.icon}`"></i>
+              <span class="footer__store-text">
+                {{ store.topText }}<br /><strong>{{ store.label }}</strong>
+              </span>
             </div>
           </div>
         </div>
         <div class="footer__social">
-          <i class="footer__social-icon fab fa-facebook-f"></i>
-          <i class="footer__social-icon fab fa-twitter"></i>
-          <i class="footer__social-icon fab fa-instagram"></i>
-          <i class="footer__social-icon fab fa-linkedin-in"></i>
+          <!--v-for replaces 4 repeated social icon elements -->
+          <i
+            v-for="social in socialIcons"
+            :key="social"
+            :class="`footer__social-icon fab ${social}`"
+          ></i>
         </div>
       </div>
     </div>
@@ -92,7 +94,50 @@
 <script lang="ts">
 import Vue from 'vue';
 
+interface StoreButton {
+  icon: string;
+  topText: string;
+  label: string;
+}
+
 export default Vue.extend({
   name: 'AppFooter',
+
+  data() {
+    return {
+      supportInfo: [
+        '111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.',
+        'exclusive@gmail.com',
+        '+88015-88888-9999',
+      ] as string[],
+
+      accountLinks: [
+        'My Account',
+        'Login / Register',
+        'Cart',
+        'Wishlist',
+        'Shop',
+      ] as string[],
+
+      quickLinks: [
+        'Privacy Policy',
+        'Terms Of Use',
+        'FAQ',
+        'Contact',
+      ] as string[],
+
+      storeButtons: [
+        { icon: 'fa-google-play', topText: 'GET IT ON', label: 'Google Play' },
+        { icon: 'fa-apple', topText: 'Download on the', label: 'App Store' },
+      ] as StoreButton[],
+
+      socialIcons: [
+        'fa-facebook-f',
+        'fa-twitter',
+        'fa-instagram',
+        'fa-linkedin-in',
+      ] as string[],
+    };
+  },
 });
 </script>
