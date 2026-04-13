@@ -137,7 +137,8 @@ export default Vue.extend({
     },
 
     goToProduct(id: number): void {
-      this.$router.push(`/product/${id}`);
+      //passes ?from=home so ProductDetailView breadcrumb knows where user came from
+      this.$router.push({ path: `/product/${id}`, query: { from: 'home' } });
     },
   },
 });
