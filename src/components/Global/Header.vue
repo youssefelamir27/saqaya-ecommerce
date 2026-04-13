@@ -4,9 +4,11 @@
       <!-- Logo -->
       <h6 class="header__logo">Exclusive</h6>
 
-      <!-- Desktop Navigation -->
+      <!-- Mobile overlay — separate element so @click works -->
+      <div v-if="isMenuOpen" class="header__overlay" @click="closeMenu"></div>
+
+      <!-- Navigation Drawer -->
       <nav class="header__nav" :class="{ 'header__nav--open': isMenuOpen }">
-        <!--v-for replaces 3 repeated router-link blocks -->
         <router-link
           v-for="link in navLinks"
           :key="link.to"
@@ -63,6 +65,7 @@
         class="header__hamburger"
         :class="{ 'header__hamburger--active': isMenuOpen }"
         @click="toggleMenu"
+        aria-label="Toggle navigation menu"
       >
         <span class="header__hamburger-line"></span>
         <span class="header__hamburger-line"></span>
@@ -88,7 +91,6 @@ export default Vue.extend({
   data() {
     return {
       isMenuOpen: false,
-      // ✅ nav links as data array — easy to add/remove links in one place
       navLinks: [
         { label: 'Home', to: '/', exact: true },
         { label: 'Contact', to: '/contact', exact: false },

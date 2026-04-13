@@ -34,10 +34,6 @@
     align-items: center;
     gap: 40px;
     flex: 1;
-
-    &--open {
-      left: 0 !important;
-    }
   }
 
   &__nav-link {
@@ -45,6 +41,7 @@
     font-size: $font-size-md;
     padding-bottom: 4px;
     position: relative;
+    text-decoration: none;
 
     &::after {
       content: '';
@@ -160,6 +157,7 @@
     cursor: pointer;
     padding: 4px;
     flex-shrink: 0;
+    z-index: 1001;
 
     &-line {
       width: 25px;
@@ -182,6 +180,15 @@
     }
   }
 
+  //Real overlay element — replaces ::before pseudo which couldn't be clicked
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: color-opacity($color-black, 0.5);
+    z-index: 998;
+    cursor: pointer;
+  }
+
   @include respond-to('lg') {
     &__container {
       gap: 1rem;
@@ -202,6 +209,7 @@
       padding: 0 1rem;
     }
 
+    //Drawer — slides in from left, sits above overlay
     &__nav {
       position: fixed;
       top: 0;
@@ -210,7 +218,7 @@
       max-width: 350px;
       height: 100vh;
       background-color: $color-white;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 0 10px color-opacity($color-black, 0.1);
       transition: left 0.3s ease;
       z-index: 999;
       padding: 80px 2rem 2rem;
@@ -219,15 +227,9 @@
       gap: 1.5rem;
       overflow-y: auto;
 
-      &--open::before {
-        content: '';
-        position: fixed;
-        top: 0;
+      //open state — slide in
+      &--open {
         left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: -1;
       }
     }
 
@@ -251,7 +253,6 @@
 
     &__hamburger {
       display: flex;
-      z-index: 1001;
     }
   }
 
