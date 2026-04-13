@@ -153,7 +153,10 @@ export default Vue.extend({
     },
 
     goToProduct(id: number): void {
-      this.$router.push(`/product/${id}`);
+      this.$router.push({
+        path: `/product/${id}`,
+        query: { from: 'products' },
+      });
     },
 
     roundedRating(product: Product): number {
