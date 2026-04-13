@@ -1,11 +1,11 @@
-]
 <template>
   <div class="product-detail">
-    <!-- Breadcrumb -->
+    <!-- Breadcrumb uses route query to know where user came from -->
     <div class="product-detail__breadcrumb">
       <router-link to="/">Home</router-link>
       <span> / </span>
-      <router-link to="/products">Products</router-link>
+      <router-link v-if="breadcrumbFrom === 'home'" to="/">Home</router-link>
+      <router-link v-else to="/products">Products</router-link>
       <span> / </span>
       <span class="product-detail__breadcrumb-current">{{ productTitle }}</span>
     </div>
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <!-- ✅ Right: ProductInfo component -->
+      <!-- ProductInfo component -->
       <product-info
         :product="selectedProduct"
         :quantity="localQuantity"
@@ -96,7 +96,6 @@ export default Vue.extend({
 
   data() {
     return {
-      // ✅ UI state stays local — not in Vuex
       selectedImage: '' as string,
       localQuantity: 1 as number,
     };
@@ -123,22 +122,45 @@ export default Vue.extend({
         this.selectedProduct && this.selectedProduct.reviews.length > 0
       );
     },
+    // reads route query to determine breadcrumb trail
+    breadcrumbFrom(): string {
+      return (this.$route.query.from as string) || 'products';
+    },
   },
 
-  async mounted() {
-    const id = Number(this.$route.params.id);
+  // Vue Router lifecycle hook — runs before component is created
+  // better than mounted() for route-based data fetching
+  async beforeRouteEnter(to, from, next) {
+    next(async (vm: any) => {
+      const id = Number(to.params.id);
+      await vm.fetchProductById(id);
+      // ✅ handle invalid product ID — redirect to 404
+      if (vm.hasError) {
+        vm.$router.replace({ name: 'ErrorPage' });
+        return;
+      }
+      if (vm.selectedProduct) {
+        vm.selectedImage = vm.selectedProduct.thumbnail;
+      }
+    });
+  },
+
+  // Vue Router lifecycle hook — runs when navigating between products
+  // e.g. going from /product/1 to /product/2 without remounting
+  async beforeRouteUpdate(to, from, next) {
+    const id = Number(to.params.id);
+    this.selectedImage = '';
+    this.localQuantity = 1;
     await this.fetchProductById(id);
+    // ✅ handle invalid product ID on route update too
+    if (this.hasError) {
+      next({ name: 'ErrorPage' });
+      return;
+    }
     if (this.selectedProduct) {
       this.selectedImage = this.selectedProduct.thumbnail;
     }
-  },
-
-  watch: {
-    selectedProduct(product: Product | null) {
-      if (product && !this.selectedImage) {
-        this.selectedImage = product.thumbnail;
-      }
-    },
+    next();
   },
 
   methods: {
