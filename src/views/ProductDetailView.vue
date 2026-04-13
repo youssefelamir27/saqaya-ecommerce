@@ -4,9 +4,13 @@
     <div class="product-detail__breadcrumb">
       <router-link to="/">Home</router-link>
       <span> / </span>
-      <router-link v-if="breadcrumbFrom === 'home'" to="/">Home</router-link>
-      <router-link v-else to="/products">Products</router-link>
-      <span> / </span>
+
+      <!--only show middle crumb when coming from products page -->
+      <template v-if="breadcrumbFrom === 'products'">
+        <router-link to="/products">Products</router-link>
+        <span> / </span>
+      </template>
+
       <span class="product-detail__breadcrumb-current">{{ productTitle }}</span>
     </div>
 
@@ -134,7 +138,7 @@ export default Vue.extend({
     next(async (vm: any) => {
       const id = Number(to.params.id);
       await vm.fetchProductById(id);
-      // ✅ handle invalid product ID — redirect to 404
+      // handle invalid product ID — redirect to 404
       if (vm.hasError) {
         vm.$router.replace({ name: 'ErrorPage' });
         return;
@@ -152,7 +156,7 @@ export default Vue.extend({
     this.selectedImage = '';
     this.localQuantity = 1;
     await this.fetchProductById(id);
-    // ✅ handle invalid product ID on route update too
+    // handle invalid product ID on route update too
     if (this.hasError) {
       next({ name: 'ErrorPage' });
       return;
