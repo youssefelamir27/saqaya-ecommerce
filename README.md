@@ -19,11 +19,10 @@ npm run build
 ```
 npm run test:unit
 ```
+### Lint and fix files
 
-### Lints and fixes files
+```bash
+npx eslint --ext .js,.vue,.ts src/ --fix
 ```
-npm run lint
-```
-
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
