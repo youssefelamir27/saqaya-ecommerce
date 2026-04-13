@@ -21,7 +21,7 @@ npm run test:unit
 ```
 ### Lint and fix files
 
-```bash
+```
 npx eslint --ext .js,.vue,.ts src/ --fix
 ```
 ### Customize configuration
