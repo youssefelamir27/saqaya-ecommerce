@@ -7,9 +7,15 @@
       <span
         v-for="star in 5"
         :key="star"
-        :class="['product-detail__star', { 'product-detail__star--filled': star <= roundedRating }]"
-      >★</span>
-      <span class="product-detail__rating-count">({{ product.rating }} reviews)</span>
+        :class="[
+          'product-detail__star',
+          { 'product-detail__star--filled': star <= roundedRating },
+        ]"
+        >★</span
+      >
+      <span class="product-detail__rating-count"
+        >({{ product.rating }} reviews)</span
+      >
       <span
         class="product-detail__stock"
         :class="{ 'product-detail__stock--low': isLowStock }"
@@ -22,7 +28,9 @@
     <div class="product-detail__price-row">
       <span class="product-detail__price-current">${{ discountedPrice }}</span>
       <span class="product-detail__price-original">${{ product.price }}</span>
-      <span class="product-detail__discount-badge">-{{ roundedDiscount }}%</span>
+      <span class="product-detail__discount-badge"
+        >-{{ roundedDiscount }}%</span
+      >
     </div>
 
     <p class="product-detail__description">{{ product.description }}</p>
@@ -40,9 +48,13 @@
 
     <!-- Quantity Row -->
     <div class="product-detail__quantity-row">
-      <button class="product-detail__qty-btn" @click="$emit('decrease')">-</button>
+      <button class="product-detail__qty-btn" @click="$emit('decrease')">
+        -
+      </button>
       <span class="product-detail__qty">{{ quantity }}</span>
-      <button class="product-detail__qty-btn" @click="$emit('increase')">+</button>
+      <button class="product-detail__qty-btn" @click="$emit('increase')">
+        +
+      </button>
       <button class="product-detail__add-btn" @click="$emit('add-to-cart')">
         Add To Cart
       </button>
@@ -88,7 +100,8 @@ export default Vue.extend({
 
     discountedPrice(): string {
       return (
-        this.product.price * (1 - this.product.discountPercentage / 100)
+        this.product.price *
+        (1 - this.product.discountPercentage / 100)
       ).toFixed(2);
     },
   },
