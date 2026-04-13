@@ -7,71 +7,21 @@
       <span class="about__breadcrumb-current">About</span>
     </div>
 
-    <!-- Our Story -->
-    <section class="story">
-      <div class="story__text">
-        <h1>Our Story</h1>
-        <p>
-          Launched in 2015, Exclusive is South Asia's premier online shopping
-          marketplace with an active presence in Bangladesh. Supported by wide
-          range of tailored marketing, data and service solutions, Exclusive has
-          10,500 sellers and 300 brands and serves 3 millions customers across
-          the region.
-        </p>
-        <p>
-          Exclusive has more than 1 Million products to offer, growing at a very
-          fast rate. Exclusive offers a diverse assortment in categories ranging
-          from consumer.
-        </p>
-      </div>
-      <div class="story__image">
-        <img
-          src="https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp"
-          alt="Our products"
-        />
-      </div>
-    </section>
+    <!--OurStory — purely presentational, no props needed -->
+    <our-story />
 
-    <!-- Stats -->
-    <section class="stats">
-      <div
-        v-for="(stat, index) in stats"
-        :key="stat.label"
-        :class="[
-          'stats__card',
-          { 'stats__card--active': index === activeStatIndex },
-        ]"
-        @click="setActiveStatIndex(index)"
-      >
-        <div class="stats__icon-wrapper">
-          <span>{{ stat.icon }}</span>
-        </div>
-        <h3>{{ stat.value }}</h3>
-        <p>{{ stat.label }}</p>
-      </div>
-    </section>
+    <!--StatsBox — receives stats + activeIndex, emits select -->
+    <stats-box
+      :stats="stats"
+      :active-index="activeStatIndex"
+      @select="setActiveStatIndex"
+    />
 
     <!-- Team -->
     <section class="team">
       <div class="team__grid">
-        <div v-for="member in team" :key="member.name" class="team__card">
-          <div class="team__image">
-            <img :src="member.image" :alt="member.name" />
-          </div>
-          <h3>{{ member.name }}</h3>
-          <p class="team__role">{{ member.role }}</p>
-          <div class="team__social">
-            <span class="team__social-icon"
-              ><i class="fab fa-facebook"></i
-            ></span>
-            <span class="team__social-icon"
-              ><i class="fab fa-instagram"></i
-            ></span>
-            <span class="team__social-icon"
-              ><i class="fab fa-linkedin"></i
-            ></span>
-          </div>
-        </div>
+        <!--TeamCard — receives one member per iteration -->
+        <team-card v-for="member in team" :key="member.name" :member="member" />
       </div>
       <div class="team__dots">
         <span
@@ -84,20 +34,16 @@
 
     <!-- Services -->
     <section class="about-services">
-      <div class="about-services__item">
-        <div class="about-services__icon"><span>🚚</span></div>
-        <h4>FREE AND FAST DELIVERY</h4>
-        <p>Free delivery for all orders over $140</p>
-      </div>
-      <div class="about-services__item">
-        <div class="about-services__icon"><span>🎧</span></div>
-        <h4>24/7 CUSTOMER SERVICE</h4>
-        <p>Friendly 24/7 customer support</p>
-      </div>
-      <div class="about-services__item">
-        <div class="about-services__icon"><span>✅</span></div>
-        <h4>MONEY BACK GUARANTEE</h4>
-        <p>We return money within 30 days</p>
+      <div
+        v-for="service in services"
+        :key="service.title"
+        class="about-services__item"
+      >
+        <div class="about-services__icon">
+          <span>{{ service.icon }}</span>
+        </div>
+        <h4>{{ service.title }}</h4>
+        <p>{{ service.description }}</p>
       </div>
     </section>
   </div>
@@ -106,19 +52,56 @@
 <script lang="ts">
 import Vue from 'vue';
 import { StatItem, TeamMember } from '@/types/product';
+import OurStory from '@/components/About/OurStory.vue';
+import StatsBox from '@/components/About/StatsBox.vue';
+import TeamCard from '@/components/About/TeamCard.vue';
+
+interface Service {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export default Vue.extend({
   name: 'AboutView',
+
+  components: {
+    OurStory,
+    StatsBox,
+    TeamCard,
+  },
 
   data() {
     return {
       activeStatIndex: 1 as number,
+
       stats: [
         { icon: '🏪', value: '10.5k', label: 'Sellers active our site' },
         { icon: '💰', value: '33k', label: 'Monthly Product Sale' },
         { icon: '🛍️', value: '45.5k', label: 'Customer active in our site' },
         { icon: '💵', value: '25k', label: 'Annual gross sale in our site' },
       ] as StatItem[],
+
       team: [] as TeamMember[],
+
+      // v-for replaces 3 repeated service blocks
+      services: [
+        {
+          icon: '🚚',
+          title: 'FREE AND FAST DELIVERY',
+          description: 'Free delivery for all orders over $140',
+        },
+        {
+          icon: '🎧',
+          title: '24/7 CUSTOMER SERVICE',
+          description: 'Friendly 24/7 customer support',
+        },
+        {
+          icon: '✅',
+          title: 'MONEY BACK GUARANTEE',
+          description: 'We return money within 30 days',
+        },
+      ] as Service[],
     };
   },
 
