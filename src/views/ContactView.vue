@@ -15,60 +15,24 @@
 
       <!-- Right Content -->
       <div class="contact__right">
-        <!-- Call Us -->
-        <div class="contact__card">
-          <div class="contact__card-header">
-            <div class="contact__card-icon">
-              <i class="fas fa-phone" style="color: white"></i>
-            </div>
-            <h3>Call us</h3>
-          </div>
+        <!--ContactBox for Call Us section -->
+        <contact-box title="Call us" icon="fa-phone">
           <p class="contact__card-text">
             We are available 24/7, 7 days a week.
           </p>
           <p class="contact__card-text">Phone: +8801611112222</p>
-        </div>
+        </contact-box>
 
         <hr class="contact__divider" />
 
-        <!-- Write To Us -->
-        <div class="contact__card">
-          <div class="contact__card-header">
-            <div class="contact__card-icon">✉️</div>
-            <h3>Write To US</h3>
-          </div>
+        <!--ContactBox for Write To Us section -->
+        <contact-box title="Write To Us" icon="fa-envelope">
           <p class="contact__card-text">
             Fill out our form and we will contact you within 24 hours.
           </p>
-
-          <div class="contact__form-row">
-            <input
-              v-model="form.name"
-              type="text"
-              placeholder="Your Name *"
-              class="contact__input"
-            />
-            <input
-              v-model="form.email"
-              type="email"
-              placeholder="Your Email *"
-              class="contact__input"
-            />
-          </div>
-
-          <textarea
-            v-model="form.message"
-            placeholder="Your Message"
-            class="contact__textarea"
-            rows="6"
-          ></textarea>
-
-          <div class="contact__form-actions">
-            <button class="contact__submit-btn" @click="sendMessage">
-              Send Message
-            </button>
-          </div>
-        </div>
+          <!--ContactForm handles all form logic and emits submit -->
+          <contact-form @submit="handleFormSubmit" />
+        </contact-box>
       </div>
     </div>
   </div>
@@ -76,15 +40,21 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { ContactForm } from '@/types/product';
+import { ContactForm as ContactFormType } from '@/types/product';
+import ContactBox from '@/components/Contact/ContactBox.vue';
+import ContactForm from '@/components/Contact/ContactForm.vue';
 
 export default Vue.extend({
   name: 'ContactView',
 
+  components: {
+    ContactBox,
+    ContactForm,
+  },
+
   data() {
     return {
       contactImage: '' as string,
-      form: { name: '', email: '', message: '' } as ContactForm,
     };
   },
 
@@ -105,13 +75,10 @@ export default Vue.extend({
       }
     },
 
-    sendMessage(): void {
-      if (!this.form.name || !this.form.email || !this.form.message) {
-        alert('Please fill in all fields.');
-        return;
-      }
+    //receives form data emitted from ContactForm
+    handleFormSubmit(form: ContactFormType): void {
+      console.log('Form submitted:', form);
       alert(`Message sent! We'll get back to you within 24 hours.`);
-      this.form = { name: '', email: '', message: '' };
     },
   },
 });
