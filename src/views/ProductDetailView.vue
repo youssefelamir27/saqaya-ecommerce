@@ -1,3 +1,4 @@
+]
 <template>
   <div class="product-detail">
     <!-- Breadcrumb -->
@@ -41,76 +42,14 @@
         </div>
       </div>
 
-      <!-- Right: Info -->
-      <div class="product-detail__info">
-        <h1>{{ selectedProduct.title }}</h1>
-
-        <div class="product-detail__rating-row">
-          <span
-            v-for="star in 5"
-            :key="star"
-            :class="[
-              'product-detail__star',
-              { 'product-detail__star--filled': star <= roundedRating },
-            ]"
-            >★</span
-          >
-          <span class="product-detail__rating-count"
-            >({{ selectedProduct.rating }} reviews)</span
-          >
-          <span
-            class="product-detail__stock"
-            :class="{ 'product-detail__stock--low': isLowStock }"
-          >
-            {{ selectedProduct.availabilityStatus }}
-          </span>
-        </div>
-
-        <div class="product-detail__price-row">
-          <span class="product-detail__price-current"
-            >${{ discountedPrice }}</span
-          >
-          <span class="product-detail__price-original"
-            >${{ selectedProduct.price }}</span
-          >
-          <span class="product-detail__discount-badge"
-            >-{{ roundedDiscount }}%</span
-          >
-        </div>
-
-        <p class="product-detail__description">
-          {{ selectedProduct.description }}
-        </p>
-
-        <hr class="product-detail__divider" />
-
-        <div class="product-detail__meta">
-          <p><strong>Brand:</strong> {{ selectedProduct.brand }}</p>
-          <p><strong>Category:</strong> {{ selectedProduct.category }}</p>
-          <p>
-            <strong>Shipping:</strong> {{ selectedProduct.shippingInformation }}
-          </p>
-          <p>
-            <strong>Return Policy:</strong> {{ selectedProduct.returnPolicy }}
-          </p>
-          <p>
-            <strong>Warranty:</strong> {{ selectedProduct.warrantyInformation }}
-          </p>
-        </div>
-
-        <div class="product-detail__quantity-row">
-          <button class="product-detail__qty-btn" @click="decreaseQty">
-            -
-          </button>
-          <span class="product-detail__qty">{{ localQuantity }}</span>
-          <button class="product-detail__qty-btn" @click="increaseQty">
-            +
-          </button>
-          <button class="product-detail__add-btn" @click="handleAddToCart">
-            Add To Cart
-          </button>
-        </div>
-      </div>
+      <!-- ✅ Right: ProductInfo component -->
+      <product-info
+        :product="selectedProduct"
+        :quantity="localQuantity"
+        @increase="increaseQty"
+        @decrease="decreaseQty"
+        @add-to-cart="handleAddToCart"
+      />
     </div>
 
     <!-- Reviews -->
@@ -147,38 +86,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-import { Review, Product } from '@/types/product';
-// interface Review {
-//   rating: number;
-//   comment: string;
-//   date: string;
-//   reviewerName: string;
-// }
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   description: string;
-//   price: number;
-//   discountPercentage: number;
-//   rating: number;
-//   stock: number;
-//   brand: string;
-//   category: string;
-//   thumbnail: string;
-//   images: string[];
-//   availabilityStatus: string;
-//   shippingInformation: string;
-//   returnPolicy: string;
-//   warrantyInformation: string;
-//   reviews: Review[];
-// }
+import { Product } from '@/types/product';
+import ProductInfo from '@/components/ProductDetail/ProductInfo.vue';
 
 export default Vue.extend({
   name: 'ProductDetailView',
 
+  components: { ProductInfo },
+
   data() {
     return {
+      // ✅ UI state stays local — not in Vuex
       selectedImage: '' as string,
       localQuantity: 1 as number,
     };
@@ -197,27 +115,8 @@ export default Vue.extend({
     errorMessage(): string | null {
       return this.$store.getters['products/errorMessage'];
     },
-
     productTitle(): string {
       return this.selectedProduct ? this.selectedProduct.title : '...';
-    },
-    roundedRating(): number {
-      return this.selectedProduct ? Math.round(this.selectedProduct.rating) : 0;
-    },
-    roundedDiscount(): number {
-      return this.selectedProduct
-        ? Math.round(this.selectedProduct.discountPercentage)
-        : 0;
-    },
-    isLowStock(): boolean {
-      return this.selectedProduct ? this.selectedProduct.stock < 10 : false;
-    },
-    discountedPrice(): string {
-      if (!this.selectedProduct) return '0.00';
-      return (
-        this.selectedProduct.price *
-        (1 - this.selectedProduct.discountPercentage / 100)
-      ).toFixed(2);
     },
     hasReviews(): boolean {
       return !!(
