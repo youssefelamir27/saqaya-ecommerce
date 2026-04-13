@@ -12,11 +12,14 @@
       </p>
     </div>
 
+    <!-- SortDropdown wired with v-model -->
+    <sort-dropdown v-model="sortKey" />
+
     <div v-if="isLoading" class="loading">Loading all products...</div>
 
     <div v-else class="products-grid">
       <div
-        v-for="product in productList"
+        v-for="product in sortedProducts"
         :key="product.id"
         class="product-card"
         @click="goToProduct(product.id)"
@@ -25,7 +28,6 @@
           <span class="product-card__badge product-card__badge--discount">
             -{{ getDiscount(product) }}%
           </span>
-
           <div class="product-card__actions">
             <button
               class="product-card__action-btn"
@@ -35,9 +37,7 @@
             </button>
             <button class="product-card__action-btn" @click.stop>👁</button>
           </div>
-
           <img :src="product.thumbnail" :alt="product.title" loading="lazy" />
-
           <button
             class="product-card__cart-btn"
             @click.stop="handleAddToCart(product)"
@@ -45,7 +45,6 @@
             Add To Cart
           </button>
         </div>
-
         <div class="product-card__info">
           <p class="product-card__title">{{ product.title }}</p>
           <div class="product-card__price">
@@ -84,9 +83,19 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { Product } from '@/types/product';
+import SortDropdown from '@/components/Products/SortDropdown.vue';
 
 export default Vue.extend({
   name: 'ProductsView',
+
+  components: { SortDropdown },
+
+  data() {
+    return {
+      // sortKey drives the sortedProducts computed
+      sortKey: '' as string,
+    };
+  },
 
   computed: {
     productList(): Product[] {
@@ -97,6 +106,24 @@ export default Vue.extend({
     },
     hasNoProducts(): boolean {
       return this.productList.length === 0;
+    },
+
+    // sorted computed — derives from productList + sortKey
+    // spreads to avoid mutating Vuex state directly
+    sortedProducts(): Product[] {
+      const list = [...this.productList];
+      switch (this.sortKey) {
+        case 'price-asc':
+          return list.sort((a, b) => a.price - b.price);
+        case 'price-desc':
+          return list.sort((a, b) => b.price - a.price);
+        case 'rating-desc':
+          return list.sort((a, b) => b.rating - a.rating);
+        case 'rating-asc':
+          return list.sort((a, b) => a.rating - b.rating);
+        default:
+          return list;
+      }
     },
   },
 
