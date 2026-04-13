@@ -20,9 +20,10 @@ npm run build
 npm run test:unit
 ```
 
-### Lints and fixes files
-```
-npm run lint
+### Lint and fix files
+
+```bash
+npx eslint --ext .js,.vue,.ts src/ --fix
 ```
 
 ### Customize configuration

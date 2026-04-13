@@ -50,8 +50,15 @@
           <span>Items ({{ cartItemCount }})</span>
           <span>${{ totalUSD }}</span>
         </div>
-        <button class="cart__checkout-btn">Proceed to Checkout</button>
-        <button class="cart__clear-btn" @click="clearCart">Clear Cart</button>
+
+        <!--AppButton replaces plain <button> -->
+        <app-button variant="primary" size="md" @click="goToCheckout">
+          Proceed to Checkout
+        </app-button>
+
+        <app-button variant="outline" size="md" @click="clearCart">
+          Clear Cart
+        </app-button>
       </div>
     </div>
   </div>
@@ -61,9 +68,14 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { CartItem } from '@/types/product';
+import AppButton from '@/components/UI/AppButton.vue';
 
 export default Vue.extend({
   name: 'CartView',
+
+  components: {
+    AppButton,
+  },
 
   computed: {
     sideCartItems(): CartItem[] {
@@ -94,6 +106,11 @@ export default Vue.extend({
       } else {
         this.updateQuantity({ productId: item.id, quantity });
       }
+    },
+
+    goToCheckout(): void {
+      // placeholder for future checkout implementation
+      alert('Checkout coming soon!');
     },
   },
 });
