@@ -7,11 +7,13 @@
       :value="value"
       @change="$emit('input', $event.target.value)"
     >
-      <option value="">Default</option>
-      <option value="price-asc">Price: Low to High</option>
-      <option value="price-desc">Price: High to Low</option>
-      <option value="rating-desc">Rating: High to Low</option>
-      <option value="rating-asc">Rating: Low to High</option>
+      <option
+        v-for="option in sortOptions"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.label }}
+      </option>
     </select>
   </div>
 </template>
@@ -19,15 +21,32 @@
 <script lang="ts">
 import Vue from 'vue';
 
+interface SortOption {
+  value: string;
+  label: string;
+}
+
 export default Vue.extend({
   name: 'SortDropdown',
 
   props: {
-    // v-model compatible — receives value, emits input
     value: {
       type: String,
       default: '',
     },
+  },
+
+  data() {
+    return {
+      // easy to add/remove sort options in one place
+      sortOptions: [
+        { value: '', label: 'Default' },
+        { value: 'price-asc', label: 'Price: Low to High' },
+        { value: 'price-desc', label: 'Price: High to Low' },
+        { value: 'rating-desc', label: 'Rating: High to Low' },
+        { value: 'rating-asc', label: 'Rating: Low to High' },
+      ] as SortOption[],
+    };
   },
 });
 </script>
