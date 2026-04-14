@@ -133,7 +133,6 @@ export default Vue.extend({
   },
 
   // Vue Router lifecycle hook — runs before component is created
-  // better than mounted() for route-based data fetching
   async beforeRouteEnter(to, from, next) {
     next(async (vm: any) => {
       const id = Number(to.params.id);

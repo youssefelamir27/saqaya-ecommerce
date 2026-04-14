@@ -38,7 +38,6 @@ export default Vue.extend({
 
   data() {
     return {
-      // easy to add/remove sort options in one place
       sortOptions: [
         { value: '', label: 'Default' },
         { value: 'price-asc', label: 'Price: Low to High' },
