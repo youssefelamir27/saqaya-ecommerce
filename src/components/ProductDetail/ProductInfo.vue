@@ -55,9 +55,18 @@
       <button class="product-detail__qty-btn" @click="$emit('increase')">
         +
       </button>
-      <!-- button text changes dynamically -->
-      <button class="product-detail__add-btn" @click="$emit('add-to-cart')">
-        {{ isInCart ? 'Update Cart' : 'Add To Cart' }}
+
+      <!-- dynamic button — style and text change based on cart state -->
+      <button
+        :class="[
+          'product-detail__add-btn',
+          isInCart
+            ? 'product-detail__add-btn--update'
+            : 'product-detail__add-btn--add',
+        ]"
+        @click="$emit('add-to-cart')"
+      >
+        {{ buttonText }}
       </button>
     </div>
   </div>
@@ -71,25 +80,19 @@ export default Vue.extend({
   name: 'ProductInfo',
 
   props: {
-    //receives full product from ProductDetailView
     product: {
       type: Object as () => Product,
       required: true,
     },
-    // new prop
-    isInCart: {
-      type: Boolean,
-      default: false,
-    },
-    //receives local quantity from ProductDetailView
     quantity: {
       type: Number,
       required: true,
     },
+    isInCart: {
+      type: Boolean,
+      default: false,
+    },
   },
-
-  // emits increase, decrease, add-to-cart up to ProductDetailView
-  // ProductDetailView handles Vuex dispatch — component stays decoupled
 
   computed: {
     roundedRating(): number {
@@ -109,6 +112,11 @@ export default Vue.extend({
         this.product.price *
         (1 - this.product.discountPercentage / 100)
       ).toFixed(2);
+    },
+
+    // button text moved to computed — clean template + easy to test
+    buttonText(): string {
+      return this.isInCart ? 'Update Cart' : 'Add To Cart';
     },
   },
 });

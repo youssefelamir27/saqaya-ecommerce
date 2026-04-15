@@ -190,18 +190,36 @@
     text-align: center;
   }
 
+  // Base button styles shared between add and update
   &__add-btn {
     padding: 10px 32px;
-    background: $color-primary;
-    color: $color-white;
-    border: none;
     border-radius: $border-radius-sm;
     font-size: $font-size-base;
     font-weight: $font-weight-medium;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    border: none;
 
-    &:hover { background: $color-primary-dark; }
+    // Add To Cart — red primary, draws attention
+    &--add {
+      background: $color-primary;
+      color: $color-white;
+      border: none;
+
+      &:hover { background: $color-primary-dark; }
+    }
+
+    // Update Cart — dark outline, secondary action
+    &--update {
+      background: transparent;
+      color: $color-black;
+      border: 2px solid $color-black;
+
+      &:hover {
+        background: $color-black;
+        color: $color-white;
+      }
+    }
   }
 }
 
