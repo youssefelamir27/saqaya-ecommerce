@@ -55,8 +55,9 @@
       <button class="product-detail__qty-btn" @click="$emit('increase')">
         +
       </button>
+      <!-- button text changes dynamically -->
       <button class="product-detail__add-btn" @click="$emit('add-to-cart')">
-        Add To Cart
+        {{ isInCart ? 'Update Cart' : 'Add To Cart' }}
       </button>
     </div>
   </div>
@@ -74,6 +75,11 @@ export default Vue.extend({
     product: {
       type: Object as () => Product,
       required: true,
+    },
+    // new prop
+    isInCart: {
+      type: Boolean,
+      default: false,
     },
     //receives local quantity from ProductDetailView
     quantity: {
