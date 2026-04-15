@@ -133,8 +133,10 @@ export default Vue.extend({
       );
     },
     // reads route query to determine breadcrumb trail
+    // only show products crumb when explicitly from=products
     breadcrumbFrom(): string {
-      return (this.$route.query.from as string) || 'products';
+      const from = this.$route.query.from as string;
+      return from === 'products' ? 'products' : 'home';
     },
   },
 
