@@ -17,6 +17,7 @@ const mockItem = {
 };
 
 describe('cart store', () => {
+  // ── Mutations ──────────────────────────────────────────────────────────────
   describe('ADD_TO_CART mutation', () => {
     it('adds new item to empty cart', () => {
       const store = createStore();
@@ -91,6 +92,7 @@ describe('cart store', () => {
     });
   });
 
+  // ── Getters ────────────────────────────────────────────────────────────────
   describe('cartItemCount getter', () => {
     it('returns 0 for empty cart', () => {
       const store = createStore();
@@ -128,12 +130,52 @@ describe('cart store', () => {
 
     it('calculates total for multiple different items', () => {
       const store = createStore();
-      // item1: 10 * 1 * 1 = 10
-      // item2: 20 * (1 - 0.25) * 1 = 15
-      // total = 25
       store.commit('cart/ADD_TO_CART', { id: 1, title: 'A', price: 10, discountPercentage: 0, thumbnail: '', quantity: 1 });
       store.commit('cart/ADD_TO_CART', { id: 2, title: 'B', price: 20, discountPercentage: 25, thumbnail: '', quantity: 1 });
       expect(store.getters['cart/totalUSD']).toBe('25.00');
+    });
+  });
+
+  // ── Actions ────────────────────────────────────────────────────────────────
+  describe('actions', () => {
+    it('addToCart action adds item to cart', async () => {
+      const store = createStore();
+      await store.dispatch('cart/addToCart', mockItem);
+      expect(store.getters['cart/sideCartItems'].length).toBe(1);
+    });
+
+    it('removeFromCart action removes item', async () => {
+      const store = createStore();
+      store.commit('cart/ADD_TO_CART', mockItem);
+      await store.dispatch('cart/removeFromCart', 1);
+      expect(store.getters['cart/sideCartItems'].length).toBe(0);
+    });
+
+    it('updateQuantity action updates item quantity', async () => {
+      const store = createStore();
+      store.commit('cart/ADD_TO_CART', mockItem);
+      await store.dispatch('cart/updateQuantity', { productId: 1, quantity: 5 });
+      expect(store.getters['cart/sideCartItems'][0].quantity).toBe(5);
+    });
+
+    it('clearCart action empties the cart', async () => {
+      const store = createStore();
+      store.commit('cart/ADD_TO_CART', mockItem);
+      await store.dispatch('cart/clearCart');
+      expect(store.getters['cart/sideCartItems'].length).toBe(0);
+    });
+
+    it('toggleSideCart action toggles open state', async () => {
+      const store = createStore();
+      await store.dispatch('cart/toggleSideCart');
+      expect(store.getters['cart/isSideCartOpen']).toBe(true);
+    });
+
+    it('closeSideCart action closes the cart', async () => {
+      const store = createStore();
+      store.commit('cart/OPEN_SIDE_CART');
+      await store.dispatch('cart/closeSideCart');
+      expect(store.getters['cart/isSideCartOpen']).toBe(false);
     });
   });
 });
