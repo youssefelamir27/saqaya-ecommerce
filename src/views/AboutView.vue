@@ -123,11 +123,16 @@ export default Vue.extend({
           'Managing Director',
           'Product Designer',
         ];
-        this.team = data.users.map((user: any, i: number) => ({
-          name: `${user.firstName} ${user.lastName}`,
-          role: roles[i],
-          image: user.image,
-        }));
+        this.team = data.users.map(
+          (
+            user: { firstName: string; lastName: string; image: string },
+            i: number
+          ) => ({
+            name: `${user.firstName} ${user.lastName}`,
+            role: roles[i],
+            image: user.image,
+          })
+        );
       } catch (err) {
         console.error('Error fetching team:', err);
       }
