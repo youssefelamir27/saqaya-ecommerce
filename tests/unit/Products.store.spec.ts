@@ -1,6 +1,11 @@
 import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import axios from 'axios';
 import productsModule from '@/store/modules/products';
+
+// ✅ mock axios so we don't make real API calls in tests
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -21,6 +26,7 @@ const mockProduct = {
 };
 
 describe('products store', () => {
+  // ── Mutations ──────────────────────────────────────────────────────────────
   describe('mutations', () => {
     it('SET_PRODUCT_LIST updates productList', () => {
       const store = createStore();
@@ -76,6 +82,7 @@ describe('products store', () => {
     });
   });
 
+  // ── Getters defaults ───────────────────────────────────────────────────────
   describe('getters defaults', () => {
     it('hasError is false initially', () => {
       const store = createStore();
@@ -105,6 +112,56 @@ describe('products store', () => {
     it('isLoading is false initially', () => {
       const store = createStore();
       expect(store.getters['products/isLoading']).toBe(false);
+    });
+  });
+
+  // ── Actions ────────────────────────────────────────────────────────────────
+  describe('actions', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('fetchAllProducts sets productList on success', async () => {
+      mockedAxios.get
+        .mockResolvedValueOnce({ data: { products: [mockProduct] } })
+        .mockResolvedValueOnce({ data: { products: [] } });
+      const store = createStore();
+      await store.dispatch('products/fetchAllProducts');
+      expect(store.getters['products/productList'].length).toBe(1);
+      expect(store.getters['products/isLoading']).toBe(false);
+      expect(store.getters['products/hasError']).toBe(false);
+    });
+
+    it('fetchAllProducts sets error on failure', async () => {
+      mockedAxios.get.mockRejectedValueOnce(new Error('Network error'));
+      const store = createStore();
+      await store.dispatch('products/fetchAllProducts');
+      expect(store.getters['products/hasError']).toBe(true);
+      expect(store.getters['products/errorMessage']).toBe('Failed to fetch products.');
+      expect(store.getters['products/isLoading']).toBe(false);
+    });
+
+    it('fetchProductById sets selectedProduct on success', async () => {
+      mockedAxios.get.mockResolvedValueOnce({ data: mockProduct });
+      const store = createStore();
+      await store.dispatch('products/fetchProductById', 1);
+      expect(store.getters['products/selectedProduct']).toEqual(mockProduct);
+      expect(store.getters['products/isLoading']).toBe(false);
+    });
+
+    it('fetchProductById sets error on failure', async () => {
+      mockedAxios.get.mockRejectedValueOnce(new Error('Not found'));
+      const store = createStore();
+      await store.dispatch('products/fetchProductById', 999);
+      expect(store.getters['products/hasError']).toBe(true);
+      expect(store.getters['products/errorMessage']).toBe('Failed to fetch product.');
+      expect(store.getters['products/isLoading']).toBe(false);
+    });
+
+    it('setActiveCategory updates activeCategory', async () => {
+      const store = createStore();
+      await store.dispatch('products/setActiveCategory', 'Skincare');
+      expect(store.getters['products/activeCategory']).toBe('Skincare');
     });
   });
 });
