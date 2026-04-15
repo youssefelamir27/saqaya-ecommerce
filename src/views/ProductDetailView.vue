@@ -140,18 +140,20 @@ export default Vue.extend({
 
   // Vue Router lifecycle hook — runs before component is created
   async beforeRouteEnter(to, from, next) {
-    next(async (vm: any) => {
-      const id = Number(to.params.id);
-      await vm.fetchProductById(id);
-      // handle invalid product ID — redirect to 404
-      if (vm.hasError) {
-        vm.$router.replace({ name: 'ErrorPage' });
-        return;
+    next(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      async (vm: any) => {
+        const id = Number(to.params.id);
+        await vm.fetchProductById(id);
+        if (vm.hasError) {
+          vm.$router.replace({ name: 'ErrorPage' });
+          return;
+        }
+        if (vm.selectedProduct) {
+          vm.selectedImage = vm.selectedProduct.thumbnail;
+        }
       }
-      if (vm.selectedProduct) {
-        vm.selectedImage = vm.selectedProduct.thumbnail;
-      }
-    });
+    );
   },
 
   // Vue Router lifecycle hook — runs when navigating between products
