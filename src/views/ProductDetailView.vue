@@ -50,6 +50,7 @@
       <product-info
         :product="selectedProduct"
         :quantity="localQuantity"
+        :is-in-cart="isInCart"
         @increase="increaseQty"
         @decrease="decreaseQty"
         @add-to-cart="handleAddToCart"
@@ -92,7 +93,7 @@ import Vue from 'vue';
 import { mapActions } from 'vuex';
 import { Product } from '@/types/product';
 import ProductInfo from '@/components/ProductDetail/ProductInfo.vue';
-
+import { CartItem } from '@/types/product';
 export default Vue.extend({
   name: 'ProductDetailView',
 
@@ -120,6 +121,11 @@ export default Vue.extend({
     },
     productTitle(): string {
       return this.selectedProduct ? this.selectedProduct.title : '...';
+    },
+    isInCart(): boolean {
+      return this.$store.getters['cart/sideCartItems'].some(
+        (item: CartItem) => item.id === this.selectedProduct?.id
+      );
     },
     hasReviews(): boolean {
       return !!(
