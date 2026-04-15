@@ -58,7 +58,7 @@ export default Vue.extend({
         alert('Please fill in all fields.');
         return;
       }
-      // ✅ emit up to parent so ContactView can handle the submission
+      // emit up to parent so ContactView can handle the submission
       this.$emit('submit', { ...this.localForm });
       this.resetForm();
     },
