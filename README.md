@@ -1,9 +1,10 @@
 # Saqaya E-commerce
-
 A beauty and fragrance e-commerce application built with Vue 2, TypeScript, Vuex 3, and Vue Router 3.
 
-## Tech Stack
+## Live Demo
+🔗 https://saqaya-ecommerce-two.vercel.app
 
+## Tech Stack
 - Vue 2 + TypeScript
 - Vuex 3 (namespaced modules)
 - Vue Router 3
@@ -12,7 +13,6 @@ A beauty and fragrance e-commerce application built with Vue 2, TypeScript, Vuex
 - Jest + Vue Test Utils
 
 ## Project Setup
-
 ```bash
 npm install --legacy-peer-deps
 ```
@@ -30,6 +30,11 @@ npm run build
 ### Run unit tests
 ```bash
 npm run test:unit
+```
+
+### Run unit tests with coverage
+```bash
+npm run test:unit -- --coverage
 ```
 
 ### Lint and fix files
