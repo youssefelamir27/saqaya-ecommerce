@@ -58,7 +58,7 @@ const mutations = {
   },
 };
 // proper type for action context — replaces { commit }: any
-type ProductsContext = ActionContext<ProductsState, any>;
+type ProductsContext = ActionContext<ProductsState, Record<string, unknown>>;
 const actions = {
   // ProductsContext used everywhere instead of any
   async fetchAllProducts({ commit }: ProductsContext) {

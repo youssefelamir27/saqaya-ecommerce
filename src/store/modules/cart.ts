@@ -66,7 +66,7 @@ const mutations = {
 };
 
 //proper type for action context
-type CartContext = ActionContext<CartState, any>;
+type CartContext = ActionContext<CartState, Record<string, unknown>>;
 const actions = {
   addToCart({ commit }: CartContext, product: CartItem) {
     commit('ADD_TO_CART', product);
