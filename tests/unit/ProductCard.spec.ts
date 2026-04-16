@@ -18,7 +18,7 @@ interface Product {
   category: string;
 }
 
-// ✅ Vue.extend gives TypeScript proper component typing
+// Vue.extend gives TypeScript proper component typing
 const ProductCard = Vue.extend({
   name: 'ProductCard',
   template: `
