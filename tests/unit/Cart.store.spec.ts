@@ -17,7 +17,7 @@ const mockItem = {
 };
 
 describe('cart store', () => {
-  // ── Mutations ──────────────────────────────────────────────────────────────
+  //  Mutations
   describe('ADD_TO_CART mutation', () => {
     it('adds new item to empty cart', () => {
       const store = createStore();
@@ -92,7 +92,7 @@ describe('cart store', () => {
     });
   });
 
-  // ── Getters ────────────────────────────────────────────────────────────────
+  //  Getters 
   describe('cartItemCount getter', () => {
     it('returns 0 for empty cart', () => {
       const store = createStore();
@@ -136,7 +136,7 @@ describe('cart store', () => {
     });
   });
 
-  // ── Actions ────────────────────────────────────────────────────────────────
+  //  Actions 
   describe('actions', () => {
     it('addToCart action adds item to cart', async () => {
       const store = createStore();
