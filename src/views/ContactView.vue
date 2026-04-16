@@ -43,7 +43,7 @@ import Vue from 'vue';
 import { ContactForm as ContactFormType } from '@/types/product';
 import ContactBox from '@/components/Contact/ContactBox.vue';
 import ContactForm from '@/components/Contact/ContactForm.vue';
-
+import axios from 'axios';
 export default Vue.extend({
   name: 'ContactView',
 
@@ -65,11 +65,10 @@ export default Vue.extend({
   methods: {
     async fetchContactImage(): Promise<void> {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           'https://dummyjson.com/products/category/home-decoration'
         );
-        const data = await res.json();
-        this.contactImage = data.products[1].images[0];
+        this.contactImage = res.data.products[1].images[0];
       } catch (err) {
         console.error('Error fetching image:', err);
       }
