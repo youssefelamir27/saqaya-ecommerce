@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import axios from 'axios';
 import productsModule from '@/store/modules/products';
 
-// ✅ mock axios so we don't make real API calls in tests
+// mock axios so we don't make real API calls in tests
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
@@ -26,7 +26,7 @@ const mockProduct = {
 };
 
 describe('products store', () => {
-  // ── Mutations ──────────────────────────────────────────────────────────────
+  //  Mutations 
   describe('mutations', () => {
     it('SET_PRODUCT_LIST updates productList', () => {
       const store = createStore();
@@ -82,7 +82,7 @@ describe('products store', () => {
     });
   });
 
-  // ── Getters defaults ───────────────────────────────────────────────────────
+  //  Getters defaults 
   describe('getters defaults', () => {
     it('hasError is false initially', () => {
       const store = createStore();
@@ -115,7 +115,7 @@ describe('products store', () => {
     });
   });
 
-  // ── Actions ────────────────────────────────────────────────────────────────
+  //  Actions 
   describe('actions', () => {
     beforeEach(() => {
       jest.clearAllMocks();
