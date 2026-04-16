@@ -7,7 +7,7 @@
       <h3>{{ title }}</h3>
     </div>
 
-    <!-- ✅ slot allows parent to pass any content inside the box -->
+    <!-- slot allows parent to pass any content inside the box -->
     <slot />
   </div>
 </template>

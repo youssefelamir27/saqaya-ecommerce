@@ -33,7 +33,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/product/:id',
     name: 'view-product',
-    component: () => import('@/views/ProductDetailView.vue'),
+    component: () => import('@/views/DetailView.vue'),
   },
   {
     path: '*',
@@ -47,7 +47,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   scrollBehavior() {
-    return { x: 0, y: 0 }; // 7always scroll to top on navigation
+    return { x: 0, y: 0 }; // always scroll to top on navigation
   },
 });
 

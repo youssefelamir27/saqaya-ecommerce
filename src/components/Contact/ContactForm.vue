@@ -39,7 +39,7 @@ export default Vue.extend({
 
   data() {
     return {
-      // ✅ local form state — ContactForm keeps its own data
+      // local form state — ContactForm keeps its own data
       localForm: {
         name: '',
         email: '',

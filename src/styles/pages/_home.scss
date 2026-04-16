@@ -369,7 +369,7 @@
   color: $color-gray-mid;
 }
 
-// ── Responsive ──────────────────────────────────────────────────────────────
+//  Responsive 
 @include respond-to(md) {
   .home {
     padding: 1rem;
