@@ -92,7 +92,7 @@ export default Vue.extend({
   name: 'FlashSale',
 
   props: {
-    // ✅ receives data from HomeView via props — no direct Vuex access
+    // receives data from HomeView via props — no direct Vuex access
     products: {
       type: Array as () => Product[],
       required: true,
@@ -103,7 +103,7 @@ export default Vue.extend({
     },
   },
 
-  // ✅ emits up to HomeView — component stays decoupled from store
+  // emits up to HomeView — component stays decoupled from store
   // go-to-product, add-to-wishlist, add-to-cart
 
   methods: {

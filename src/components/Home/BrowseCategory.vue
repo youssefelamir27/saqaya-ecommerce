@@ -11,14 +11,13 @@
     <div class="categories__slider">
       <div
         v-for="cat in categories"
-        :key="cat.name"
+        :key="cat.slug"
         :class="[
           'categories__card',
-          { 'categories__card--active': activeCategory === cat.name },
+          { 'categories__card--active': activeCategory === cat.slug },
         ]"
-        @click="$emit('select-category', cat.name)"
+        @click="$emit('select-category', cat.slug)"
       >
-        <span class="categories__icon">{{ cat.icon }}</span>
         <p>{{ cat.name }}</p>
       </div>
     </div>
@@ -27,28 +26,23 @@
 
 <script lang="ts">
 import Vue from 'vue';
-
-interface Category {
-  name: string;
-  icon: string;
-}
+import { Category } from '@/types/product';
 
 export default Vue.extend({
   name: 'BrowseCategory',
 
   props: {
-    //receives categories array from HomeView via props
+    // receives Category[] from API via HomeView
     categories: {
       type: Array as () => Category[],
       required: true,
     },
-    //receives active category to highlight the correct card
     activeCategory: {
       type: String,
       required: true,
     },
   },
 
-  // emits 'select-category' up to HomeView which dispatches to Vuex
+  // emits 'select-category' with slug up to HomeView
 });
 </script>

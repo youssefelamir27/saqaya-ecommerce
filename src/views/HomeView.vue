@@ -25,7 +25,7 @@
       </div>
     </section>
 
-    <!--Flash Sales — extracted to component -->
+    <!-- Flash Sales -->
     <flash-sale
       :products="flashSaleProducts"
       :is-loading="isLoading"
@@ -36,7 +36,7 @@
 
     <hr class="divider" />
 
-    <!--Browse By Category — extracted to component -->
+    <!-- Browse By Category -->
     <browse-category
       :categories="browseCategories"
       :active-category="activeCategory"
@@ -45,7 +45,7 @@
 
     <hr class="divider" />
 
-    <!--Explore Our Products — extracted to component -->
+    <!-- Explore Our Products -->
     <explore-products
       :products="exploreProducts"
       @go-to-product="goToProduct"
@@ -55,20 +55,16 @@
 
     <!-- Services -->
     <section class="services">
-      <div class="services__item">
-        <div class="services__icon">🚚</div>
-        <h4>FREE AND FAST DELIVERY</h4>
-        <p>Free delivery for all orders over $140</p>
-      </div>
-      <div class="services__item">
-        <div class="services__icon">🎧</div>
-        <h4>24/7 CUSTOMER SERVICE</h4>
-        <p>Friendly 24/7 customer support</p>
-      </div>
-      <div class="services__item">
-        <div class="services__icon">✅</div>
-        <h4>MONEY BACK GUARANTEE</h4>
-        <p>We return money within 30 days</p>
+      <div
+        v-for="service in services"
+        :key="service.title"
+        class="services__item"
+      >
+        <div class="services__icon">
+          <span>{{ service.icon }}</span>
+        </div>
+        <h4>{{ service.title }}</h4>
+        <p>{{ service.description }}</p>
       </div>
     </section>
   </div>
@@ -77,10 +73,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-import { Product } from '@/types/product';
+import { Product, Category } from '@/types/product';
 import FlashSale from '@/components/Home/FlashSale.vue';
 import BrowseCategory from '@/components/Home/BrowseCategory.vue';
 import ExploreProducts from '@/components/Home/ExploreProducts.vue';
+
+interface Service {
+  icon: string;
+  title: string;
+  description: string;
+}
 
 export default Vue.extend({
   name: 'HomeView',
@@ -91,6 +93,28 @@ export default Vue.extend({
     ExploreProducts,
   },
 
+  data() {
+    return {
+      services: [
+        {
+          icon: '🚚',
+          title: 'FREE AND FAST DELIVERY',
+          description: 'Free delivery for all orders over $140',
+        },
+        {
+          icon: '🎧',
+          title: '24/7 CUSTOMER SERVICE',
+          description: 'Friendly 24/7 customer support',
+        },
+        {
+          icon: '✅',
+          title: 'MONEY BACK GUARANTEE',
+          description: 'We return money within 30 days',
+        },
+      ] as Service[],
+    };
+  },
+
   computed: {
     flashSaleProducts(): Product[] {
       return this.$store.getters['products/flashSaleProducts'];
@@ -98,7 +122,7 @@ export default Vue.extend({
     exploreProducts(): Product[] {
       return this.$store.getters['products/exploreProducts'];
     },
-    browseCategories(): { name: string; icon: string }[] {
+    browseCategories(): Category[] {
       return this.$store.getters['products/browseCategories'];
     },
     activeCategory(): string {
@@ -107,14 +131,22 @@ export default Vue.extend({
     isLoading(): boolean {
       return this.$store.getters['products/isLoading'];
     },
+    productList(): Product[] {
+      return this.$store.getters['products/productList'];
+    },
   },
 
   async mounted() {
-    await this.fetchAllProducts();
+    // fetch products and categories in parallel
+    await Promise.all([this.fetchAllProducts(), this.fetchCategories()]);
   },
 
   methods: {
-    ...mapActions('products', ['fetchAllProducts', 'setActiveCategory']),
+    ...mapActions('products', [
+      'fetchAllProducts',
+      'setActiveCategory',
+      'fetchCategories',
+    ]),
     ...mapActions('cart', ['addToCart']),
 
     handleAddToCart(product: Product): void {
@@ -128,16 +160,32 @@ export default Vue.extend({
       });
     },
 
-    handleSetActiveCategory(name: string): void {
-      this.setActiveCategory(name);
+    handleSetActiveCategory(slug: string): void {
+      //  update active category in store
+      this.setActiveCategory(slug);
+      //  filter products by selected category
+      this.filterProductsByCategory(slug);
+    },
+
+    filterProductsByCategory(slug: string): void {
+      //  filter from full productList by category slug
+      const filtered = this.productList.filter(
+        (p: Product) => p.category === slug
+      );
+      //  if no products in that category show all products
+      const products = filtered.length > 0 ? filtered : this.productList;
+      this.$store.commit('products/SET_EXPLORE_PRODUCTS', products.slice(0, 8));
+      this.$store.commit(
+        'products/SET_FLASH_SALE_PRODUCTS',
+        products.slice(0, 10)
+      );
     },
 
     addToWishlist(product: Product): void {
-      console.log('Wishlist:', product.title);
+      console.log('Added to wishlist:', product.title);
     },
 
     goToProduct(id: number): void {
-      //passes ?from=home so ProductDetailView breadcrumb knows where user came from
       this.$router.push({ path: `/product/${id}`, query: { from: 'home' } });
     },
   },
