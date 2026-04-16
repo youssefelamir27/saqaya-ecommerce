@@ -181,8 +181,6 @@
       transform: rotate(-45deg) translate(5px, -5px);
     }
   }
-
-  //Real overlay element — replaces ::before pseudo which couldn't be clicked
   &__overlay {
     position: fixed;
     inset: 0;
