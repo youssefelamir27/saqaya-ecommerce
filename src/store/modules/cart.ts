@@ -1,5 +1,5 @@
-import { CartItem, CartState } from '@/types/product';
-import { ActionContext } from 'vuex';
+import { CartItem, CartState, CartContext } from '@/types/product';
+
 const state = (): CartState => ({
   sideCartItems: [],
   isSideCartOpen: false,
@@ -7,12 +7,9 @@ const state = (): CartState => ({
 
 const getters = {
   sideCartItems: (state: CartState) => state.sideCartItems,
-
   isSideCartOpen: (state: CartState) => state.isSideCartOpen,
-
   cartItemCount: (state: CartState) =>
     state.sideCartItems.reduce((total, item) => total + item.quantity, 0),
-
   totalUSD: (state: CartState) =>
     state.sideCartItems
       .reduce((total, item) => {
@@ -26,11 +23,9 @@ const mutations = {
   ADD_TO_CART(state: CartState, product: CartItem) {
     const existing = state.sideCartItems.find((item) => item.id === product.id);
     if (existing) {
-      // add the passed quantity instead of always incrementing by 1
-      existing.quantity += product.quantity;
+      existing.quantity++;
     } else {
-      // use the passed quantity instead of hardcoding 1
-      state.sideCartItems.push({ ...product });
+      state.sideCartItems.push({ ...product, quantity: 1 });
     }
   },
 
@@ -65,8 +60,7 @@ const mutations = {
   },
 };
 
-//proper type for action context
-type CartContext = ActionContext<CartState, Record<string, unknown>>;
+// CartContext imported from types/product.ts — no longer defined here
 const actions = {
   addToCart({ commit }: CartContext, product: CartItem) {
     commit('ADD_TO_CART', product);
@@ -95,6 +89,7 @@ const actions = {
     commit('CLOSE_SIDE_CART');
   },
 };
+
 export default {
   namespaced: true,
   state,

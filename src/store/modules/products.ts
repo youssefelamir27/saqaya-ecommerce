@@ -1,6 +1,10 @@
 import axios from 'axios';
-import { ActionContext } from 'vuex';
-import { Product, ProductsState } from '@/types/product';
+import {
+  Product,
+  ProductsState,
+  Category,
+  ProductsContext,
+} from '@/types/product';
 
 const BASE_URL = 'https://dummyjson.com';
 
@@ -9,15 +13,8 @@ const state = (): ProductsState => ({
   selectedProduct: null,
   flashSaleProducts: [],
   exploreProducts: [],
-  browseCategories: [
-    { name: 'Beauty', icon: '💄' },
-    { name: 'Lipstick', icon: '💋' },
-    { name: 'Fragrance', icon: '🌸' },
-    { name: 'Perfume', icon: '🫧' },
-    { name: 'Skincare', icon: '🧴' },
-    { name: 'Tools', icon: '🪞' },
-  ],
-  activeCategory: 'Beauty',
+  browseCategories: [],
+  activeCategory: '',
   loading: false,
   error: null,
 });
@@ -47,6 +44,9 @@ const mutations = {
   SET_EXPLORE_PRODUCTS(state: ProductsState, products: Product[]) {
     state.exploreProducts = products;
   },
+  SET_BROWSE_CATEGORIES(state: ProductsState, categories: Category[]) {
+    state.browseCategories = categories;
+  },
   SET_ACTIVE_CATEGORY(state: ProductsState, category: string) {
     state.activeCategory = category;
   },
@@ -57,21 +57,35 @@ const mutations = {
     state.error = error;
   },
 };
-// proper type for action context — replaces { commit }: any
-type ProductsContext = ActionContext<ProductsState, Record<string, unknown>>;
+
+//  ProductsContext imported from types/product.ts — no longer defined here
 const actions = {
-  // ProductsContext used everywhere instead of any
   async fetchAllProducts({ commit }: ProductsContext) {
     commit('SET_LOADING', true);
     commit('SET_ERROR', null);
     try {
-      const [beautyRes, fragranceRes] = await Promise.all([
+      const [
+        beautyRes,
+        fragranceRes,
+        skinCareRes,
+        sunglassesRes,
+        bagsRes,
+        jewelleryRes,
+      ] = await Promise.all([
         axios.get(`${BASE_URL}/products/category/beauty`),
         axios.get(`${BASE_URL}/products/category/fragrances`),
+        axios.get(`${BASE_URL}/products/category/skin-care`),
+        axios.get(`${BASE_URL}/products/category/sunglasses`),
+        axios.get(`${BASE_URL}/products/category/womens-bags`),
+        axios.get(`${BASE_URL}/products/category/womens-jewellery`),
       ]);
       const allProducts: Product[] = [
         ...beautyRes.data.products,
         ...fragranceRes.data.products,
+        ...skinCareRes.data.products,
+        ...sunglassesRes.data.products,
+        ...bagsRes.data.products,
+        ...jewelleryRes.data.products,
       ];
       commit('SET_PRODUCT_LIST', allProducts);
       commit('SET_FLASH_SALE_PRODUCTS', allProducts.slice(0, 10));
@@ -93,6 +107,28 @@ const actions = {
       commit('SET_ERROR', 'Failed to fetch product.');
     } finally {
       commit('SET_LOADING', false);
+    }
+  },
+
+  async fetchCategories({ commit }: ProductsContext) {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/categories`);
+      const beautyCategories: Category[] = res.data.filter((cat: Category) =>
+        [
+          'beauty',
+          'fragrances',
+          'skin-care',
+          'sunglasses',
+          'womens-bags',
+          'womens-jewellery',
+        ].includes(cat.slug)
+      );
+      commit('SET_BROWSE_CATEGORIES', beautyCategories);
+      if (beautyCategories.length > 0) {
+        commit('SET_ACTIVE_CATEGORY', beautyCategories[0].slug);
+      }
+    } catch (error) {
+      commit('SET_ERROR', 'Failed to fetch categories.');
     }
   },
 

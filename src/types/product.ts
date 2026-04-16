@@ -1,3 +1,5 @@
+import { ActionContext } from 'vuex';
+
 export interface Review {
   rating: number;
   comment: string;
@@ -24,16 +26,6 @@ export interface Product {
   warrantyInformation: string;
   reviews: Review[];
 }
-export interface ProductsState {
-  productList: Product[];
-  selectedProduct: Product | null;
-  flashSaleProducts: Product[];
-  exploreProducts: Product[];
-  browseCategories: { name: string; icon: string }[];
-  activeCategory: string;
-  loading: boolean;
-  error: string | null;
-}
 
 export interface CartItem {
   id: number;
@@ -44,46 +36,46 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Category {
+  slug: string;
+  name: string;
+  url: string;
+}
+
+export interface StatItem {
+  icon: string;
+  value: string;
+  label: string;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+}
+
+export interface ContactForm {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export interface ProductsState {
+  productList: Product[];
+  selectedProduct: Product | null;
+  flashSaleProducts: Product[];
+  exploreProducts: Product[];
+  browseCategories: Category[];
+  activeCategory: string;
+  loading: boolean;
+  error: string | null;
+}
+
 export interface CartState {
   sideCartItems: CartItem[];
   isSideCartOpen: boolean;
 }
 
-export interface Category {
-  name: string;
-  icon: string;
-}
-
-export interface ContactForm {
-  name: string;
-  email: string;
-  message: string;
-}
-
-export interface StatItem {
-  icon: string;
-  value: string;
-  label: string;
-}
-
-export interface TeamMember {
-  name: string;
-  role: string;
-  image: string;
-}
-export interface ContactForm {
-  name: string;
-  email: string;
-  message: string;
-}
-export interface StatItem {
-  icon: string;
-  value: string;
-  label: string;
-}
-
-export interface TeamMember {
-  name: string;
-  role: string;
-  image: string;
-}
+// context types moved here — used in store modules
+export type ProductsContext = ActionContext<ProductsState, any>;
+export type CartContext = ActionContext<CartState, any>;
