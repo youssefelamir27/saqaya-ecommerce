@@ -2,7 +2,7 @@
 A beauty and fragrance e-commerce application built with Vue 2, TypeScript, Vuex 3, and Vue Router 3.
 
 ## Live Demo
-🔗 https://saqaya-ecommerce-two.vercel.app
+🔗 https://saqaya-ecommerce-two.vercel.app/
 
 ## Tech Stack
 - Vue 2 + TypeScript
