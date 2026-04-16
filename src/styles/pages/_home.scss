@@ -368,3 +368,67 @@
   padding: 40px;
   color: $color-gray-mid;
 }
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@include respond-to(md) {
+  .home {
+    padding: 1rem;
+  }
+
+  // hero stacks vertically on mobile
+  .hero {
+    margin-bottom: 2rem;
+  
+    &__text h1 {
+      font-size: 2rem;
+    }
+
+    // image shows below text and is properly sized
+    &__image {
+      display: flex;
+      justify-content: center;
+
+      img {
+        max-height: 200px;
+        width: auto;
+      }
+    }
+  }
+
+  // products grid becomes 2 columns on tablet
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // services stack vertically
+  .services {
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xl;
+  }
+}
+
+@include respond-to(sm) {
+  .hero {
+    &__content {
+      grid-template-columns: 1fr; // single column
+      padding: 2rem 1.5rem 1rem;
+      text-align: center;
+    }
+    &__text h1 {
+      font-size: 1.6rem;
+    }
+  }
+
+  // products grid single column on mobile
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .section-header {
+    &__title-row h2 {
+      font-size: 1.4rem;
+    }
+  }
+}
