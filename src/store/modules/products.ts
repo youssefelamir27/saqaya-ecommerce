@@ -58,7 +58,6 @@ const mutations = {
   },
 };
 
-//  ProductsContext imported from types/product.ts — no longer defined here
 const actions = {
   async fetchAllProducts({ commit }: ProductsContext) {
     commit('SET_LOADING', true);
@@ -130,6 +129,15 @@ const actions = {
     } catch (error) {
       commit('SET_ERROR', 'Failed to fetch categories.');
     }
+  },
+
+  filterByCategory({ commit, state }: ProductsContext, slug: string) {
+    const filtered = state.productList.filter(
+      (p: Product) => p.category === slug
+    );
+    const products = filtered.length > 0 ? filtered : state.productList;
+    commit('SET_EXPLORE_PRODUCTS', products.slice(0, 8));
+    commit('SET_FLASH_SALE_PRODUCTS', products.slice(0, 10));
   },
 
   setActiveCategory({ commit }: ProductsContext, category: string) {
