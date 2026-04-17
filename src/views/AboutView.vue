@@ -55,6 +55,7 @@ import { StatItem, TeamMember } from '@/types/product';
 import OurStory from '@/components/About/OurStory.vue';
 import StatsBox from '@/components/About/StatsBox.vue';
 import TeamCard from '@/components/About/TeamCard.vue';
+import axios from 'axios';
 
 interface Service {
   icon: string;
@@ -116,14 +117,13 @@ export default Vue.extend({
 
     async fetchTeam(): Promise<void> {
       try {
-        const res = await fetch('https://dummyjson.com/users?limit=3');
-        const data = await res.json();
+        const res = await axios.get('https://dummyjson.com/users?limit=3');
         const roles = [
           'Founder & Chairman',
           'Managing Director',
           'Product Designer',
         ];
-        this.team = data.users.map(
+        this.team = res.data.users.map(
           (
             user: { firstName: string; lastName: string; image: string },
             i: number
