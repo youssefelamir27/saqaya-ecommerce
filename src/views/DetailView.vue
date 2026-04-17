@@ -91,9 +91,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-import { Product } from '@/types/product';
+import { Product, CartItem } from '@/types/product';
 import ProductInfo from '@/components/ProductDetail/ProductInfo.vue';
-import { CartItem } from '@/types/product';
+
 export default Vue.extend({
   name: 'ProductDetailView',
 
@@ -122,8 +122,11 @@ export default Vue.extend({
     productTitle(): string {
       return this.selectedProduct ? this.selectedProduct.title : '...';
     },
+    cartItems(): CartItem[] {
+      return this.$store.getters['cart/sideCartItems'];
+    },
     isInCart(): boolean {
-      return this.$store.getters['cart/sideCartItems'].some(
+      return this.cartItems.some(
         (item: CartItem) => item.id === this.selectedProduct?.id
       );
     },
@@ -137,6 +140,20 @@ export default Vue.extend({
     breadcrumbFrom(): string {
       const from = this.$route.query.from as string;
       return from === 'products' ? 'products' : 'home';
+    },
+  },
+  watch: {
+    // when cart changes and product is in cart, sync localQuantity
+    cartItems: {
+      deep: true,
+      handler() {
+        if (this.isInCart) {
+          const cartItem = this.cartItems.find(
+            (item: CartItem) => item.id === this.selectedProduct?.id
+          );
+          if (cartItem) this.localQuantity = cartItem.quantity;
+        }
+      },
     },
   },
 
@@ -163,7 +180,6 @@ export default Vue.extend({
   async beforeRouteUpdate(to, from, next) {
     const id = Number(to.params.id);
     this.selectedImage = '';
-    this.localQuantity = 1;
     await this.fetchProductById(id);
     // handle invalid product ID on route update too
     if (this.hasError) {
@@ -178,7 +194,7 @@ export default Vue.extend({
 
   methods: {
     ...mapActions('products', ['fetchProductById']),
-    ...mapActions('cart', ['addToCart']),
+    ...mapActions('cart', ['addToCart', 'updateQuantity']),
 
     selectImage(img: string): void {
       this.selectedImage = img;
@@ -203,14 +219,23 @@ export default Vue.extend({
 
     handleAddToCart(): void {
       if (!this.selectedProduct) return;
-      this.addToCart({
-        id: this.selectedProduct.id,
-        title: this.selectedProduct.title,
-        price: this.selectedProduct.price,
-        discountPercentage: this.selectedProduct.discountPercentage,
-        thumbnail: this.selectedProduct.thumbnail,
-        quantity: this.localQuantity,
-      });
+      if (this.isInCart) {
+        // product already in cart — update to exact quantity chosen
+        this.updateQuantity({
+          productId: this.selectedProduct.id,
+          quantity: this.localQuantity,
+        });
+      } else {
+        // product not in cart — add with chosen quantity
+        this.addToCart({
+          id: this.selectedProduct.id,
+          title: this.selectedProduct.title,
+          price: this.selectedProduct.price,
+          discountPercentage: this.selectedProduct.discountPercentage,
+          thumbnail: this.selectedProduct.thumbnail,
+          quantity: this.localQuantity,
+        });
+      }
     },
   },
 });
