@@ -9,7 +9,7 @@ A beauty and fragrance e-commerce application built with Vue 2, TypeScript, Vuex
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
+|:---:|:---:|
 | Framework | Vue 2 + TypeScript |
 | State Management | Vuex 3 (namespaced modules) |
 | Routing | Vue Router 3 |
