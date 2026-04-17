@@ -180,6 +180,7 @@ export default Vue.extend({
   async beforeRouteUpdate(to, from, next) {
     const id = Number(to.params.id);
     this.selectedImage = '';
+    this.localQuantity = 1;
     await this.fetchProductById(id);
     // handle invalid product ID on route update too
     if (this.hasError) {
