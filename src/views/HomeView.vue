@@ -131,13 +131,9 @@ export default Vue.extend({
     isLoading(): boolean {
       return this.$store.getters['products/isLoading'];
     },
-    productList(): Product[] {
-      return this.$store.getters['products/productList'];
-    },
   },
 
   async mounted() {
-    // fetch products and categories in parallel
     await Promise.all([this.fetchAllProducts(), this.fetchCategories()]);
   },
 
@@ -146,6 +142,7 @@ export default Vue.extend({
       'fetchAllProducts',
       'setActiveCategory',
       'fetchCategories',
+      'filterByCategory',
     ]),
     ...mapActions('cart', ['addToCart']),
 
@@ -161,24 +158,8 @@ export default Vue.extend({
     },
 
     handleSetActiveCategory(slug: string): void {
-      //  update active category in store
       this.setActiveCategory(slug);
-      //  filter products by selected category
-      this.filterProductsByCategory(slug);
-    },
-
-    filterProductsByCategory(slug: string): void {
-      //  filter from full productList by category slug
-      const filtered = this.productList.filter(
-        (p: Product) => p.category === slug
-      );
-      //  if no products in that category show all products
-      const products = filtered.length > 0 ? filtered : this.productList;
-      this.$store.commit('products/SET_EXPLORE_PRODUCTS', products.slice(0, 8));
-      this.$store.commit(
-        'products/SET_FLASH_SALE_PRODUCTS',
-        products.slice(0, 10)
-      );
+      this.filterByCategory(slug);
     },
 
     addToWishlist(product: Product): void {
