@@ -28,7 +28,6 @@
       <div class="footer__col">
         <h4 class="footer__col-title">Account</h4>
         <ul class="footer__list">
-          <!--v-for replaces 5 repeated li elements -->
           <li
             v-for="item in accountLinks"
             :key="item"
@@ -43,9 +42,13 @@
       <div class="footer__col">
         <h4 class="footer__col-title">Quick Link</h4>
         <ul class="footer__list">
-          <!--v-for replaces 4 repeated li elements -->
-          <li v-for="item in quickLinks" :key="item" class="footer__list-item">
-            {{ item }}
+          <!-- ✅ quickLinks now objects with label and to -->
+          <li
+            v-for="item in quickLinks"
+            :key="item.label"
+            class="footer__list-item"
+          >
+            <router-link :to="item.to">{{ item.label }}</router-link>
           </li>
         </ul>
       </div>
@@ -59,7 +62,6 @@
         <div class="footer__qr">
           <div class="footer__qr-placeholder"></div>
           <div class="footer__store-btns">
-            <!--v-for replaces 2 repeated store button blocks -->
             <div
               v-for="store in storeButtons"
               :key="store.label"
@@ -73,7 +75,6 @@
           </div>
         </div>
         <div class="footer__social">
-          <!--v-for replaces 4 repeated social icon elements -->
           <i
             v-for="social in socialIcons"
             :key="social"
@@ -100,6 +101,12 @@ interface StoreButton {
   label: string;
 }
 
+// local interface for quick links with navigation especialized for Footer
+interface QuickLink {
+  label: string;
+  to: string;
+}
+
 export default Vue.extend({
   name: 'AppFooter',
 
@@ -120,11 +127,11 @@ export default Vue.extend({
       ] as string[],
 
       quickLinks: [
-        'Privacy Policy',
-        'Terms Of Use',
-        'FAQ',
-        'Contact',
-      ] as string[],
+        { label: 'Privacy Policy', to: '/' },
+        { label: 'Terms Of Use', to: '/' },
+        { label: 'FAQ', to: '/' },
+        { label: 'Contact', to: '/contact' },
+      ] as QuickLink[],
 
       storeButtons: [
         { icon: 'fa-google-play', topText: 'GET IT ON', label: 'Google Play' },
