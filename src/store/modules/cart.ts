@@ -23,9 +23,11 @@ const mutations = {
   ADD_TO_CART(state: CartState, product: CartItem) {
     const existing = state.sideCartItems.find((item) => item.id === product.id);
     if (existing) {
-      existing.quantity++;
+      // update to the exact quantity chosen by the user on the detail page
+      existing.quantity += product.quantity;
     } else {
-      state.sideCartItems.push({ ...product, quantity: 1 });
+      // spread preserves the quantity passed in from the detail page
+      state.sideCartItems.push({ ...product });
     }
   },
 
