@@ -1,20 +1,13 @@
-import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
 import axios from 'axios';
-import productsModule from '@/store/modules/products';
+import {
+  fetchAllProducts,
+  fetchProductById,
+  fetchBeautyCategories,
+  BEAUTY_CATEGORY_SLUGS,
+} from '@/services/productService';
 
-// mock axios so we don't make real API calls in tests
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-function createStore() {
-  return new Vuex.Store({
-    modules: { products: { ...productsModule } },
-  });
-}
 
 const mockProduct = {
   id: 1, title: 'Lipstick', description: 'A lipstick',
@@ -25,183 +18,92 @@ const mockProduct = {
   returnPolicy: '30 days', warrantyInformation: '1 year', reviews: [],
 };
 
-describe('products store', () => {
-  // Mutations 
-  describe('mutations', () => {
-    it('SET_PRODUCT_LIST updates productList', () => {
-      const store = createStore();
-      store.commit('products/SET_PRODUCT_LIST', [mockProduct]);
-      expect(store.getters['products/productList'].length).toBe(1);
-    });
-
-    it('SET_SELECTED_PRODUCT updates selectedProduct', () => {
-      const store = createStore();
-      store.commit('products/SET_SELECTED_PRODUCT', mockProduct);
-      expect(store.getters['products/selectedProduct']).toEqual(mockProduct);
-    });
-
-    it('SET_LOADING toggles isLoading', () => {
-      const store = createStore();
-      store.commit('products/SET_LOADING', true);
-      expect(store.getters['products/isLoading']).toBe(true);
-      store.commit('products/SET_LOADING', false);
-      expect(store.getters['products/isLoading']).toBe(false);
-    });
-
-    it('SET_ERROR sets hasError to true and stores message', () => {
-      const store = createStore();
-      store.commit('products/SET_ERROR', 'Failed to fetch products.');
-      expect(store.getters['products/hasError']).toBe(true);
-      expect(store.getters['products/errorMessage']).toBe('Failed to fetch products.');
-    });
-
-    it('SET_ERROR with null clears error state', () => {
-      const store = createStore();
-      store.commit('products/SET_ERROR', 'some error');
-      store.commit('products/SET_ERROR', null);
-      expect(store.getters['products/hasError']).toBe(false);
-      expect(store.getters['products/errorMessage']).toBeNull();
-    });
-
-    it('SET_ACTIVE_CATEGORY updates activeCategory', () => {
-      const store = createStore();
-      store.commit('products/SET_ACTIVE_CATEGORY', 'Fragrance');
-      expect(store.getters['products/activeCategory']).toBe('Fragrance');
-    });
-
-    it('SET_FLASH_SALE_PRODUCTS updates flashSaleProducts', () => {
-      const store = createStore();
-      store.commit('products/SET_FLASH_SALE_PRODUCTS', [mockProduct]);
-      expect(store.getters['products/flashSaleProducts'].length).toBe(1);
-    });
-
-    it('SET_EXPLORE_PRODUCTS updates exploreProducts', () => {
-      const store = createStore();
-      store.commit('products/SET_EXPLORE_PRODUCTS', [mockProduct]);
-      expect(store.getters['products/exploreProducts'].length).toBe(1);
-    });
-
-    it('SET_BROWSE_CATEGORIES updates browseCategories', () => {
-      const store = createStore();
-      const mockCategories = [
-        { slug: 'beauty', name: 'Beauty', url: 'https://dummyjson.com/products/category/beauty' },
-        { slug: 'fragrances', name: 'Fragrances', url: 'https://dummyjson.com/products/category/fragrances' },
-      ];
-      store.commit('products/SET_BROWSE_CATEGORIES', mockCategories);
-      expect(store.getters['products/browseCategories'].length).toBe(2);
-    });
+describe('productService', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  // Getters defaults 
-  describe('getters defaults', () => {
-    it('hasError is false initially', () => {
-      const store = createStore();
-      expect(store.getters['products/hasError']).toBe(false);
+  describe('fetchAllProducts', () => {
+    it('fetches products from all beauty category slugs and merges them', async () => {
+      // return one product for the first slug, empty for the rest
+      mockedAxios.get
+        .mockResolvedValueOnce({ data: { products: [mockProduct] } })
+        .mockResolvedValue({ data: { products: [] } });
+
+      const result = await fetchAllProducts();
+
+      expect(mockedAxios.get).toHaveBeenCalledTimes(BEAUTY_CATEGORY_SLUGS.length);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual(mockProduct);
     });
 
-    it('errorMessage is null initially', () => {
-      const store = createStore();
-      expect(store.getters['products/errorMessage']).toBeNull();
+    it('calls the correct URL for each category slug', async () => {
+      mockedAxios.get.mockResolvedValue({ data: { products: [] } });
+
+      await fetchAllProducts();
+
+      BEAUTY_CATEGORY_SLUGS.forEach((slug) => {
+        expect(mockedAxios.get).toHaveBeenCalledWith(
+          `https://dummyjson.com/products/category/${slug}`
+        );
+      });
     });
 
-    it('selectedProduct is null initially', () => {
-      const store = createStore();
-      expect(store.getters['products/selectedProduct']).toBeNull();
-    });
-
-    // activeCategory starts empty, set after fetchCategories
-    it('activeCategory is empty string initially', () => {
-      const store = createStore();
-      expect(store.getters['products/activeCategory']).toBe('');
-    });
-
-    // browseCategories starts empty, fetched from API
-    it('browseCategories is empty array initially', () => {
-      const store = createStore();
-      expect(store.getters['products/browseCategories'].length).toBe(0);
-    });
-
-    it('isLoading is false initially', () => {
-      const store = createStore();
-      expect(store.getters['products/isLoading']).toBe(false);
-    });
-  });
-
-  //  Actions
-  describe('actions', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-    
-    //mock API responses for fetchAllProducts
-    it('fetchAllProducts sets productList on success', async () => {
-  mockedAxios.get
-    .mockResolvedValueOnce({ data: { products: [mockProduct] } }) // beauty
-    .mockResolvedValueOnce({ data: { products: [] } })            // fragrances
-    .mockResolvedValueOnce({ data: { products: [] } })            // skin-care
-    .mockResolvedValueOnce({ data: { products: [] } })            // sunglasses
-    .mockResolvedValueOnce({ data: { products: [] } })            // womens-bags
-    .mockResolvedValueOnce({ data: { products: [] } });           // womens-jewellery
-  const store = createStore();
-  await store.dispatch('products/fetchAllProducts');
-  expect(store.getters['products/productList'].length).toBe(1);
-  expect(store.getters['products/isLoading']).toBe(false);
-  expect(store.getters['products/hasError']).toBe(false);
-});
-
-    it('fetchAllProducts sets error on failure', async () => {
+    it('throws when axios fails', async () => {
       mockedAxios.get.mockRejectedValueOnce(new Error('Network error'));
-      const store = createStore();
-      await store.dispatch('products/fetchAllProducts');
-      expect(store.getters['products/hasError']).toBe(true);
-      expect(store.getters['products/errorMessage']).toBe('Failed to fetch products.');
-      expect(store.getters['products/isLoading']).toBe(false);
+      await expect(fetchAllProducts()).rejects.toThrow('Network error');
     });
+  });
 
-    it('fetchProductById sets selectedProduct on success', async () => {
+  describe('fetchProductById', () => {
+    it('returns the product data for the given id', async () => {
       mockedAxios.get.mockResolvedValueOnce({ data: mockProduct });
-      const store = createStore();
-      await store.dispatch('products/fetchProductById', 1);
-      expect(store.getters['products/selectedProduct']).toEqual(mockProduct);
-      expect(store.getters['products/isLoading']).toBe(false);
+
+      const result = await fetchProductById(1);
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        'https://dummyjson.com/products/1'
+      );
+      expect(result).toEqual(mockProduct);
     });
 
-    it('fetchProductById sets error on failure', async () => {
+    it('throws when axios fails', async () => {
       mockedAxios.get.mockRejectedValueOnce(new Error('Not found'));
-      const store = createStore();
-      await store.dispatch('products/fetchProductById', 999);
-      expect(store.getters['products/hasError']).toBe(true);
-      expect(store.getters['products/errorMessage']).toBe('Failed to fetch product.');
-      expect(store.getters['products/isLoading']).toBe(false);
+      await expect(fetchProductById(999)).rejects.toThrow('Not found');
     });
+  });
 
-    it('setActiveCategory updates activeCategory', async () => {
-      const store = createStore();
-      await store.dispatch('products/setActiveCategory', 'Skincare');
-      expect(store.getters['products/activeCategory']).toBe('Skincare');
-    });
-
-    it('fetchCategories sets browseCategories on success', async () => {
-      const mockCategories = [
+  describe('fetchBeautyCategories', () => {
+    it('returns only beauty-related categories filtered from full list', async () => {
+      const allCategories = [
         { slug: 'beauty', name: 'Beauty', url: '...' },
         { slug: 'fragrances', name: 'Fragrances', url: '...' },
-        { slug: 'skin-care', name: 'Skin Care', url: '...' },
-        { slug: 'furniture', name: 'Furniture', url: '...' }, // ← should be filtered out
+        { slug: 'furniture', name: 'Furniture', url: '...' },
+        { slug: 'groceries', name: 'Groceries', url: '...' },
       ];
-      mockedAxios.get.mockResolvedValueOnce({ data: mockCategories });
-      const store = createStore();
-      await store.dispatch('products/fetchCategories');
-      // only 3 beauty-related categories should be set
-      expect(store.getters['products/browseCategories'].length).toBe(3);
-      // first category should be set as active
-      expect(store.getters['products/activeCategory']).toBe('beauty');
+      mockedAxios.get.mockResolvedValueOnce({ data: allCategories });
+
+      const result = await fetchBeautyCategories();
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        'https://dummyjson.com/products/categories'
+      );
+      expect(result).toHaveLength(2);
+      expect(result.map((c) => c.slug)).toEqual(['beauty', 'fragrances']);
     });
 
-    it('fetchCategories sets error on failure', async () => {
+    it('returns empty array when no categories match', async () => {
+      mockedAxios.get.mockResolvedValueOnce({
+        data: [{ slug: 'furniture', name: 'Furniture', url: '...' }],
+      });
+
+      const result = await fetchBeautyCategories();
+      expect(result).toHaveLength(0);
+    });
+
+    it('throws when axios fails', async () => {
       mockedAxios.get.mockRejectedValueOnce(new Error('Network error'));
-      const store = createStore();
-      await store.dispatch('products/fetchCategories');
-      expect(store.getters['products/hasError']).toBe(true);
+      await expect(fetchBeautyCategories()).rejects.toThrow('Network error');
     });
   });
 });

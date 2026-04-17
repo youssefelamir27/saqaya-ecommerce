@@ -1,12 +1,10 @@
-import axios from 'axios';
 import {
   Product,
   ProductsState,
   Category,
   ProductsContext,
 } from '@/types/product';
-
-const BASE_URL = 'https://dummyjson.com';
+import * as productService from '@/services/productService';
 
 const state = (): ProductsState => ({
   productList: [],
@@ -63,33 +61,11 @@ const actions = {
     commit('SET_LOADING', true);
     commit('SET_ERROR', null);
     try {
-      const [
-        beautyRes,
-        fragranceRes,
-        skinCareRes,
-        sunglassesRes,
-        bagsRes,
-        jewelleryRes,
-      ] = await Promise.all([
-        axios.get(`${BASE_URL}/products/category/beauty`),
-        axios.get(`${BASE_URL}/products/category/fragrances`),
-        axios.get(`${BASE_URL}/products/category/skin-care`),
-        axios.get(`${BASE_URL}/products/category/sunglasses`),
-        axios.get(`${BASE_URL}/products/category/womens-bags`),
-        axios.get(`${BASE_URL}/products/category/womens-jewellery`),
-      ]);
-      const allProducts: Product[] = [
-        ...beautyRes.data.products,
-        ...fragranceRes.data.products,
-        ...skinCareRes.data.products,
-        ...sunglassesRes.data.products,
-        ...bagsRes.data.products,
-        ...jewelleryRes.data.products,
-      ];
+      const allProducts = await productService.fetchAllProducts();
       commit('SET_PRODUCT_LIST', allProducts);
       commit('SET_FLASH_SALE_PRODUCTS', allProducts.slice(0, 10));
       commit('SET_EXPLORE_PRODUCTS', allProducts.slice(0, 8));
-    } catch (error) {
+    } catch {
       commit('SET_ERROR', 'Failed to fetch products.');
     } finally {
       commit('SET_LOADING', false);
@@ -100,9 +76,9 @@ const actions = {
     commit('SET_LOADING', true);
     commit('SET_ERROR', null);
     try {
-      const res = await axios.get(`${BASE_URL}/products/${id}`);
-      commit('SET_SELECTED_PRODUCT', res.data);
-    } catch (error) {
+      const product = await productService.fetchProductById(id);
+      commit('SET_SELECTED_PRODUCT', product);
+    } catch {
       commit('SET_ERROR', 'Failed to fetch product.');
     } finally {
       commit('SET_LOADING', false);
@@ -111,22 +87,12 @@ const actions = {
 
   async fetchCategories({ commit }: ProductsContext) {
     try {
-      const res = await axios.get(`${BASE_URL}/products/categories`);
-      const beautyCategories: Category[] = res.data.filter((cat: Category) =>
-        [
-          'beauty',
-          'fragrances',
-          'skin-care',
-          'sunglasses',
-          'womens-bags',
-          'womens-jewellery',
-        ].includes(cat.slug)
-      );
+      const beautyCategories = await productService.fetchBeautyCategories();
       commit('SET_BROWSE_CATEGORIES', beautyCategories);
       if (beautyCategories.length > 0) {
         commit('SET_ACTIVE_CATEGORY', beautyCategories[0].slug);
       }
-    } catch (error) {
+    } catch {
       commit('SET_ERROR', 'Failed to fetch categories.');
     }
   },
