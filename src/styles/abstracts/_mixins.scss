@@ -1,0 +1,82 @@
+@import 'variables';
+
+// Responsive breakpoints
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: $breakpoint-xl) { @content; }
+  }
+}
+
+// Flexbox center
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flexbox between
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Text truncate
+@mixin text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Section title badge (red bar + text)
+@mixin section-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+// Card hover lift
+@mixin card-hover {
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+// Absolute position badge
+@mixin absolute-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  padding: 3px 8px;
+  border-radius: $border-radius-sm;
+  color: $color-white;
+}
+// Breadcrumb base style
+@mixin breadcrumb-base {
+  font-size: 13px;
+  color: #999999;
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+}
+//link base style
+@mixin link-base($color: #999999, $hover-color: #000000) {
+  text-decoration: none;
+  color: $color;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $hover-color;
+  }
+}

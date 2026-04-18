@@ -1,0 +1,278 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.header {
+  background-color: $color-white;
+  border-bottom: 1px solid #f0f0f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+
+  &__container {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: $header-height;
+    @include flex-between;
+    gap: 2rem;
+  }
+
+  &__logo {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-black;
+    letter-spacing: 1px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+  }
+
+  &__nav-link {
+    color: $color-black;
+    font-size: $font-size-md;
+    padding-bottom: 4px;
+    position: relative;
+    text-decoration: none;
+
+    &::after {
+      content: '';
+      width: 0;
+      height: 2px;
+      background-color: $color-black;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transition: width 1s;
+    }
+
+    &.router-link-active::after {
+      width: 100%;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    background-color: $color-gray-light;
+    border-radius: $border-radius-sm;
+    padding: 6px 12px;
+    width: 240px;
+
+    &-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: $font-size-sm;
+      color: $color-black;
+      width: 100%;
+
+      &::placeholder {
+        color: $color-gray-mid;
+      }
+    }
+
+    &-icon {
+      color: $color-black;
+      font-size: $font-size-base;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #42b983;
+      }
+    }
+
+    &--mobile {
+      width: 100%;
+      padding: 10px 12px;
+    }
+  }
+
+  &__cart {
+    position: relative;
+    cursor: pointer;
+
+    .fa-cart-plus {
+      font-size: 20px;
+      color: $color-black;
+      transition: color 0.3s;
+    }
+
+    &:hover .fa-cart-plus {
+      color: #42b983;
+    }
+
+    &-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: $color-primary;
+      color: $color-white;
+      font-size: 10px;
+      font-weight: $font-weight-bold;
+      width: 16px;
+      height: 16px;
+      border-radius: $border-radius-full;
+      @include flex-center;
+    }
+
+    &--mobile .fa-cart-plus {
+      font-size: 24px;
+    }
+
+    &--mobile &-badge {
+      top: -10px;
+      right: -20px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__mobile-actions {
+    display: none;
+  }
+
+  &__hamburger {
+    display: none;
+    flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+    z-index: 1001;
+
+    &-line {
+      width: 25px;
+      height: 2px;
+      background-color: $color-black;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    &--active &-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    &--active &-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    &--active &-line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+  }
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: color-opacity($color-black, 0.5);
+    z-index: 998;
+    cursor: pointer;
+  }
+
+  @include respond-to('lg') {
+    &__container {
+      gap: 1rem;
+      padding: 0 1.5rem;
+    }
+
+    &__nav {
+      gap: 30px;
+    }
+
+    &__search {
+      width: 200px;
+    }
+  }
+
+  @include respond-to('md') {
+    &__container {
+      padding: 0 1rem;
+    }
+
+    //Drawer — slides in from left, sits above overlay
+    &__nav {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 350px;
+      height: 100vh;
+      background-color: $color-white;
+      box-shadow: 2px 0 10px color-opacity($color-black, 0.1);
+      transition: left 0.3s ease;
+      z-index: 999;
+      padding: 80px 2rem 2rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+      overflow-y: auto;
+
+      //open state — slide in
+      &--open {
+        left: 0;
+      }
+    }
+
+    &__nav-link {
+      font-size: $font-size-xl;
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+
+    &__actions {
+      display: none;
+    }
+
+    &__mobile-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    &__hamburger {
+      display: flex;
+    }
+  }
+
+  @include respond-to('sm') {
+    &__container {
+      padding: 0 0.75rem;
+    }
+
+    &__logo {
+      font-size: $font-size-xl;
+    }
+
+    &__nav {
+      width: 85%;
+      padding: 70px 1.5rem 1.5rem;
+    }
+
+    &__nav-link {
+      font-size: $font-size-lg;
+    }
+  }
+}

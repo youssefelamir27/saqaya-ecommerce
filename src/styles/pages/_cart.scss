@@ -1,0 +1,230 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+@import '../abstracts/functions';
+
+.cart {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $spacing-lg;
+
+  &__breadcrumb {
+    @include breadcrumb-base;
+
+    a {
+      @include link-base;
+    }
+  }
+
+  &__breadcrumb-current {
+    color: $color-black;
+    font-weight: $font-weight-bold;
+
+  }
+
+  &__empty {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-4xl 0;
+    text-align: center;
+
+    p {
+      font-size: $font-size-lg;
+      color: $color-gray-mid;
+    }
+  }
+
+  &__empty-btn {
+    @include link-base($color-white, $color-white);
+    padding: $spacing-sm $spacing-xl;
+    background-color: $color-primary;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: $spacing-xl;
+    align-items: flex-start;
+
+    @include respond-to(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+  }
+
+  &__item {
+    @include flex-between;
+    gap: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: $border-radius-sm;
+    background-color: $color-gray-light;
+    flex-shrink: 0;
+  }
+
+  &__item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__item-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    color: $color-black;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__item-price {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  &__item-controls {
+    @include flex-center;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+  }
+
+  &__qty-btn {
+    @include flex-center;
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: $font-size-lg;
+    color: $color-black;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: $color-gray-light;
+    }
+  }
+
+  &__qty {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-black;
+    border-left: 1px solid $color-border;
+    border-right: 1px solid $color-border;
+  }
+
+  &__remove-btn {
+    background: none;
+    border: none;
+    font-size: $font-size-sm;
+    color: $color-gray-mid;
+    cursor: pointer;
+    padding: $spacing-xs;
+    flex-shrink: 0;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    padding: $spacing-lg;
+    position: sticky;
+    top: calc(#{$header-height} + #{$spacing-md});
+  }
+
+  &__summary-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-black;
+    margin: 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__summary-row {
+    @include flex-between;
+    font-size: $font-size-base;
+    color: $color-black;
+    padding: $spacing-xs 0;
+
+    span:last-child {
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+    }
+  }
+
+  &__checkout-btn {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-primary;
+    color: $color-white;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    border: none;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  &__clear-btn {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: none;
+    color: $color-gray-mid;
+    font-size: $font-size-sm;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: $color-primary;
+      border-color: $color-primary;
+    }
+  }
+}

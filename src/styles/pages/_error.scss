@@ -1,0 +1,57 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Error Page — BEM
+
+.error-page {
+  min-height: 10vh;
+  padding: 40px $spacing-4xl;
+
+  &__breadcrumb {
+    @include breadcrumb-base;
+
+    a {
+      @include link-base;
+    }
+  }
+
+  &__breadcrumb-current {
+    font-weight: $font-weight-bold;
+    color: $color-black;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: $spacing-lg;
+
+    h1 {
+      font-size: 80px;
+      font-weight: $font-weight-bold;
+      color: $color-black;
+      margin: 0;
+    }
+
+    p {
+      font-size: $font-size-md;
+      color: $color-gray-dark;
+      margin: 0;
+    }
+  }
+
+  &__home-btn {
+    background-color: $color-primary;
+    color: $color-white;
+    text-decoration: none;
+    padding: 14px 40px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-md;
+    margin-top: $spacing-md;
+    transition: background-color 0.2s;
+
+    &:hover { background-color: $color-primary-dark; }
+  }
+}

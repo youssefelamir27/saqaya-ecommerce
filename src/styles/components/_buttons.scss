@@ -1,0 +1,66 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.btn {
+  display: inline-block;
+  padding: 12px 40px;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  border: none;
+  text-align: center;
+
+  &--primary {
+    background: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-dark;
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    border: 1px solid $color-border;
+    color: $color-black;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
+      border-color: $color-primary;
+    }
+  }
+
+  &--dark {
+    background: $color-black;
+    color: $color-white;
+
+    &:hover {
+      background: $color-gray-dark;
+    }
+  }
+
+  &--size-sm {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+  }
+
+  &--size-md {
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-base;
+  }
+
+  &--size-lg {
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-lg;
+  }
+
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

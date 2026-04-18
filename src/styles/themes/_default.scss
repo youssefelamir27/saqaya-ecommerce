@@ -1,0 +1,11 @@
+@import '../abstracts/variables';
+
+:root {
+  --color-primary: #{$color-primary};
+  --color-black: #{$color-black};
+  --color-white: #{$color-white};
+  --color-gray-light: #{$color-gray-light};
+  --font-family-base: #{$font-family-base};
+  --header-height: #{$header-height};
+  --max-width: #{$max-width};
+}

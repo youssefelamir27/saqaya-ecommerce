@@ -1,0 +1,32 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.badge {
+  @include absolute-badge;
+
+  &--discount {
+    background: $color-primary;
+  }
+
+  &--new {
+    background: $color-success;
+  }
+}
+
+.section-badge {
+  @include section-badge;
+
+  &__bar {
+    width: 6px;
+    height: 28px;
+    background-color: $color-primary;
+    border-radius: $border-radius-sm;
+    display: inline-block;
+  }
+
+  &__text {
+    color: $color-primary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+  }
+}

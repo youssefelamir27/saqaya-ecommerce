@@ -1,0 +1,290 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+// Product Detail Page — BEM
+
+.product-detail {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 2rem 4rem;
+
+  &__breadcrumb {
+    @include breadcrumb-base;
+    margin-bottom: 40px;
+
+    a {
+      @include link-base;
+    }
+  }
+
+  &__breadcrumb-current {
+    font-weight: $font-weight-bold;
+    color: $color-black;
+  }
+
+  &__error {
+    text-align: center;
+    padding: $spacing-4xl;
+    font-size: $font-size-lg;
+    color: $color-primary;
+  }
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+
+  &__main-image {
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+    background: $color-gray-light;
+    border-radius: $border-radius-md;
+    padding: 20px;
+  }
+
+  &__thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__thumb {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    background: $color-gray-light;
+    padding: 4px;
+    transition: border-color 0.2s;
+
+    &--active,
+    &:hover { border-color: $color-primary; }
+  }
+
+  &__info {
+    h1 {
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-bold;
+      color: $color-black;
+      margin-bottom: $spacing-md;
+    }
+  }
+
+  &__rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    margin-bottom: 20px;
+  }
+
+  &__star {
+    color: #cccccc;
+    font-size: $font-size-lg;
+
+    &--filled { color: #ffad33; }
+  }
+
+  &__rating-count {
+    font-size: $font-size-sm;
+    color: $color-gray-mid;
+  }
+
+  &__stock {
+    font-size: 12px;
+    color: $color-success;
+    font-weight: $font-weight-medium;
+    padding: 2px $spacing-sm;
+    background: #e8f8ee;
+    border-radius: $border-radius-sm;
+
+    &--low { color: $color-primary; background: #fef0f0; }
+  }
+
+  &__price-row {
+    display: flex;
+    align-items: center;
+     justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  &__price-current {
+    font-size: 26px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  &__price-original {
+    font-size: $font-size-lg;
+    color: $color-gray-mid;
+    text-decoration: line-through;
+  }
+
+  &__discount-badge {
+    background: $color-primary;
+    color: $color-white;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    padding: 3px $spacing-sm;
+    border-radius: $border-radius-sm;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: #555555;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1px solid $color-border;
+    margin: 20px 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+
+    p {
+      font-size: $font-size-sm;
+      color: #555555;
+      margin: 0;
+    }
+  }
+
+  &__quantity-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  &__qty-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid $color-border;
+    background: $color-white;
+    border-radius: $border-radius-sm;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
+      border-color: $color-primary;
+    }
+  }
+
+  &__qty {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    min-width: 30px;
+    text-align: center;
+  }
+
+  // Base button styles shared between add and update
+  &__add-btn {
+    padding: 10px 32px;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    border: none;
+
+    // Add To Cart — red primary, draws attention
+    &--add {
+      background: $color-primary;
+      color: $color-white;
+      border: none;
+
+      &:hover { background: $color-primary-dark; }
+    }
+
+    // Update Cart — dark outline, secondary action
+    &--update {
+      background: transparent;
+      color: $color-black;
+      border: 2px solid $color-black;
+
+      &:hover {
+        background: $color-black;
+        color: $color-white;
+      }
+    }
+  }
+}
+
+// Reviews
+.reviews {
+  margin-top: 40px;
+
+  &__title {
+    font-size: 20px;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    color: $color-black;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  &__card {
+    background: #f9f9f9;
+    border-radius: $border-radius-md;
+    padding: 20px;
+  }
+
+  &__header {
+    @include flex-between;
+    margin-bottom: 10px;
+  }
+
+  &__star {
+    color: #cccccc;
+    font-size: $font-size-lg;
+
+    &--filled { color: #ffad33; }
+  }
+
+  &__comment {
+    font-size: $font-size-sm;
+    color: #555555;
+    line-height: 1.6;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__date {
+    font-size: $font-size-xs;
+    color: $color-gray-mid;
+  }
+}
+
+@include respond-to(md) {
+  .product-detail {
+    padding: 2rem 1rem;
+
+    &__wrapper {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+  }
+
+  .reviews__grid {
+    grid-template-columns: 1fr;
+  }
+}

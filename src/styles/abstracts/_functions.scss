@@ -1,0 +1,11 @@
+@import 'variables';
+
+// Convert px to rem
+@function to-rem($px) {
+  @return #{$px / 16}rem;
+}
+
+// Get color with opacity
+@function color-opacity($color, $opacity) {
+  @return rgba($color, $opacity);
+}
