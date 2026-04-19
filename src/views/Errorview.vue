@@ -14,5 +14,11 @@
 </template>
 
 <script setup lang="ts">
-// purely presentational — no logic needed
+/**
+ * ErrorView — 404 not found page
+ *
+ * Purely presentational — no props, no emits, no store access, no reactive data.
+ * Rendered by the catch-all route: /:pathMatch(.*)*
+ * Also navigated to programmatically from DetailView when a product fetch fails.
+ */
 </script>

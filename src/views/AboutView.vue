@@ -17,10 +17,9 @@
       @select="setActiveStatIndex"
     />
 
-    <!-- Team -->
+    <!-- Team section — TeamCard rendered per member fetched from API -->
     <section class="team">
       <div class="team__grid">
-        <!-- TeamCard — receives one member per iteration -->
         <TeamCard v-for="member in team" :key="member.name" :member="member" />
       </div>
       <div class="team__dots">
@@ -32,7 +31,7 @@
       </div>
     </section>
 
-    <!-- Services -->
+    <!-- Services section — v-for replaces 3 repeated service blocks -->
     <section class="about-services">
       <div
         v-for="service in services"
@@ -50,6 +49,18 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * AboutView — company about page
+ *
+ * Displays the company story, stats, team members, and service highlights.
+ * Team members are fetched from the DummyJSON users API and mapped to TeamMember format.
+ *
+ * State breakdown:
+ *   - activeStatIndex: reactive (ref) — changes when user clicks a stat card
+ *   - team: reactive (ref) — populated async from API on mount
+ *   - stats, services: static (plain const) — never change at runtime
+ */
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import type { StatItem, TeamMember } from '@/types/product';
@@ -63,11 +74,13 @@ interface Service {
   description: string;
 }
 
-// ref replaces data() for reactive values
+/** activeStatIndex — index of the highlighted stat card (default: 1 = Monthly Sales) */
 const activeStatIndex = ref(1);
+
+/** team — array of team members fetched from DummyJSON users API */
 const team = ref<TeamMember[]>([]);
 
-// plain consts for static data — no reactivity needed
+// static data — plain consts instead of ref() since they never change
 const stats: StatItem[] = [
   { icon: '🏪', value: '10.5k', label: 'Sellers active our site' },
   { icon: '💰', value: '33k', label: 'Monthly Product Sale' },
@@ -76,27 +89,20 @@ const stats: StatItem[] = [
 ];
 
 const services: Service[] = [
-  {
-    icon: '🚚',
-    title: 'FREE AND FAST DELIVERY',
-    description: 'Free delivery for all orders over $140',
-  },
-  {
-    icon: '🎧',
-    title: '24/7 CUSTOMER SERVICE',
-    description: 'Friendly 24/7 customer support',
-  },
-  {
-    icon: '✅',
-    title: 'MONEY BACK GUARANTEE',
-    description: 'We return money within 30 days',
-  },
+  { icon: '🚚', title: 'FREE AND FAST DELIVERY', description: 'Free delivery for all orders over $140' },
+  { icon: '🎧', title: '24/7 CUSTOMER SERVICE', description: 'Friendly 24/7 customer support' },
+  { icon: '✅', title: 'MONEY BACK GUARANTEE', description: 'We return money within 30 days' },
 ];
 
+/** setActiveStatIndex — updates the highlighted stat card index */
 function setActiveStatIndex(index: number): void {
   activeStatIndex.value = index;
 }
 
+/**
+ * fetchTeam — fetches 3 users from DummyJSON and maps them to TeamMember format
+ * Assigns predefined roles since the API doesn't have role data
+ */
 async function fetchTeam(): Promise<void> {
   try {
     const res = await axios.get('https://dummyjson.com/users?limit=3');
@@ -113,7 +119,7 @@ async function fetchTeam(): Promise<void> {
   }
 }
 
-// onMounted replaces mounted() lifecycle hook
+// onMounted replaces the Vue 2 mounted() lifecycle hook
 onMounted(async () => {
   await fetchTeam();
 });
