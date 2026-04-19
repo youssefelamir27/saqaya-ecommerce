@@ -11,10 +11,9 @@
       </p>
     </div>
 
-    <!-- SortDropdown wired with v-model -->
     <SortDropdown v-model="sortKey" />
 
-    <div v-if="productsStore.isLoading" class="loading">Loading all products...</div>
+    <div v-if="isLoading" class="loading">Loading all products...</div>
 
     <div v-else class="products-grid">
       <div
@@ -55,33 +54,30 @@
       </div>
     </div>
 
-    <div v-if="!productsStore.isLoading && hasNoProducts" class="no-products">
-      No products found.
-    </div>
+    <div v-if="!isLoading && hasNoProducts" class="no-products">No products found.</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useProductsStore } from '@/stores/products';
-import { useCartStore } from '@/stores/cart';
+import { useProducts } from '@/composables/useProducts';
+import { useCart } from '@/composables/useCart';
 import SortDropdown from '@/components/Products/SortDropdown.vue';
 import type { Product } from '@/types/product';
 
 const router = useRouter();
-const productsStore = useProductsStore();
-const cartStore = useCartStore();
 
-// sortKey drives the sortedProducts computed
+// use composables instead of stores directly
+const { productList, isLoading, fetchAllProducts } = useProducts();
+const { addToCart } = useCart();
+
 const sortKey = ref('');
 
-const hasNoProducts = computed(() => productsStore.productList.length === 0);
+const hasNoProducts = computed(() => productList.value.length === 0);
 
-// sorted computed — derives from productList + sortKey
-// spreads to avoid mutating store state directly
 const sortedProducts = computed(() => {
-  const list = [...productsStore.productList];
+  const list = [...productList.value];
   switch (sortKey.value) {
     case 'price-asc': return list.sort((a, b) => a.price - b.price);
     case 'price-desc': return list.sort((a, b) => b.price - a.price);
@@ -92,7 +88,7 @@ const sortedProducts = computed(() => {
 });
 
 function handleAddToCart(product: Product): void {
-  cartStore.addToCart({
+  addToCart({
     id: product.id,
     title: product.title,
     price: product.price,
@@ -123,8 +119,8 @@ function getDiscountedPrice(product: Product): string {
 }
 
 onMounted(async () => {
-  if (productsStore.productList.length === 0) {
-    await productsStore.fetchAllProducts();
+  if (productList.value.length === 0) {
+    await fetchAllProducts();
   }
 });
 </script>

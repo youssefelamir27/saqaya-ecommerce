@@ -32,7 +32,7 @@
           <div class="header__cart header__cart--mobile" @click="handleCartClick">
             <i class="fas fa-cart-plus"></i>
             <span v-if="showCartBadge" class="header__cart-badge">
-              {{ cartStore.cartItemCount }}
+              {{ cartItemCount }}
             </span>
           </div>
         </div>
@@ -51,7 +51,7 @@
         <div class="header__cart" @click="handleCartClick">
           <i class="fas fa-cart-plus"></i>
           <span v-if="showCartBadge" class="header__cart-badge">
-            {{ cartStore.cartItemCount }}
+            {{ cartItemCount }}
           </span>
         </div>
       </div>
@@ -74,15 +74,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { useCartStore } from '@/stores/cart';
+import { useCart } from '@/composables/useCart';
 
-const cartStore = useCartStore();
+// use composable instead of store directly — clean architecture layer
+const { cartItemCount, isSideCartOpen, toggleSideCart } = useCart();
 const route = useRoute();
 
-// reactive local state
 const isMenuOpen = ref(false);
 
-// static nav data — no reactivity needed
 interface NavLink {
   label: string;
   to: string;
@@ -94,15 +93,14 @@ const navLinks: NavLink[] = [
   { label: 'About', to: '/about' },
 ];
 
-// computed properties
 const isErrorPage = computed(() => route.name === 'ErrorPage');
 const showCartBadge = computed(
-  () => !isErrorPage.value && cartStore.cartItemCount > 0
+  () => !isErrorPage.value && cartItemCount.value > 0
 );
 
 function handleCartClick(): void {
-  const willOpen = !cartStore.isSideCartOpen;
-  cartStore.toggleSideCart();
+  const willOpen = !isSideCartOpen.value;
+  toggleSideCart();
   document.body.style.overflow = willOpen ? 'hidden' : '';
 }
 
