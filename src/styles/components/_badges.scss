@@ -1,21 +1,38 @@
+// =============================================================================
+// _badges.scss — Badge Component Styles
+// =============================================================================
+// Two badge types used throughout the app:
+//
+// .badge — absolute-positioned product card badge (discount %, new)
+//   Uses the absolute-badge() mixin from _mixins.scss.
+//   Parent must have position: relative.
+//
+// .section-badge — horizontal badge with red bar + label text
+//   Used in section headers (Flash Sales, Explore Products, etc.)
+//   Uses the section-badge() mixin from _mixins.scss.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
+// Product card badge — absolute positioned top-left
 .badge {
   @include absolute-badge;
 
   &--discount {
-    background: $color-primary;
+    background: $color-primary; // red for discount percentage
   }
 
   &--new {
-    background: $color-success;
+    background: $color-success; // green for new products
   }
 }
 
+// Section header badge — red bar + colored label text
 .section-badge {
   @include section-badge;
 
+  // Vertical red bar — visual accent before the label text
   &__bar {
     width: 6px;
     height: 28px;

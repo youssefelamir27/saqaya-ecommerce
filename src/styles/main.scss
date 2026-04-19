@@ -1,27 +1,44 @@
-// Abstracts
+// =============================================================================
+// main.scss — SASS 7-in-1 Architecture Entry Point
+// =============================================================================
+// All partials are imported here in the correct dependency order.
+// This file is imported once in main.ts and applies styles globally.
+//
+// Import order matters:
+//   1. Abstracts first — variables, functions, mixins must be available to all
+//   2. Vendors — third-party styles (Font Awesome)
+//   3. Base — global resets and typography
+//   4. Layout — structural components (header, footer)
+//   5. Components — reusable UI component styles
+//   6. Pages — page-specific overrides
+//   7. Themes — design token overrides
+// =============================================================================
+
+// Abstracts — no CSS output, only variables/functions/mixins
 @import 'abstracts/variables';
 @import 'abstracts/functions';
 @import 'abstracts/mixins';
 
-// Vendors
+// Vendors — third-party library styles
 @import 'vendors/fontawesome';
 
-// Base
+// Base — global resets and default element styles
 @import 'base/reset';
 @import 'base/typography';
 
-// Layout
+// Layout — structural layout components
 @import 'layout/header';
 @import 'layout/footer';
 
-// Components
+// Components — reusable UI component styles
 @import 'components/buttons';
 @import 'components/cards';
 @import 'components/badges';
 @import 'components/side-cart';
 @import 'components/app-input';
 @import 'components/sort-dropdown';
-// Pages
+
+// Pages — page-specific styles
 @import 'pages/home';
 @import 'pages/products';
 @import 'pages/product-detail';
@@ -30,5 +47,5 @@
 @import 'pages/error';
 @import 'pages/cart';
 
-// Themes
+// Themes — design token overrides (default color scheme)
 @import 'themes/default';

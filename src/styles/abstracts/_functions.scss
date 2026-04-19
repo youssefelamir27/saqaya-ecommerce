@@ -1,11 +1,44 @@
+// =============================================================================
+// _functions.scss — SASS Utility Functions
+// =============================================================================
+// Pure SASS functions that return computed values.
+// Functions produce no CSS output — they are called inline within declarations.
+// Import abstracts/variables before using these functions.
+// =============================================================================
+
 @import 'variables';
 
-// Convert px to rem
+// -----------------------------------------------------------------------------
+// to-rem($px)
+// -----------------------------------------------------------------------------
+// Converts a px value to rem units based on a 16px root font size.
+// Use for font sizes and spacing to support user font size preferences.
+//
+// @param $px - pixel value to convert (number, without unit)
+// @return rem value as a string
+//
+// @example
+//   font-size: to-rem(14);   // → 0.875rem
+//   font-size: to-rem(24);   // → 1.5rem
+// -----------------------------------------------------------------------------
 @function to-rem($px) {
   @return #{$px / 16}rem;
 }
 
-// Get color with opacity
+// -----------------------------------------------------------------------------
+// color-opacity($color, $opacity)
+// -----------------------------------------------------------------------------
+// Returns an rgba() color with the given opacity.
+// Prefer this over writing rgba() directly for consistency with design tokens.
+//
+// @param $color   - SASS color value (use $color-* variables from _variables.scss)
+// @param $opacity - opacity value between 0 and 1
+// @return rgba color value
+//
+// @example
+//   background: color-opacity($color-primary, 0.1);   // → rgba(219, 68, 68, 0.1)
+//   border: 1px solid color-opacity($color-black, 0.2);
+// -----------------------------------------------------------------------------
 @function color-opacity($color, $opacity) {
   @return rgba($color, $opacity);
 }

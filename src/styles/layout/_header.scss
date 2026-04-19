@@ -1,10 +1,23 @@
+// =============================================================================
+// _header.scss — Site Header Styles
+// =============================================================================
+// Styles for the AppHeader (Header.vue) global navigation component.
+// The header is fixed at the top — page content has padding-top: 100px
+// applied in MainLayout to compensate.
+//
+// Responsive behavior:
+//   Desktop (> 768px): horizontal nav with search bar and cart icon
+//   Mobile (≤ 768px): hamburger button + slide-in nav drawer from left
+//   The overlay (header__overlay) covers the viewport when drawer is open
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
 .header {
   background-color: $color-white;
   border-bottom: 1px solid #f0f0f0;
-  position: fixed;
+  position: fixed; // stays at top during scroll
   top: 0;
   left: 0;
   right: 0;
@@ -36,6 +49,7 @@
     flex: 1;
   }
 
+  // Active link underline — animated via CSS, controlled by router-link-active class
   &__nav-link {
     color: $color-black;
     font-size: $font-size-md;
@@ -54,6 +68,7 @@
       transition: width 1s;
     }
 
+    // Vue Router adds this class to the active route link
     &.router-link-active::after {
       width: 100%;
     }
@@ -104,6 +119,7 @@
     }
   }
 
+  // Cart icon with badge counter
   &__cart {
     position: relative;
     cursor: pointer;
@@ -118,6 +134,7 @@
       color: #42b983;
     }
 
+    // Red badge showing cart item count
     &-badge {
       position: absolute;
       top: -8px;
@@ -144,22 +161,22 @@
     }
   }
 
+  // Mobile-only actions inside the drawer — hidden on desktop
   &__mobile-actions {
     display: none;
   }
 
+  // Hamburger button — three lines that animate to X when active
   &__hamburger {
     display: none;
     flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
     gap: 4px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 4px;
     flex-shrink: 0;
-    z-index: 1001;
+    z-index: 1001; // above the overlay
 
     &-line {
       width: 25px;
@@ -169,6 +186,7 @@
       display: block;
     }
 
+    // X animation when menu is open
     &--active &-line:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px);
     }
@@ -181,13 +199,17 @@
       transform: rotate(-45deg) translate(5px, -5px);
     }
   }
+
+  // Semi-transparent overlay — shown behind the mobile drawer
   &__overlay {
     position: fixed;
     inset: 0;
     background-color: color-opacity($color-black, 0.5);
-    z-index: 998;
+    z-index: 998; // below drawer (999) but above content
     cursor: pointer;
   }
+
+  // ── Responsive breakpoints ────────────────────────────────────────────────
 
   @include respond-to('lg') {
     &__container {
@@ -209,11 +231,11 @@
       padding: 0 1rem;
     }
 
-    //Drawer — slides in from left, sits above overlay
+    // Mobile drawer — slides in from left, sits above overlay
     &__nav {
       position: fixed;
       top: 0;
-      left: -100%;
+      left: -100%; // hidden off-screen by default
       width: 80%;
       max-width: 350px;
       height: 100vh;
@@ -227,7 +249,7 @@
       gap: 1.5rem;
       overflow-y: auto;
 
-      //open state — slide in
+      // Open state — slides into view
       &--open {
         left: 0;
       }
@@ -239,10 +261,12 @@
       padding: 0.5rem 0;
     }
 
+    // Hide desktop actions on mobile
     &__actions {
       display: none;
     }
 
+    // Show mobile search and cart inside the drawer
     &__mobile-actions {
       display: flex;
       flex-direction: column;
@@ -252,6 +276,7 @@
       margin-top: 1rem;
     }
 
+    // Show hamburger on mobile
     &__hamburger {
       display: flex;
     }

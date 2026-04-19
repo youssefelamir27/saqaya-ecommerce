@@ -1,14 +1,23 @@
+// =============================================================================
+// _typography.scss — Base Typography Styles
+// =============================================================================
+// Sets default font family, size, color, and line-height for body text.
+// Heading styles apply a consistent font-weight and line-height across h1-h6.
+// All values use design tokens from _variables.scss.
+// =============================================================================
+
 @import '../abstracts/variables';
 
+// Body — default text styles applied globally
 body {
   font-family: $font-family-base;
   font-size: $font-size-base;
   color: $color-text;
-  line-height: 1.7;
+  line-height: 1.7; // generous line-height for readability
 }
 
+// Headings — consistent weight and tight line-height for display text
 h1, h2, h3, h4, h5, h6 {
   font-weight: $font-weight-bold;
-//   color: $color-black;
   line-height: 1.2;
 }

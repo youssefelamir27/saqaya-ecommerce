@@ -1,3 +1,11 @@
+// =============================================================================
+// _sort-dropdown.scss — SortDropdown Component Styles
+// =============================================================================
+// Styles for the SortDropdown.vue component used in ProductsView.
+// The dropdown is right-aligned (margin-left: auto) to sit at the
+// top-right of the products grid.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
@@ -6,13 +14,13 @@
   gap: $spacing-sm;
   margin-bottom: $spacing-lg;
   width: fit-content;
-  margin-left: auto; // aligns to the right
+  margin-left: auto; // right-aligns the dropdown above the product grid
 
   &__label {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: $color-black;
-    white-space: nowrap;
+    white-space: nowrap; // prevents label from wrapping
   }
 
   &__select {

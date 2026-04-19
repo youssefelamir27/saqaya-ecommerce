@@ -1,34 +1,52 @@
+// =============================================================================
+// _variables.scss — Design Tokens
+// =============================================================================
+// Central source of truth for all design values used across the project.
+// All colors, typography, spacing, and layout values are defined here.
+// Use these variables everywhere — never hardcode values in component styles.
+// =============================================================================
+
+// -----------------------------------------------------------------------------
 // Colors
-$color-primary: #db4444;
-$color-primary-dark: #c03333;
-$color-black: #000000;
-$color-white: #ffffff;
-$color-gray-light: #f5f5f5;
-$color-gray-mid: #999999;
-$color-gray-dark: #444444;
-$color-success: #00a651;
-$color-text: #2c3e50;
-$color-border: #e5e5e5;
-$color-footer-bg: #000000;
-$color-footer-text: #cccccc;
+// -----------------------------------------------------------------------------
+$color-primary: #db4444;         // Main brand red — buttons, accents, prices
+$color-primary-dark: #c03333;    // Darker red — button hover states
+$color-black: #000000;           // Pure black — headings, strong text
+$color-white: #ffffff;           // Pure white — backgrounds, text on dark
+$color-gray-light: #f5f5f5;      // Light gray — card backgrounds, inputs
+$color-gray-mid: #999999;        // Medium gray — secondary text, placeholders
+$color-gray-dark: #444444;       // Dark gray — body text
+$color-success: #00a651;         // Green — "In Stock" badge
+$color-text: #2c3e50;            // Default text color
+$color-border: #e5e5e5;          // Dividers, input borders
+$color-footer-bg: #000000;       // Footer background
+$color-footer-text: #cccccc;     // Footer secondary text
 
+// -----------------------------------------------------------------------------
 // Typography
+// -----------------------------------------------------------------------------
 $font-family-base: 'Avenir', Helvetica, Arial, sans-serif;
-$font-size-xs: 11px;
-$font-size-sm: 13px;
-$font-size-base: 14px;
-$font-size-md: 15px;
-$font-size-lg: 16px;
-$font-size-xl: 18px;
-$font-size-2xl: 22px;
-$font-size-3xl: 24px;
-$font-size-4xl: 2rem;
-$font-weight-normal: 400;
-$font-weight-medium: 500;
-$font-weight-semibold: 600;
-$font-weight-bold: 700;
 
-// Spacing
+// Font sizes — xs to 4xl scale
+$font-size-xs: 11px;    // Badges, labels
+$font-size-sm: 13px;    // Secondary text, captions
+$font-size-base: 14px;  // Default body text
+$font-size-md: 15px;    // Slightly larger body text
+$font-size-lg: 16px;    // Section labels, nav links
+$font-size-xl: 18px;    // Card titles
+$font-size-2xl: 22px;   // Section headings
+$font-size-3xl: 24px;   // Page headings
+$font-size-4xl: 2rem;   // Hero headings
+
+// Font weights
+$font-weight-normal: 400;    // Regular body text
+$font-weight-medium: 500;    // Slightly emphasized text
+$font-weight-semibold: 600;  // Subheadings, labels
+$font-weight-bold: 700;      // Headings, strong emphasis
+
+// -----------------------------------------------------------------------------
+// Spacing — consistent spacing scale used for padding, margin, gap
+// -----------------------------------------------------------------------------
 $spacing-xs: 4px;
 $spacing-sm: 8px;
 $spacing-md: 16px;
@@ -38,17 +56,23 @@ $spacing-2xl: 40px;
 $spacing-3xl: 60px;
 $spacing-4xl: 80px;
 
-// Border radius
-$border-radius-sm: 4px;
-$border-radius-md: 8px;
-$border-radius-full: 50%;
+// -----------------------------------------------------------------------------
+// Border Radius
+// -----------------------------------------------------------------------------
+$border-radius-sm: 4px;    // Buttons, badges, small elements
+$border-radius-md: 8px;    // Cards, modals
+$border-radius-full: 50%;  // Circular elements (avatar, dot indicators)
 
-// Breakpoints
-$breakpoint-sm: 480px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-$breakpoint-xl: 1024px;
+// -----------------------------------------------------------------------------
+// Breakpoints — used with the respond-to() mixin in _mixins.scss
+// -----------------------------------------------------------------------------
+$breakpoint-sm: 480px;   // Small mobile
+$breakpoint-md: 768px;   // Tablet
+$breakpoint-lg: 992px;   // Small desktop
+$breakpoint-xl: 1024px;  // Desktop
 
+// -----------------------------------------------------------------------------
 // Layout
-$max-width: 1200px;
-$header-height: 70px;
+// -----------------------------------------------------------------------------
+$max-width: 1200px;      // Maximum content width — applied to page containers
+$header-height: 70px;    // Fixed header height — used for page-content padding-top

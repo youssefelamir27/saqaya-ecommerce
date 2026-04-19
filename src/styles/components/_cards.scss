@@ -1,3 +1,26 @@
+// =============================================================================
+// _cards.scss — Product Card Styles
+// =============================================================================
+// Styles for the product card used in FlashSale, ExploreProducts,
+// ProductsView, and HomeView.
+//
+// The card is not a Vue component — it's rendered inline via v-for in each
+// section that needs it. These styles apply globally via BEM classes.
+//
+// Key interactions:
+//   - Hover: card lifts via card-hover() mixin
+//   - Hover: action buttons (wishlist, view) fade in
+//   - Hover: "Add To Cart" button slides up from bottom
+//
+// BEM structure:
+//   .product-card                   — clickable card wrapper
+//   .product-card__image-wrapper    — image container with overlay actions
+//   .product-card__badge            — discount % badge (absolute positioned)
+//   .product-card__actions          — wishlist/view buttons (fade on hover)
+//   .product-card__cart-btn         — "Add To Cart" (slides up on hover)
+//   .product-card__info             — title, price, rating below image
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
@@ -5,10 +28,10 @@
   cursor: pointer;
   border-radius: $border-radius-md;
   overflow: hidden;
-  @include card-hover;
+  @include card-hover; // lift on hover via translateY(-4px)
 
   &__image-wrapper {
-    position: relative;
+    position: relative; // needed for absolute badge and buttons
     background: $color-gray-light;
     height: 200px;
     @include flex-center;
@@ -22,6 +45,7 @@
     }
   }
 
+  // Action buttons — hidden until hover
   &__actions {
     position: absolute;
     top: 10px;
@@ -46,6 +70,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
+  // "Add To Cart" — slides up from bottom edge on hover
   &__cart-btn {
     position: absolute;
     bottom: 0;
@@ -73,7 +98,7 @@
     font-weight: $font-weight-medium;
     color: $color-black;
     margin: 0 0 6px;
-    @include text-truncate;
+    @include text-truncate; // single line with ellipsis
   }
 
   &__price {
@@ -82,12 +107,14 @@
     gap: 10px;
     margin-bottom: 6px;
 
+    // Discounted price — red, bold
     &--current {
       color: $color-primary;
       font-weight: $font-weight-bold;
       font-size: $font-size-md;
     }
 
+    // Original price — gray, strikethrough
     &--original {
       color: $color-gray-mid;
       text-decoration: line-through;
@@ -102,6 +129,7 @@
   }
 }
 
+// Star rating — gray by default, gold when filled
 .star {
   color: #cccccc;
   font-size: $font-size-sm;

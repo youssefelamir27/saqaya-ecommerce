@@ -1,3 +1,22 @@
+// =============================================================================
+// _buttons.scss — AppButton Component Styles
+// =============================================================================
+// Styles for the AppButton.vue reusable button component.
+//
+// Variants (controlled by variant prop → btn--{variant} class):
+//   .btn--primary  — red fill button (main CTA)
+//   .btn--outline  — transparent with border, fills on hover
+//   .btn--dark     — black fill button
+//
+// Sizes (controlled by size prop → btn--size-{size} class):
+//   .btn--size-sm  — compact padding for tight spaces
+//   .btn--size-md  — default size
+//   .btn--size-lg  — large padding for prominent CTAs
+//
+// Disabled state — applied via disabled prop → btn--disabled class
+//   Also matches native :disabled for accessibility
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
@@ -12,6 +31,7 @@
   border: none;
   text-align: center;
 
+  // Primary — red fill (main brand color)
   &--primary {
     background: $color-primary;
     color: $color-white;
@@ -21,6 +41,7 @@
     }
   }
 
+  // Outline — transparent with border, inverts on hover
   &--outline {
     background: transparent;
     border: 1px solid $color-border;
@@ -33,6 +54,7 @@
     }
   }
 
+  // Dark — black fill
   &--dark {
     background: $color-black;
     color: $color-white;
@@ -42,6 +64,7 @@
     }
   }
 
+  // Size modifiers
   &--size-sm {
     padding: $spacing-xs $spacing-md;
     font-size: $font-size-sm;
@@ -57,6 +80,7 @@
     font-size: $font-size-lg;
   }
 
+  // Disabled — reduces opacity and blocks interaction
   &--disabled,
   &:disabled {
     opacity: 0.5;

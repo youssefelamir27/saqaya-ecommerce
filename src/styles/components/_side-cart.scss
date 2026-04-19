@@ -1,20 +1,31 @@
+// =============================================================================
+// _side-cart.scss — Side Cart Drawer & Cart Item Styles
+// =============================================================================
+// Styles for the SideCart.vue drawer component and SideCartItem.vue.
+// The overlay covers the full viewport; the drawer slides in from the right.
+// Animations use CSS keyframes (not Vue <transition>) to avoid the Vue 2
+// nested <transition> freeze bug documented in the project.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 @import '../abstracts/functions';
 
+// Overlay — semi-transparent backdrop covering the full viewport
 .side-cart-overlay {
   position: fixed;
   inset: 0;
   background-color: color-opacity($color-black, 0.45);
   z-index: 1000;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; // drawer attaches to the right
   animation: fadeIn 0.25s ease;
 }
 
+// Drawer — slides in from the right
 .side-cart {
   width: 380px;
-  max-width: 100vw;
+  max-width: 100vw; // prevents overflow on small screens
   height: 100%;
   background-color: $color-white;
   display: flex;
@@ -58,6 +69,7 @@
     margin: 0 0 $spacing-md;
   }
 
+  // Empty state — centered content shown when cart has no items
   &__empty {
     flex: 1;
     display: flex;
@@ -131,6 +143,7 @@
     margin-top: $spacing-sm;
   }
 
+  // "View Cart" — outline button navigates to full cart page
   &__view-btn {
     flex: 1;
     text-align: center;
@@ -149,6 +162,7 @@
     }
   }
 
+  // "Checkout" — primary action button
   &__checkout-btn {
     flex: 1;
     padding: 11px 0;
@@ -166,6 +180,7 @@
     }
   }
 
+  // "Clear Cart" — subtle text button at bottom
   &__clear {
     margin-top: $spacing-sm;
     background: none;
@@ -184,6 +199,9 @@
   }
 }
 
+// =============================================================================
+// SideCartItem — individual item row inside the cart drawer
+// =============================================================================
 .side-cart-item {
   display: flex;
   align-items: flex-start;
@@ -205,6 +223,7 @@
     gap: $spacing-xs;
   }
 
+  // Title clamped to 2 lines to prevent overflow
   &__title {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
@@ -223,6 +242,7 @@
     color: $color-primary;
   }
 
+  // Quantity stepper — bordered inline control
   &__controls {
     @include flex-center;
     border: 1px solid $color-border;
@@ -247,6 +267,7 @@
     }
   }
 
+  // Quantity display — bordered separator between - and + buttons
   &__qty {
     @include flex-center;
     width: 28px;
@@ -274,12 +295,16 @@
   }
 }
 
-// ── Animations ────────────────────────────────────────────────────────────────
+// =============================================================================
+// Animations
+// =============================================================================
+// fadeIn — overlay fades in smoothly
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+// slideIn — drawer slides in from the right
 @keyframes slideIn {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }

@@ -1,3 +1,11 @@
+// =============================================================================
+// _reset.scss — CSS Reset & Base Element Styles
+// =============================================================================
+// Normalizes browser default styles to ensure consistent rendering.
+// Applied globally — these styles affect all elements in the app.
+// =============================================================================
+
+// Universal box-sizing reset — includes pseudo-elements
 *,
 *::before,
 *::after {
@@ -6,48 +14,58 @@
   box-sizing: border-box;
 }
 
+// Full height on html and body for flex layout in #app
 html,
 body {
   height: 100%;
   color: #2c3e50;
 }
 
+// Improve font rendering on macOS/iOS
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Remove default list styles — we use BEM classes for list styling
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+// Remove underlines from links — styled per component
 a {
   text-decoration: none;
   color: currentColor;
 }
 
+// Prevent images from overflowing their container
 img {
   max-width: 100%;
   display: block;
 }
 
+// Reset button defaults — styled per component
 button {
   cursor: pointer;
   border: none;
   background: transparent;
 }
 
+// Inherit font from body — prevents browser default font on inputs
 input,
 textarea {
   font-family: inherit;
   font-size: inherit;
 }
 
-// App root 
+// =============================================================================
+// App Root — Vue mounts to #app
+// =============================================================================
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  // Column layout so header/footer stay at top/bottom with flex-grow on content
   display: flex;
   flex-direction: column;
   min-height: 100vh;

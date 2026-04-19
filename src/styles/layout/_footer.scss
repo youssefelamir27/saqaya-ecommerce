@@ -1,17 +1,32 @@
+// =============================================================================
+// _footer.scss — Site Footer Styles
+// =============================================================================
+// Styles for the AppFooter (Footer.vue) global footer component.
+// The footer has a dark background with 5 content columns:
+//   Subscribe | Support | Account | Quick Links | Download App
+//
+// Responsive behavior:
+//   Desktop: 5 columns in a single row (flex-wrap: nowrap)
+//   Tablet (~892px): columns wrap into 2-3 rows
+//   Mobile (≤ 768px): single column stack
+//   Small mobile (≤ 480px): reduced padding, centered store buttons
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
 .footer {
-  background-color: $color-footer-bg;
+  background-color: $color-footer-bg; // black
   color: $color-white;
   margin-top: $spacing-4xl;
 
+  // 5-column flex layout
   &__main {
     display: flex;
     justify-content: space-between;
     padding: $spacing-3xl $spacing-4xl;
     gap: 40px;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap; // single row on desktop
   }
 
   &__col {
@@ -46,6 +61,7 @@
     }
   }
 
+  // Email subscribe input with send icon
   &__email {
     display: flex;
     align-items: center;
@@ -91,11 +107,13 @@
     }
   }
 
+  // QR code + store buttons row
   &__qr {
     display: flex;
     gap: 12px;
     align-items: center;
 
+    // QR code placeholder — white square
     &-placeholder {
       width: 60px;
       height: 60px;
@@ -111,6 +129,7 @@
     gap: $spacing-sm;
   }
 
+  // App Store / Google Play button
   &__store-btn {
     display: flex;
     align-items: center;
@@ -151,6 +170,7 @@
     }
   }
 
+  // Bottom copyright bar
   &__bottom {
     border-top: 1px solid #333333;
     text-align: center;
@@ -163,6 +183,8 @@
     }
   }
 
+  // ── Responsive breakpoints ────────────────────────────────────────────────
+
   @include respond-to('xl') {
     &__main {
       padding: $spacing-2xl;
@@ -174,6 +196,7 @@
     }
   }
 
+  // Wrap columns into multiple rows at ~892px
   @media (max-width: 892px) {
     &__main {
       justify-content: space-around;
@@ -183,7 +206,7 @@
 
   @include respond-to('md') {
     &__main {
-      flex-direction: column;
+      flex-direction: column; // single column stack
       padding: $spacing-2xl $spacing-lg;
       gap: $spacing-xl;
     }

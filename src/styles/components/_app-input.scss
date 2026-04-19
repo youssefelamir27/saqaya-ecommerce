@@ -1,3 +1,18 @@
+// =============================================================================
+// _app-input.scss — AppInput Component Styles
+// =============================================================================
+// Styles for the AppInput.vue reusable input component.
+// Supports optional label, icon, error state, and disabled state.
+//
+// BEM structure:
+//   .app-input          — wrapper with error modifier
+//   .app-input__label   — optional label above input
+//   .app-input__wrapper — relative container for icon positioning
+//   .app-input__icon    — absolute positioned left icon
+//   .app-input__field   — the actual <input> element
+//   .app-input__error   — error message below input
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
@@ -12,10 +27,12 @@
     color: $color-black;
   }
 
+  // Relative wrapper needed for absolute icon positioning
   &__wrapper {
     position: relative;
   }
 
+  // Icon — absolute positioned, pointer-events none so it doesn't block input
   &__icon {
     position: absolute;
     left: $spacing-sm;
@@ -46,6 +63,7 @@
       border-color: $color-black;
     }
 
+    // Extra left padding when icon is present
     &--with-icon {
       padding-left: $spacing-xl;
     }
@@ -57,10 +75,12 @@
     }
   }
 
+  // Error modifier — red border on the input field
   &--error &__field {
     border-color: $color-primary;
   }
 
+  // Error message — shown below input when error prop is provided
   &__error {
     font-size: $font-size-xs;
     color: $color-primary;

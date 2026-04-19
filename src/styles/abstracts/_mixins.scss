@@ -1,6 +1,27 @@
+// =============================================================================
+// _mixins.scss — Reusable SASS Mixins
+// =============================================================================
+// Mixins generate CSS output when included with @include.
+// Use mixins to avoid repeating common patterns across component styles.
+// Import abstracts/variables before using these mixins.
+// =============================================================================
+
 @import 'variables';
 
-// Responsive breakpoints
+// -----------------------------------------------------------------------------
+// respond-to($breakpoint)
+// -----------------------------------------------------------------------------
+// Responsive media query mixin using named breakpoints from _variables.scss.
+// Always uses max-width (mobile-first approach: style desktop, override for mobile).
+//
+// @param $breakpoint - sm | md | lg | xl
+//
+// @example
+//   .hero {
+//     font-size: 48px;
+//     @include respond-to(md) { font-size: 28px; }
+//   }
+// -----------------------------------------------------------------------------
 @mixin respond-to($breakpoint) {
   @if $breakpoint == sm {
     @media (max-width: $breakpoint-sm) { @content; }
@@ -13,28 +34,63 @@
   }
 }
 
-// Flexbox center
+// -----------------------------------------------------------------------------
+// flex-center
+// -----------------------------------------------------------------------------
+// Centers content both horizontally and vertically using flexbox.
+// Use for icon wrappers, loading states, empty states.
+//
+// @example
+//   .icon-wrapper { @include flex-center; }
+// -----------------------------------------------------------------------------
 @mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-// Flexbox between
+// -----------------------------------------------------------------------------
+// flex-between
+// -----------------------------------------------------------------------------
+// Spaces content to opposite ends with vertical center alignment.
+// Use for header rows, price rows, section title rows.
+//
+// @example
+//   .cart-row { @include flex-between; }
+// -----------------------------------------------------------------------------
 @mixin flex-between {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-// Text truncate
+// -----------------------------------------------------------------------------
+// text-truncate
+// -----------------------------------------------------------------------------
+// Truncates overflowing text with an ellipsis (...).
+// Requires a defined width on the element.
+//
+// @example
+//   .product-title {
+//     max-width: 200px;
+//     @include text-truncate;
+//   }
+// -----------------------------------------------------------------------------
 @mixin text-truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-// Section title badge (red bar + text)
+// -----------------------------------------------------------------------------
+// section-badge
+// -----------------------------------------------------------------------------
+// Base styles for the red bar + label badge used in section headers.
+// Used in FlashSale, ExploreProducts, BrowseCategory section headers.
+//
+// @example
+//   .section-header__badge { @include section-badge; }
+// -----------------------------------------------------------------------------
 @mixin section-badge {
   display: flex;
   align-items: center;
@@ -42,7 +98,15 @@
   margin-bottom: 12px;
 }
 
-// Card hover lift
+// -----------------------------------------------------------------------------
+// card-hover
+// -----------------------------------------------------------------------------
+// Adds a subtle lift effect on hover for interactive cards.
+// Use on product cards, team cards, stat cards.
+//
+// @example
+//   .product-card { @include card-hover; }
+// -----------------------------------------------------------------------------
 @mixin card-hover {
   transition: transform 0.2s;
   &:hover {
@@ -50,7 +114,16 @@
   }
 }
 
-// Absolute position badge
+// -----------------------------------------------------------------------------
+// absolute-badge
+// -----------------------------------------------------------------------------
+// Positions a badge absolutely in the top-left corner of its parent.
+// Parent must have position: relative.
+// Used for discount badges on product cards.
+//
+// @example
+//   .product-card__badge { @include absolute-badge; background: $color-primary; }
+// -----------------------------------------------------------------------------
 @mixin absolute-badge {
   position: absolute;
   top: 10px;
@@ -61,7 +134,15 @@
   border-radius: $border-radius-sm;
   color: $color-white;
 }
-// Breadcrumb base style
+
+// -----------------------------------------------------------------------------
+// breadcrumb-base
+// -----------------------------------------------------------------------------
+// Base styles for breadcrumb navigation used across all page views.
+//
+// @example
+//   .about__breadcrumb { @include breadcrumb-base; }
+// -----------------------------------------------------------------------------
 @mixin breadcrumb-base {
   font-size: 13px;
   color: #999999;
@@ -70,7 +151,18 @@
   justify-content: flex-start;
   gap: 5px;
 }
-//link base style
+
+// -----------------------------------------------------------------------------
+// link-base($color, $hover-color)
+// -----------------------------------------------------------------------------
+// Base styles for text links with configurable colors and hover transition.
+//
+// @param $color       - default link color (default: #999999)
+// @param $hover-color - hover link color (default: #000000)
+//
+// @example
+//   .footer__list-item a { @include link-base($color-gray-mid, $color-white); }
+// -----------------------------------------------------------------------------
 @mixin link-base($color: #999999, $hover-color: #000000) {
   text-decoration: none;
   color: $color;
