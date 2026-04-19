@@ -1,21 +1,37 @@
+// =============================================================================
+// _products.scss — Products Page Styles
+// =============================================================================
+// Styles for ProductsView.vue — the full product catalog at /products.
+//
+// Layout: single-column page with a responsive auto-fit grid.
+// Uses CSS Grid auto-fit with minmax(220px, 1fr) for fluid responsiveness
+// without needing explicit breakpoints.
+//
+// Product card styles here differ slightly from _home.scss:
+//   - Larger image area (220px vs 200px)
+//   - Auto-fit grid instead of fixed 4-column
+//   - Slightly different spacing values
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
-// Products Page — BEM
-
+// Page wrapper — centered with consistent padding
 .products-page {
   max-width: $max-width;
   margin: 0 auto;
   padding: 2rem;
 }
 
+// Page header — badge, title, subtitle
 .products-header {
   margin-bottom: 3rem;
 
   &__badge {
-    @include section-badge;
+    @include section-badge; // red bar + label layout
   }
 
+  // Vertical red accent bar
   &__bar {
     width: 6px;
     height: 28px;
@@ -43,12 +59,14 @@
   }
 }
 
+// Fluid responsive grid — auto-fit keeps card size consistent
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
 }
 
+// Product card — same pattern as home page but with slightly larger dimensions
 .product-card {
   cursor: pointer;
   border-radius: $border-radius-md;
@@ -64,7 +82,7 @@
   &__image-wrapper {
     position: relative;
     background: $color-gray-light;
-    height: 220px;
+    height: 220px; // slightly taller than home page cards
     @include flex-center;
     overflow: hidden;
 
@@ -75,6 +93,7 @@
     }
   }
 
+  // Discount/new badge
   &__badge {
     position: absolute;
     top: 12px;
@@ -89,6 +108,7 @@
     &--new { background: $color-success; }
   }
 
+  // Wishlist/view action buttons
   &__actions {
     position: absolute;
     top: 12px;
@@ -111,6 +131,7 @@
     font-size: 15px;
   }
 
+  // "Add To Cart" — reveals on hover from bottom
   &__cart-btn {
     position: absolute;
     bottom: 0;
@@ -166,6 +187,7 @@
   }
 }
 
+// Loading state — large centered text while products fetch
 .loading {
   text-align: center;
   padding: 80px 20px;
@@ -173,6 +195,7 @@
   color: #777777;
 }
 
+// Empty state — shown when no products match
 .no-products {
   text-align: center;
   padding: 60px;
@@ -180,8 +203,11 @@
   font-size: $font-size-xl;
 }
 
+// ── Responsive ────────────────────────────────────────────────────────────────
 @include respond-to(md) {
   .products-page { padding: 1rem; }
+
+  // Smaller minimum card width on mobile
   .products-grid {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 18px;

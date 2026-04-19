@@ -1,7 +1,13 @@
+// =============================================================================
+// _error.scss — 404 Error Page Styles
+// =============================================================================
+// Styles for ErrorView.vue — the catch-all 404 page.
+// Large "404 Not Found" heading centered on the page.
+// "Back to home page" button links back to HomeView.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
-
-// Error Page — BEM
 
 .error-page {
   min-height: 10vh;
@@ -20,6 +26,7 @@
     color: $color-black;
   }
 
+  // Centered content — large 404 heading with message and CTA
   &__content {
     display: flex;
     flex-direction: column;
@@ -29,7 +36,7 @@
     gap: $spacing-lg;
 
     h1 {
-      font-size: 80px;
+      font-size: 80px; // oversized for visual impact
       font-weight: $font-weight-bold;
       color: $color-black;
       margin: 0;
@@ -42,6 +49,7 @@
     }
   }
 
+  // "Back to home page" — primary red button
   &__home-btn {
     background-color: $color-primary;
     color: $color-white;

@@ -1,7 +1,21 @@
+// =============================================================================
+// _product-detail.scss — Product Detail Page Styles
+// =============================================================================
+// Styles for DetailView.vue and ProductInfo.vue.
+//
+// Layout: 2-column grid (image gallery left, product info right).
+// Image gallery: large main image + thumbnail strip below.
+// Quantity controls: - button | number | + button | cart action button.
+//
+// Two cart button variants:
+//   .product-detail__add-btn--add    → red fill ("Add To Cart")
+//   .product-detail__add-btn--update → dark outline ("Update Cart")
+//
+// Reviews section: 3-column grid of review cards below the product.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
-
-// Product Detail Page — BEM
 
 .product-detail {
   max-width: $max-width;
@@ -22,6 +36,7 @@
     color: $color-black;
   }
 
+  // Error state — shown when product fetch fails
   &__error {
     text-align: center;
     padding: $spacing-4xl;
@@ -29,6 +44,7 @@
     color: $color-primary;
   }
 
+  // 2-column grid: images left, info right
   &__wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -36,6 +52,7 @@
     margin-bottom: 60px;
   }
 
+  // Main product image — large with light gray background
   &__main-image {
     width: 100%;
     height: 400px;
@@ -52,6 +69,7 @@
     flex-wrap: wrap;
   }
 
+  // Thumbnail — highlighted with primary border when active
   &__thumb {
     width: 70px;
     height: 70px;
@@ -76,6 +94,7 @@
     }
   }
 
+  // Rating stars + review count + stock status
   &__rating-row {
     display: flex;
     align-items: center;
@@ -96,6 +115,7 @@
     color: $color-gray-mid;
   }
 
+  // Stock badge — green for in stock, red for low stock
   &__stock {
     font-size: 12px;
     color: $color-success;
@@ -107,10 +127,11 @@
     &--low { color: $color-primary; background: #fef0f0; }
   }
 
+  // Price row: discounted price + original strikethrough + discount badge
   &__price-row {
     display: flex;
     align-items: center;
-     justify-content: center;
+    justify-content: center;
     gap: 12px;
     margin-bottom: 20px;
   }
@@ -127,6 +148,7 @@
     text-decoration: line-through;
   }
 
+  // Red discount percentage badge
   &__discount-badge {
     background: $color-primary;
     color: $color-white;
@@ -149,6 +171,7 @@
     margin: 20px 0;
   }
 
+  // Product meta info: brand, category, shipping, return, warranty
   &__meta {
     display: flex;
     flex-direction: column;
@@ -162,6 +185,7 @@
     }
   }
 
+  // Quantity stepper + cart action button
   &__quantity-row {
     display: flex;
     align-items: center;
@@ -193,7 +217,7 @@
     text-align: center;
   }
 
-  // Base button styles shared between add and update
+  // Cart action button — two variants based on isInCart state
   &__add-btn {
     padding: 10px 32px;
     border-radius: $border-radius-sm;
@@ -203,7 +227,7 @@
     transition: background 0.2s, color 0.2s, border-color 0.2s;
     border: none;
 
-    // Add To Cart — red primary, draws attention
+    // "Add To Cart" — red primary, draws attention
     &--add {
       background: $color-primary;
       color: $color-white;
@@ -212,7 +236,7 @@
       &:hover { background: $color-primary-dark; }
     }
 
-    // Update Cart — dark outline, secondary action
+    // "Update Cart" — dark outline, secondary action
     &--update {
       background: transparent;
       color: $color-black;
@@ -226,7 +250,9 @@
   }
 }
 
-// Reviews
+// =============================================================================
+// Reviews — 3-column grid of customer review cards
+// =============================================================================
 .reviews {
   margin-top: 40px;
 
@@ -274,17 +300,18 @@
   }
 }
 
+// ── Responsive ────────────────────────────────────────────────────────────────
 @include respond-to(md) {
   .product-detail {
     padding: 2rem 1rem;
 
     &__wrapper {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; // stack on mobile
       gap: 30px;
     }
   }
 
   .reviews__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // single column on mobile
   }
 }

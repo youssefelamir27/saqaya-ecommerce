@@ -1,3 +1,14 @@
+// =============================================================================
+// _cart.scss — Cart Page Styles
+// =============================================================================
+// Styles for CartView.vue — the full cart page at /cart.
+// Different from _side-cart.scss which styles the SideCart drawer.
+//
+// Layout: 2-column grid (items list left, order summary sticky right).
+// The summary column uses position: sticky to stay visible while scrolling.
+// On mobile (≤ 768px), columns stack vertically.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 @import '../abstracts/functions';
@@ -18,9 +29,9 @@
   &__breadcrumb-current {
     color: $color-black;
     font-weight: $font-weight-bold;
-
   }
 
+  // Empty state — centered message with "Shop Now" CTA
   &__empty {
     @include flex-center;
     flex-direction: column;
@@ -48,6 +59,7 @@
     }
   }
 
+  // 2-column grid: items list + sticky summary sidebar
   &__wrapper {
     display: grid;
     grid-template-columns: 1fr 320px;
@@ -55,7 +67,7 @@
     align-items: flex-start;
 
     @include respond-to(md) {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; // stack on mobile
     }
   }
 
@@ -68,6 +80,7 @@
     padding: $spacing-md;
   }
 
+  // Individual cart item row
   &__item {
     @include flex-between;
     gap: $spacing-md;
@@ -96,6 +109,7 @@
     gap: $spacing-xs;
   }
 
+  // Title clamped to 2 lines to prevent overflow
   &__item-title {
     font-size: $font-size-base;
     font-weight: $font-weight-medium;
@@ -114,6 +128,7 @@
     margin: 0;
   }
 
+  // Quantity stepper — bordered inline control
   &__item-controls {
     @include flex-center;
     border: 1px solid $color-border;
@@ -136,6 +151,7 @@
     }
   }
 
+  // Quantity display between - and + buttons
   &__qty {
     @include flex-center;
     width: 32px;
@@ -162,6 +178,7 @@
     }
   }
 
+  // Sticky order summary sidebar — stays visible during scroll
   &__summary {
     display: flex;
     flex-direction: column;
@@ -170,7 +187,7 @@
     border-radius: $border-radius-md;
     padding: $spacing-lg;
     position: sticky;
-    top: calc(#{$header-height} + #{$spacing-md});
+    top: calc(#{$header-height} + #{$spacing-md}); // accounts for fixed header
   }
 
   &__summary-title {
@@ -190,10 +207,11 @@
 
     span:last-child {
       font-weight: $font-weight-bold;
-      color: $color-primary;
+      color: $color-primary; // total price in red
     }
   }
 
+  // "Proceed to Checkout" — primary red button
   &__checkout-btn {
     width: 100%;
     padding: $spacing-sm $spacing-md;
@@ -211,6 +229,7 @@
     }
   }
 
+  // "Clear Cart" — subtle secondary button
   &__clear-btn {
     width: 100%;
     padding: $spacing-sm $spacing-md;

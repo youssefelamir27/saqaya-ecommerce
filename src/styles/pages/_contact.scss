@@ -1,7 +1,16 @@
+// =============================================================================
+// _contact.scss — Contact Page Styles
+// =============================================================================
+// Styles for ContactView.vue and its child components:
+//   ContactBox.vue  → .contact__card
+//   ContactForm.vue → .contact__form-row, .contact__input, .contact__textarea
+//
+// Layout: 2-column grid (decorative image left, contact cards right).
+// The image column is hidden on mobile (max-width: 1000px).
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
-
-// Contact Page — BEM
 
 .contact {
   max-width: $max-width;
@@ -21,6 +30,7 @@
     font-weight: $font-weight-bold;
   }
 
+  // 2-column layout: image left (1fr), content right (1.2fr)
   &__wrapper {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -40,6 +50,7 @@
     }
   }
 
+  // Right column — white card with shadow containing both ContactBox sections
   &__right {
     background: $color-white;
     border-radius: $border-radius-md;
@@ -50,6 +61,7 @@
     gap: 0;
   }
 
+  // ContactBox card wrapper
   &__card {
     padding: $spacing-md 0;
   }
@@ -68,6 +80,7 @@
     }
   }
 
+  // Circular icon — red background with white icon
   &__card-icon {
     width: 40px;
     height: 40px;
@@ -91,6 +104,7 @@
     margin: $spacing-sm 0;
   }
 
+  // ContactForm — 2-column name/email row
   &__form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -99,6 +113,7 @@
     margin-bottom: $spacing-md;
   }
 
+  // Borderless input on gray background
   &__input {
     width: 100%;
     padding: 14px $spacing-md;
@@ -131,6 +146,7 @@
     &:focus { background: #eeeeee; }
   }
 
+  // Submit button — right-aligned
   &__form-actions {
     display: flex;
     justify-content: flex-end;
@@ -152,11 +168,13 @@
   }
 }
 
+// Hide image column below 1000px — content fills full width
 @media (max-width: 1000px) {
   .contact__wrapper { grid-template-columns: 1fr; }
   .contact__image { display: none; }
 }
 
+// Stack form row on mobile
 @include respond-to(md) {
   .contact__form-row { grid-template-columns: 1fr; }
 }

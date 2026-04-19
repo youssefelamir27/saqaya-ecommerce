@@ -1,11 +1,28 @@
+// =============================================================================
+// _default.scss — Default Theme CSS Custom Properties
+// =============================================================================
+// Exposes SASS design tokens as CSS custom properties (CSS variables).
+// This allows the values to be accessed in JavaScript if needed,
+// and makes it easier to implement a dark theme in the future by
+// overriding these variables in a _dark.scss theme file.
+//
+// Note: #{$variable} interpolation is required because SASS variables
+// cannot be used directly inside var() declarations.
+// =============================================================================
+
 @import '../abstracts/variables';
 
 :root {
+  // Colors
   --color-primary: #{$color-primary};
   --color-black: #{$color-black};
   --color-white: #{$color-white};
   --color-gray-light: #{$color-gray-light};
+
+  // Typography
   --font-family-base: #{$font-family-base};
+
+  // Layout
   --header-height: #{$header-height};
   --max-width: #{$max-width};
 }

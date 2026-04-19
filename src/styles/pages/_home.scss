@@ -1,15 +1,30 @@
+// =============================================================================
+// _home.scss — Home Page Styles
+// =============================================================================
+// Styles for HomeView.vue and its child section components:
+//   .hero              — promotional banner (black background, 2-col grid)
+//   .section-header    — reusable section title with red bar badge + arrows
+//   .products-slider   — horizontal scroll container for FlashSale cards
+//   .products-grid     — 4-column grid for ExploreProducts cards
+//   .product-card      — product card used in both slider and grid
+//   .categories        — horizontal scrollable category pills
+//   .services          — 3-item service highlights row
+//   .view-all          — centered "View All Products" button
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
-// Home Page — BEM
-
+// Page wrapper
 .home {
   max-width: $max-width;
   margin: 0 auto;
   padding: 2rem;
 }
 
-// Hero
+// =============================================================================
+// Hero Banner — black background with text left, product image right
+// =============================================================================
 .hero {
   background: $color-black;
   border-radius: $border-radius-md;
@@ -41,6 +56,7 @@
     margin-bottom: 12px;
   }
 
+  // "Shop Now" link — white underline style
   &__shop-btn {
     color: $color-white;
     text-decoration: none;
@@ -55,6 +71,7 @@
     object-fit: contain;
   }
 
+  // Pagination dots at bottom of hero
   &__dots {
     display: flex;
     justify-content: center;
@@ -75,12 +92,16 @@
   }
 }
 
-// Section header
+// =============================================================================
+// Section Header — reusable title block with red bar badge and arrow buttons
+// Used in FlashSale, ExploreProducts, and BrowseCategory sections
+// =============================================================================
 .section-header {
   &__badge {
-    @include section-badge;
+    @include section-badge; // red bar + label layout
   }
 
+  // Vertical red accent bar
   &__bar {
     width: 6px;
     height: 28px;
@@ -95,6 +116,7 @@
     font-weight: $font-weight-semibold;
   }
 
+  // Title row — h2 left, arrow buttons right
   &__title-row {
     @include flex-between;
     margin-bottom: 2rem;
@@ -112,6 +134,7 @@
     gap: $spacing-sm;
   }
 
+  // Circular arrow button — red on hover
   &__arrow-btn {
     width: 40px;
     height: 40px;
@@ -129,21 +152,26 @@
   }
 }
 
-// Products slider
+// =============================================================================
+// Products Slider — horizontal scroll for FlashSale section
+// Scrollbar hidden for cleaner look; controlled by JS scrollBy()
+// =============================================================================
 .products-slider {
   display: flex;
   gap: 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
   padding-bottom: 12px;
-  scrollbar-width: none;
+  scrollbar-width: none; // Firefox
 
   &::-webkit-scrollbar {
-    display: none;
+    display: none; // Chrome/Safari
   }
 }
 
-// Products grid
+// =============================================================================
+// Products Grid — 4-column grid for ExploreProducts section
+// =============================================================================
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -151,9 +179,12 @@
   margin-bottom: 2rem;
 }
 
-// Product card
+// =============================================================================
+// Product Card — used in both slider and grid
+// Hover reveals action buttons and "Add To Cart" bar
+// =============================================================================
 .product-card {
-  min-width: 220px;
+  min-width: 220px; // prevents cards from being too narrow in the slider
   cursor: pointer;
   border-radius: $border-radius-md;
   overflow: hidden;
@@ -179,6 +210,7 @@
     }
   }
 
+  // Discount/new badge — absolute top-left
   &__badge {
     @include absolute-badge;
 
@@ -186,6 +218,7 @@
     &--new { background: $color-success; }
   }
 
+  // Wishlist/view actions — fade in on hover
   &__actions {
     position: absolute;
     top: 10px;
@@ -208,6 +241,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
+  // "Add To Cart" — slides up from bottom on hover
   &__cart-btn {
     position: absolute;
     bottom: 0;
@@ -264,7 +298,10 @@
   }
 }
 
-// Categories
+// =============================================================================
+// Categories — horizontal scrollable category pill row
+// Active and hover states use primary red
+// =============================================================================
 .categories {
   margin-bottom: 4rem;
 
@@ -280,38 +317,41 @@
   }
 
   &__card {
-  min-width: 100px;
-  height: 100px;
-  border: 1px solid $color-border;
-  border-radius: $border-radius-md;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-sm;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: $spacing-sm; 
-  text-align: center;   
+    min-width: 100px;
+    height: 100px;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: $spacing-sm;
+    text-align: center;
 
-  p {
-    font-size: 13px; 
-    font-weight: $font-weight-medium;
-    margin: 0;
-    line-height: 1.3; 
-    word-break: break-word; 
-  }
+    p {
+      font-size: 13px;
+      font-weight: $font-weight-medium;
+      margin: 0;
+      line-height: 1.3;
+      word-break: break-word;
+    }
 
-  &:hover,
-  &--active {
-    background: $color-primary;
-    border-color: $color-primary;
-    color: $color-white;
+    // Active and hover — red fill
+    &:hover,
+    &--active {
+      background: $color-primary;
+      border-color: $color-primary;
+      color: $color-white;
+    }
   }
 }
-}
 
-// Services
+// =============================================================================
+// Services — 3-item row matching about page services section
+// =============================================================================
 .services {
   display: flex;
   justify-content: center;
@@ -337,7 +377,7 @@
   }
 }
 
-// View all
+// "View All Products" CTA button
 .view-all {
   text-align: center;
   margin-top: 2rem;
@@ -357,6 +397,7 @@
   }
 }
 
+// Horizontal divider between sections
 .divider {
   border: none;
   border-top: 1px solid $color-border;
@@ -369,27 +410,26 @@
   margin-bottom: 2rem;
 }
 
+// Loading state — used in FlashSale while products are fetching
 .loading {
   text-align: center;
   padding: 40px;
   color: $color-gray-mid;
 }
 
-//  Responsive 
+// ── Responsive ────────────────────────────────────────────────────────────────
 @include respond-to(md) {
   .home {
     padding: 1rem;
   }
 
-  // hero stacks vertically on mobile
   .hero {
     margin-bottom: 2rem;
-  
+
     &__text h1 {
       font-size: 2rem;
     }
 
-    // image shows below text and is properly sized
     &__image {
       display: flex;
       justify-content: center;
@@ -401,12 +441,11 @@
     }
   }
 
-  // products grid becomes 2 columns on tablet
+  // 2-column grid on tablet
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  // services stack vertically
   .services {
     flex-direction: column;
     align-items: center;
@@ -417,7 +456,7 @@
 @include respond-to(sm) {
   .hero {
     &__content {
-      grid-template-columns: 1fr; // single column
+      grid-template-columns: 1fr; // single column on mobile
       padding: 2rem 1.5rem 1rem;
       text-align: center;
     }
@@ -426,7 +465,6 @@
     }
   }
 
-  // products grid single column on mobile
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;

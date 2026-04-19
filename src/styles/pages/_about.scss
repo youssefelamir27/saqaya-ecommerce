@@ -1,8 +1,19 @@
+// =============================================================================
+// _about.scss — About Page Styles
+// =============================================================================
+// Styles for AboutView.vue and its child components:
+//   OurStory.vue  → .story
+//   StatsBox.vue  → .stats
+//   TeamCard.vue  → .team__card
+//
+// Layout uses CSS Grid for story (2-col) and stats (4-col).
+// Active stat card uses $color-primary background with white text.
+// =============================================================================
+
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
-// About Page — BEM
-
+// Page wrapper — centered with consistent padding
 .about {
   max-width: $max-width;
   margin: 0 auto;
@@ -22,7 +33,9 @@
   }
 }
 
-// Story
+// =============================================================================
+// OurStory — 2-column grid: text left, image right
+// =============================================================================
 .story {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -54,7 +67,10 @@
   }
 }
 
-// Stats
+// =============================================================================
+// StatsBox — 4-column grid of clickable stat cards
+// Active card gets primary red background with white text
+// =============================================================================
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -71,6 +87,7 @@
 
     &:hover { border-color: $color-primary; }
 
+    // Active state — red background, all text white
     &--active {
       background: $color-primary;
       border-color: $color-primary;
@@ -86,7 +103,7 @@
       font-size: 2rem;
       font-weight: $font-weight-bold;
       margin-bottom: $spacing-sm;
-      color: inherit;
+      color: inherit; // inherits white from active state
     }
 
     p {
@@ -97,6 +114,7 @@
     }
   }
 
+  // Circular icon container — black by default, white on active
   &__icon-wrapper {
     width: 56px;
     height: 56px;
@@ -109,7 +127,9 @@
   }
 }
 
-// Team
+// =============================================================================
+// Team — 3-column grid of TeamCard components
+// =============================================================================
 .team {
   margin-bottom: $spacing-4xl;
 
@@ -166,6 +186,7 @@
     &:hover { opacity: 1; }
   }
 
+  // Pagination dots below team grid
   &__dots {
     display: flex;
     justify-content: center;
@@ -184,7 +205,9 @@
   }
 }
 
-// Services
+// =============================================================================
+// Services — horizontal row of 3 service highlights
+// =============================================================================
 .about-services {
   display: flex;
   justify-content: center;
@@ -206,6 +229,7 @@
     }
   }
 
+  // Circular icon with black background and border ring
   &__icon {
     width: 60px;
     height: 60px;
@@ -219,13 +243,14 @@
   }
 }
 
+// ── Responsive ────────────────────────────────────────────────────────────────
 @media (max-width: 640px) {
   .story {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // stack vertically on mobile
     gap: 0;
   }
 
   .stats {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; // 2 columns on small screens
   }
 }
