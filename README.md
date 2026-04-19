@@ -1,67 +1,36 @@
-# Saqaya E-commerce V3
-
-A beauty and fragrance e-commerce application — migrated from Vue 2 to Vue 3, rebuilt with modern tooling and clean architecture patterns.
-
-> **Week 4 Migration:** Vue 2 + Vuex + Options API → Vue 3 + Pinia + Composition API + Vite
-
+# Saqaya E-commerce
+A beauty and fragrance e-commerce application built with Vue 2, TypeScript, Vuex 3, and Vue Router 3, consuming the [DummyJSON API](https://dummyjson.com/).
 ## Live Demo
-
-🔗 Coming soon on Vercel
-
+🔗 [https://saqaya-ecommerce-two.vercel.app/](https://saqaya-ecommerce-two.vercel.app/)
 ## Tech Stack
-
 | Layer | Technology |
 |:---:|:---:|
-| Framework | Vue 3 + TypeScript |
-| Build Tool | Vite |
-| State Management | Pinia (with persistence) |
-| Routing | Vue Router 4 |
+| Framework | Vue 2 + TypeScript |
+| State Management | Vuex 3 (namespaced modules) |
+| Routing | Vue Router 3 |
 | Styling | SCSS / SASS 7-in-1 architecture + BEM |
 | HTTP Client | Axios |
 | API | DummyJSON |
-| Testing | Vitest + Vue Test Utils |
+| Testing | Jest + Vue Test Utils |
 | Deployment | Vercel |
-
-## Architecture
-
-This project follows a **Clean Architecture** pattern with a composables layer separating UI from business logic:
-
-```
-component → composable → store → service → API
-```
-
-| Layer | Location | Responsibility |
-|:---:|:---:|:---:|
-| Presentation | `src/components/`, `src/views/` | UI rendering |
-| Application | `src/composables/` | Business logic, state coordination |
-| State | `src/stores/` | Pinia stores (cart, products) |
-| Infrastructure | `src/services/` | API calls via Axios |
-| Domain | `src/types/` | Shared TypeScript interfaces |
-
 ## Project Structure
-
 ```
 src/
-├── assets/             # Static assets + Font Awesome
+├── assets/             # Static assets
 ├── components/         # Reusable components organized by domain
-│   ├── __tests__/
-│   ├── About/          # OurStory, StatsBox, TeamCard
-│   ├── Cart/           # SideCart, SideCartItem
-│   │   └── __tests__/
-│   ├── Contact/        # ContactBox, ContactForm
+│   ├── About/
+│   ├── Cart/
+│   ├── Contact/
 │   ├── Global/         # Header, Footer
-│   ├── Home/           # FlashSale, BrowseCategory, ExploreProducts
-│   ├── ProductDetail/  # ProductInfo
-│   ├── Products/       # SortDropdown
+│   ├── Home/
+│   ├── ProductDetail/
+│   ├── Products/
 │   └── UI/             # AppButton, AppInput
-│       └── __tests__/
-├── composables/        # Application layer — useCart, useProducts
-│   └── __tests__/
 ├── layout/             # MainLayout.vue
-├── router/             # Vue Router 4 config
+├── router/             # Vue Router config
 ├── services/           # API service layer (Axios calls)
-├── stores/             # Pinia stores — cart.ts, products.ts
-│   └── __tests__/
+├── store/              # Vuex store
+│   └── modules/        # cart.ts, products.ts
 ├── styles/             # SCSS 7-in-1 architecture
 │   ├── abstracts/      # Variables, mixins, functions
 │   ├── base/           # Reset, typography
@@ -71,95 +40,52 @@ src/
 │   ├── themes/
 │   └── vendors/
 ├── types/              # Shared TypeScript interfaces
-├── views/              # Route-level page components
-└── webfonts/           # Font Awesome webfonts
+└── views/              # Route-level page components
 ```
-
 ## Key Features
-
 - 🛍️ **Product browsing** — filter by beauty categories fetched from the API
 - 🔍 **Product detail** — dynamic routing with breadcrumb support (`?from=home` / `?from=products`)
-- 🛒 **Side cart** — add, remove, update quantity, with persistent state via `pinia-plugin-persistedstate`
+- 🛒 **Side cart** — add, remove, update quantity, with persistent state via `vuex-persistedstate`
 - 🔀 **Sort & filter** — sort products by price and rating using a dedicated `SortDropdown` component
 - 📱 **Responsive design** — mobile-friendly layout including hero section
-- ✅ **85 tests** across 7 suites — stores, composables, and components
-
-## Key Migration Changes (Vue 2 → Vue 3)
-
-| Vue 2 | Vue 3 |
-|:---:|:---:|
-| Options API | Composition API (`<script setup>`) |
-| Vuex 3 | Pinia |
-| Vue CLI + Webpack | Vite |
-| Jest | Vitest |
-| `mapGetters` / `mapActions` | `useCart()` / `useProducts()` composables |
-| `Vue.extend({})` | `defineProps` / `defineEmits` |
-| `beforeRouteEnter` | `onMounted` + `onBeforeRouteUpdate` |
-| `vuex-persistedstate` | `pinia-plugin-persistedstate` |
-
+- ✅ **Full test coverage** — 126 tests across 12 suites
 ## Test Coverage
-
 ```
 File                  | % Stmts | % Branch | % Funcs | % Lines |
 ----------------------|---------|----------|---------|---------|
-All files             |   91.60 |    92.85 |   87.87 |   91.89 |
-components/Cart       |     100 |      100 |     100 |     100 |
-components/UI         |   83.33 |      100 |   66.66 |   83.33 |
-composables           |   97.72 |      100 |   96.42 |     100 |
-stores                |     100 |       80 |     100 |     100 |
+All files             |     100 |     87.5 |     100 |     100 |
+services/             |     100 |      100 |     100 |     100 |
+store/modules/        |     100 |      100 |     100 |     100 |
+components/           |     100 |      100 |     100 |     100 |
 ```
-
 ## Project Setup
-
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
-
 ### Compiles and hot-reloads for development
-
 ```bash
-npm run dev
+npm run serve
 ```
-
 ### Compiles and minifies for production
-
 ```bash
 npm run build
 ```
-
 ### Run unit tests
-
 ```bash
 npm run test:unit
 ```
-
 ### Run unit tests with coverage
-
 ```bash
 npm run test:unit -- --coverage
 ```
-
-### Type check
-
-```bash
-npx vue-tsc --noEmit
-```
-
 ### Lint and fix files
-
 ```bash
-npm run lint
+npx eslint --ext .js,.vue,.ts src/ --fix
 ```
-
 ## Notes
-
-- Cart items persist across sessions using `pinia-plugin-persistedstate`.
+- Cart items persist across sessions using `vuex-persistedstate`.  
   To reset the cart, run `localStorage.clear()` in the browser console.
-- All API calls are centralized in `src/services/productService.ts`.
-- Components access state exclusively through composables (`useCart`, `useProducts`) — never directly from stores.
+- All API calls are centralized in `src/services/productService.ts` and consumed by Vuex actions.
 - All shared TypeScript interfaces live in `src/types/product.ts`.
-
-## Related
-
-- **Vue 2 version (Week 1-3):** [`main` branch](https://github.com/youssefelamir27/saqaya-ecommerce/tree/main)
-- **Vue 3 migration (Week 4):** [`week4/vue3-migration` branch](https://github.com/youssefelamir27/saqaya-ecommerce/tree/week4/vue3-migration)
+## Configuration
+See [Vue CLI Configuration Reference](https://cli.vuejs.org/config/).
