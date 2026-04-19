@@ -1,3 +1,19 @@
+/**
+ * AppButton.spec.ts — Unit tests for the AppButton component
+ *
+ * Tests the reusable button component used throughout the app.
+ * No store or composable dependencies — pure prop/emit/slot testing.
+ *
+ * Test coverage:
+ *   - Slot content rendering
+ *   - Variant class applied correctly (primary, outline, dark)
+ *   - Size class applied correctly (sm, md, lg)
+ *   - Disabled class and attribute applied when disabled prop is true
+ *   - Default variant (primary) and size (md) applied when no props provided
+ *   - Click event emitted on click
+ *   - Native click blocked when button is disabled
+ */
+
 import { mount } from '@vue/test-utils';
 import { describe, it, expect } from 'vitest';
 import AppButton from '@/components/UI/AppButton.vue';
@@ -49,11 +65,11 @@ describe('AppButton.vue', () => {
   });
 
   it('does not emit click when disabled', async () => {
+    // Native disabled attribute blocks browser click events
     const wrapper = mount(AppButton, {
       props: { disabled: true },
     });
     await wrapper.trigger('click');
-    // button is disabled so native click is blocked
     expect(wrapper.attributes('disabled')).toBeDefined();
   });
 });

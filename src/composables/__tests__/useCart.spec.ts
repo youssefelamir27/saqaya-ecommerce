@@ -55,7 +55,7 @@ describe('useCart composable', () => {
     addToCart({ ...mockItem, quantity: 3 });
     addToCart({ ...mockItem, quantity: 2 });
     expect(sideCartItems.value.length).toBe(1); // still one item
-    expect(sideCartItems.value[0].quantity).toBe(5); // 3 + 2
+    expect(sideCartItems.value[0]!.quantity).toBe(5); // 3 + 2
   });
 
   it('removeFromCart removes item by id', () => {
@@ -69,7 +69,7 @@ describe('useCart composable', () => {
     const { addToCart, updateQuantity, sideCartItems } = useCart();
     addToCart(mockItem);
     updateQuantity(1, 5);
-    expect(sideCartItems.value[0].quantity).toBe(5);
+    expect(sideCartItems.value[0]!.quantity).toBe(5);
   });
 
   it('clearCart empties all items', () => {

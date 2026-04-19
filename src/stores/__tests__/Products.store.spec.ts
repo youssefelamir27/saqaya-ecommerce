@@ -1,9 +1,29 @@
+/**
+ * Products.store.spec.ts — Unit tests for the products Pinia store
+ *
+ * Tests the useProductsStore directly — no composable layer involved.
+ * productService is fully mocked — no real API calls are made.
+ *
+ * Test coverage:
+ *   - State defaults: productList, selectedProduct, hasError, errorMessage,
+ *     isLoading, activeCategory, browseCategories
+ *   - Direct state mutations (Pinia allows direct state access in tests)
+ *   - fetchAllProducts: success + failure paths
+ *   - fetchProductById: success + failure paths
+ *   - setActiveCategory: updates state
+ *   - fetchCategories: success + failure paths
+ *   - filterByCategory: filters by slug, falls back to full list
+ *
+ * Pattern: setActivePinia(createPinia()) in beforeEach ensures a fresh
+ * store instance for every test — prevents state leaking between tests.
+ */
+
 import { setActivePinia, createPinia } from 'pinia';
-import { useProductsStore } from '@/stores/products';
+import { useProductsStore } from '@/stores/Products';
 import * as productService from '@/services/productService';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 
-// mock the service layer so we don't make real API calls in tests
+// Mock the service layer — store actions call these functions
 vi.mock('@/services/productService');
 const mockedService = productService as unknown as {
   fetchAllProducts: ReturnType<typeof vi.fn>;
@@ -21,10 +41,13 @@ const mockProduct = {
 };
 
 describe('products store', () => {
+  // Fresh pinia + clear mocks before each test
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
   });
+
+  // ── State defaults ─────────────────────────────────────────────────────────
 
   describe('state defaults', () => {
     it('productList is empty initially', () => {
@@ -62,6 +85,9 @@ describe('products store', () => {
       expect(store.browseCategories.length).toBe(0);
     });
   });
+
+  // ── Direct state mutations ─────────────────────────────────────────────────
+  // Pinia allows direct state mutation in tests — no commit() needed
 
   describe('direct state mutations', () => {
     it('setting productList updates state', () => {
@@ -119,6 +145,8 @@ describe('products store', () => {
     });
   });
 
+  // ── Actions ────────────────────────────────────────────────────────────────
+
   describe('actions', () => {
     it('fetchAllProducts sets productList on success', async () => {
       mockedService.fetchAllProducts.mockResolvedValueOnce([mockProduct]);
@@ -171,6 +199,7 @@ describe('products store', () => {
       const store = useProductsStore();
       await store.fetchCategories();
       expect(store.browseCategories.length).toBe(3);
+      // first category slug set as activeCategory by default
       expect(store.activeCategory).toBe('beauty');
     });
 
@@ -183,13 +212,14 @@ describe('products store', () => {
 
     it('filterByCategory filters products by matching slug', () => {
       const store = useProductsStore();
-      store.productList = [mockProduct];
+      store.productList = [mockProduct]; // mockProduct.category = 'beauty'
       store.filterByCategory('beauty');
       expect(store.exploreProducts).toContainEqual(mockProduct);
       expect(store.flashSaleProducts).toContainEqual(mockProduct);
     });
 
     it('filterByCategory falls back to full productList when no match', () => {
+      // No products match 'nonexistent-category' — falls back to full list
       const store = useProductsStore();
       store.productList = [mockProduct];
       store.filterByCategory('nonexistent-category');

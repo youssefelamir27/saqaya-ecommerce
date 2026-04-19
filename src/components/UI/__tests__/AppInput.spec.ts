@@ -1,3 +1,22 @@
+/**
+ * AppInput.spec.ts — Unit tests for the AppInput component
+ *
+ * Tests the reusable input component used throughout the app.
+ * No store or composable dependencies — pure prop/emit testing.
+ *
+ * Test coverage:
+ *   - Input element renders
+ *   - Label renders when provided, hidden when not
+ *   - Error message renders when error prop provided
+ *   - Error class applied when error prop provided
+ *   - Emits update:modelValue on input (Vue 3 v-model pattern)
+ *   - Correct input type applied
+ *   - Placeholder applied correctly
+ *   - Input disabled when disabled prop is true
+ *   - Icon renders when icon prop provided
+ *   - Emits blur event on blur
+ */
+
 import { mount } from '@vue/test-utils';
 import { describe, it, expect } from 'vitest';
 import AppInput from '@/components/UI/AppInput.vue';
@@ -36,11 +55,12 @@ describe('AppInput.vue', () => {
   });
 
   it('emits update:modelValue on input', async () => {
+    // Vue 3 v-model: emits update:modelValue instead of Vue 2's input event
     const wrapper = mount(AppInput);
     const input = wrapper.find('input');
     await input.setValue('hello');
     expect(wrapper.emitted('update:modelValue')).toBeTruthy();
-    expect(wrapper.emitted('update:modelValue')![0][0]).toBe('hello');
+    expect(wrapper.emitted('update:modelValue')![0]![0]).toBe('hello');
   });
 
   it('sets correct input type', () => {
@@ -70,9 +90,10 @@ describe('AppInput.vue', () => {
     });
     expect(wrapper.find('i').exists()).toBe(true);
   });
+
   it('emits blur event on blur', async () => {
-  const wrapper = mount(AppInput);
-  await wrapper.find('input').trigger('blur');
-  expect(wrapper.emitted('blur')).toBeTruthy();
-});
+    const wrapper = mount(AppInput);
+    await wrapper.find('input').trigger('blur');
+    expect(wrapper.emitted('blur')).toBeTruthy();
+  });
 });

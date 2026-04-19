@@ -26,11 +26,11 @@ describe('SortDropdown', () => {
     const wrapper = mount(SortDropdown);
     const options = wrapper.findAll('option');
     expect(options).toHaveLength(5);
-    expect(options[0].text()).toBe('Default');
-    expect(options[1].text()).toBe('Price: Low to High');
-    expect(options[2].text()).toBe('Price: High to Low');
-    expect(options[3].text()).toBe('Rating: High to Low');
-    expect(options[4].text()).toBe('Rating: Low to High');
+    expect(options[0]!.text()).toBe('Default');
+    expect(options[1]!.text()).toBe('Price: Low to High');
+    expect(options[2]!.text()).toBe('Price: High to Low');
+    expect(options[3]!.text()).toBe('Rating: High to Low');
+    expect(options[4]!.text()).toBe('Rating: Low to High');
   });
 
   it('reflects modelValue prop as the selected value', () => {
