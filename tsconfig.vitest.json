@@ -7,6 +7,9 @@
   "exclude": [],
 
   "compilerOptions": {
+    // Skip type checking on declaration files — fixes Pinia action inference in tests
+    "skipLibCheck": true,
+
     // Vitest runs in a different environment than the application code.
     // Adjust lib and types accordingly.
     "lib": [],
