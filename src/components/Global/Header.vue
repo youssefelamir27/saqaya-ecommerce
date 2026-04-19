@@ -72,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'AppHeader' })
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCart } from '@/composables/useCart';

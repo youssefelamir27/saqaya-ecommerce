@@ -80,6 +80,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'AppFooter' })
 // static data — plain consts instead of data() since nothing is reactive
 interface StoreButton {
   icon: string;
