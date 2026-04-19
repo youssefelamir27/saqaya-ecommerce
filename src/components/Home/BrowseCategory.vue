@@ -8,6 +8,10 @@
       <h2>Browse By Category</h2>
     </div>
     <div class="categories__slider">
+      <!--
+        Each card gets categories__card--active when its slug matches activeCategory.
+        Clicking emits 'select-category' with the slug up to HomeView.
+      -->
       <div
         v-for="cat in categories"
         :key="cat.slug"
@@ -24,10 +28,22 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * BrowseCategory — horizontal category selector component
+ *
+ * Displays a scrollable row of beauty category cards.
+ * The active category is highlighted via the categories__card--active class.
+ *
+ * Pure presentational component — no store access.
+ * Data flows in via props from HomeView, selections flow out via emits.
+ *
+ * @props categories - array of Category objects fetched from the API
+ * @props activeCategory - slug of the currently selected category
+ * @emits select-category - fires with the clicked category slug
+ */
+
 import type { Category } from '@/types/product';
 
-// receives Category[] from API via HomeView
-// emits 'select-category' with slug up to HomeView
 defineProps<{
   categories: Category[];
   activeCategory: string;

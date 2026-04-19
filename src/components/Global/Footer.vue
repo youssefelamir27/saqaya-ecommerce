@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <!-- Support Column -->
+      <!-- Support Column — contact info rendered via v-for -->
       <div class="footer__col">
         <h4 class="footer__col-title">Support</h4>
         <p v-for="info in supportInfo" :key="info" class="footer__col-text">
@@ -24,7 +24,7 @@
         </p>
       </div>
 
-      <!-- Account Column -->
+      <!-- Account Column — account links rendered via v-for -->
       <div class="footer__col">
         <h4 class="footer__col-title">Account</h4>
         <ul class="footer__list">
@@ -34,7 +34,7 @@
         </ul>
       </div>
 
-      <!-- Quick Link Column -->
+      <!-- Quick Link Column — router-link navigation items -->
       <div class="footer__col">
         <h4 class="footer__col-title">Quick Link</h4>
         <ul class="footer__list">
@@ -44,7 +44,7 @@
         </ul>
       </div>
 
-      <!-- Download App Column -->
+      <!-- Download App Column — store buttons and social icons -->
       <div class="footer__col">
         <h4 class="footer__col-title">Download App</h4>
         <p class="footer__col-text footer__col-text--muted">
@@ -80,8 +80,19 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * AppFooter — global site footer component
+ *
+ * Purely presentational — no props, no emits, no store access.
+ * All data is static and defined as plain consts (not reactive)
+ * since it never changes at runtime.
+ *
+ * Sections: Subscribe, Support, Account, Quick Links, Download App
+ */
+
 defineOptions({ name: 'AppFooter' })
-// static data — plain consts instead of data() since nothing is reactive
+
+// local interfaces for typed static data
 interface StoreButton {
   icon: string;
   topText: string;
@@ -93,6 +104,7 @@ interface QuickLink {
   to: string;
 }
 
+// plain consts instead of data() — no reactivity needed for static content
 const supportInfo: string[] = [
   '111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.',
   'exclusive@gmail.com',

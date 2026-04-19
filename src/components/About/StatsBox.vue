@@ -1,5 +1,9 @@
 <template>
   <section class="stats">
+    <!--
+      Each card gets stats__card--active when its index matches activeIndex.
+      Clicking emits 'select' with the index up to AboutView.
+    -->
     <div
       v-for="(stat, index) in stats"
       :key="stat.label"
@@ -16,16 +20,27 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * StatsBox — interactive statistics card grid
+ *
+ * Displays a row of stat cards (sellers, sales, customers, revenue).
+ * The active card is highlighted via the stats__card--active class.
+ *
+ * Pure presentational component — no store access.
+ * Data flows in from AboutView, selections flow out via emits.
+ *
+ * @props stats - array of StatItem objects (icon, value, label)
+ * @props activeIndex - index of the currently highlighted stat card
+ * @emits select - fires with the clicked card index up to AboutView
+ */
+
 import type { StatItem } from '@/types/product';
 
-// receives stats array from AboutView
-// receives active index from AboutView to highlight correct card
 defineProps<{
   stats: StatItem[];
   activeIndex: number;
 }>();
 
-// emits 'select' with the clicked index up to AboutView
 defineEmits<{
   select: [index: number];
 }>();

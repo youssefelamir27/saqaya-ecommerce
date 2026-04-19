@@ -25,7 +25,11 @@
 </template>
 
 <script setup lang="ts">
-// purely presentational — no props, no emits, no data
-// static content that never changes
-// empty script setup is valid in Vue 3
+/**
+ * OurStory — static about section component
+ *
+ * Purely presentational — no props, no emits, no store access, no reactive data.
+ * Displays static company history text alongside a product image.
+ * Content never changes at runtime so no reactivity is needed.
+ */
 </script>
