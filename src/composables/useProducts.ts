@@ -1,6 +1,5 @@
 import { computed } from 'vue';
-import { useProductsStore } from '@/stores/products';
-
+import { useProductsStore } from '@/stores/Products';
 /**
  * useProducts — application layer composable
  *

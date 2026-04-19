@@ -1,8 +1,27 @@
+/**
+ * useProducts.spec.ts — Unit tests for the useProducts composable
+ *
+ * Tests the application layer composable that wraps useProductsStore.
+ * The productService is fully mocked — no real API calls are made.
+ *
+ * Test coverage:
+ *   - Default state (productList, selectedProduct, isLoading, hasError, errorMessage)
+ *   - fetchAllProducts: success + failure paths
+ *   - fetchProductById: success + failure paths
+ *   - setActiveCategory: state update
+ *   - filterByCategory: product filtering logic
+ *   - fetchCategories: success + failure paths
+ *
+ * Pattern: setActivePinia(createPinia()) in beforeEach ensures a fresh
+ * store instance for every test — prevents state leaking between tests.
+ */
+
 import { setActivePinia, createPinia } from 'pinia';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useProducts } from '@/composables/useProducts';
 import * as productService from '@/services/productService';
 
+// Mock the entire service layer — store actions call these functions
 vi.mock('@/services/productService');
 const mockedService = productService as unknown as {
   fetchAllProducts: ReturnType<typeof vi.fn>;
@@ -20,6 +39,7 @@ const mockProduct = {
 };
 
 describe('useProducts composable', () => {
+  // Fresh pinia + clear mocks before each test
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
@@ -73,13 +93,14 @@ describe('useProducts composable', () => {
   });
 
   it('filterByCategory filters exploreProducts by slug', async () => {
-  const { filterByCategory, exploreProducts } = useProducts();
-  const { useProductsStore } = await import('@/stores/products');
-  const store = useProductsStore();
-  store.productList = [mockProduct];
-  filterByCategory('beauty');
-  expect(exploreProducts.value).toContainEqual(mockProduct);
-});
+    const { filterByCategory, exploreProducts } = useProducts();
+    // Fix: lowercase 'products' — file is products.ts not Products.ts
+    const { useProductsStore } = await import('@/stores/Products');
+    const store = useProductsStore();
+    store.productList = [mockProduct];
+    filterByCategory('beauty');
+    expect(exploreProducts.value).toContainEqual(mockProduct);
+  });
 
   it('fetchCategories sets browseCategories on success', async () => {
     const mockCategories = [
@@ -90,6 +111,7 @@ describe('useProducts composable', () => {
     const { fetchCategories, browseCategories, activeCategory } = useProducts();
     await fetchCategories();
     expect(browseCategories.value.length).toBe(2);
+    // first category slug is set as activeCategory by default
     expect(activeCategory.value).toBe('beauty');
   });
 

@@ -1,5 +1,6 @@
 import { computed } from 'vue';
-import { useCartStore } from '@/stores/cart';
+// import { useCartStore } from '@/stores/cart';
+import { useCartStore } from '@/stores/Cart';
 import type { CartItem } from '@/types/product';
 
 /**
