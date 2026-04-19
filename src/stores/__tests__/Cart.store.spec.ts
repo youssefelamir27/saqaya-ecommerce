@@ -133,6 +133,11 @@ describe('cart store', () => {
       expect(store.totalUSD).toBe('25.00');
     });
   });
+  it('openSideCart opens the cart', () => {
+  const store = useCartStore();
+  store.openSideCart();
+  expect(store.isSideCartOpen).toBe(true);
+});
 
   describe('closeSideCart action', () => {
     it('closes the cart', () => {
