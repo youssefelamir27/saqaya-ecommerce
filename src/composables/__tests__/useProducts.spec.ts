@@ -95,7 +95,7 @@ describe('useProducts composable', () => {
   it('filterByCategory filters exploreProducts by slug', async () => {
     const { filterByCategory, exploreProducts } = useProducts();
     // Fix: lowercase 'products' — file is products.ts not Products.ts
-    const { useProductsStore } = await import('@/stores/Products');
+    const { useProductsStore } = await import('@/stores/products');
     const store = useProductsStore();
     store.productList = [mockProduct];
     filterByCategory('beauty');

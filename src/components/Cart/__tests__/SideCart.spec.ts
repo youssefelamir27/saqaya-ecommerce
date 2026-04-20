@@ -16,6 +16,9 @@
  *   - Calls closeSideCart when overlay is clicked
  *   - Calls clearCart when Clear Cart button is clicked
  *   - Calls closeSideCart when Shop Now is clicked
+ *   - handleIncrease: calls updateQuantity with quantity + 1
+ *   - handleDecrease: calls updateQuantity with quantity - 1 when quantity > 1
+ *   - handleDecrease: calls removeFromCart when quantity is 1
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -148,5 +151,41 @@ describe('SideCart', () => {
     const wrapper = mount(SideCart, { global: { plugins: [router] } });
     await wrapper.find('.side-cart__shop-btn').trigger('click');
     expect(mockCloseSideCart).toHaveBeenCalledOnce();
+  });
+
+  it('calls updateQuantity with quantity + 1 when SideCartItem emits increase', async () => {
+    isSideCartOpen.value = true;
+    isEmpty.value = false;
+    sideCartItems.value = [
+      { id: 1, title: 'Lipstick', price: 10, discountPercentage: 0, thumbnail: '', quantity: 2 },
+    ];
+    const wrapper = mount(SideCart, { global: { plugins: [router] } });
+    const sideCartItem = wrapper.findComponent({ name: 'SideCartItem' });
+    await sideCartItem.vm.$emit('increase', 1);
+    expect(mockUpdateQuantity).toHaveBeenCalledWith(1, 3); // 2 + 1
+  });
+
+  it('calls updateQuantity with quantity - 1 when SideCartItem emits decrease and quantity > 1', async () => {
+    isSideCartOpen.value = true;
+    isEmpty.value = false;
+    sideCartItems.value = [
+      { id: 1, title: 'Lipstick', price: 10, discountPercentage: 0, thumbnail: '', quantity: 2 },
+    ];
+    const wrapper = mount(SideCart, { global: { plugins: [router] } });
+    const sideCartItem = wrapper.findComponent({ name: 'SideCartItem' });
+    await sideCartItem.vm.$emit('decrease', 1);
+    expect(mockUpdateQuantity).toHaveBeenCalledWith(1, 1); // 2 - 1
+  });
+
+  it('calls removeFromCart when SideCartItem emits decrease and quantity is 1', async () => {
+    isSideCartOpen.value = true;
+    isEmpty.value = false;
+    sideCartItems.value = [
+      { id: 1, title: 'Lipstick', price: 10, discountPercentage: 0, thumbnail: '', quantity: 1 },
+    ];
+    const wrapper = mount(SideCart, { global: { plugins: [router] } });
+    const sideCartItem = wrapper.findComponent({ name: 'SideCartItem' });
+    await sideCartItem.vm.$emit('decrease', 1);
+    expect(mockRemoveFromCart).toHaveBeenCalledWith(1); // remove instead of 0 quantity
   });
 });
