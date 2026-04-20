@@ -6,7 +6,7 @@ A beauty and fragrance e-commerce application — migrated from Vue 2 to Vue 3, 
 
 ## Live Demo
 
-🔗 Coming soon on Vercel
+🔗 [Vue 3 Version](https://saqaya-ecommerce-p664bx7xj-youssefelamir27s-projects.vercel.app/)
 
 ## Tech Stack
 
@@ -44,7 +44,6 @@ component → composable → store → service → API
 src/
 ├── assets/             # Static assets + Font Awesome
 ├── components/         # Reusable components organized by domain
-│   ├── __tests__/
 │   ├── About/          # OurStory, StatsBox, TeamCard
 │   ├── Cart/           # SideCart, SideCartItem
 │   │   └── __tests__/
@@ -53,6 +52,7 @@ src/
 │   ├── Home/           # FlashSale, BrowseCategory, ExploreProducts
 │   ├── ProductDetail/  # ProductInfo
 │   ├── Products/       # SortDropdown
+│   │   └── __tests__/
 │   └── UI/             # AppButton, AppInput
 │       └── __tests__/
 ├── composables/        # Application layer — useCart, useProducts
@@ -82,7 +82,7 @@ src/
 - 🛒 **Side cart** — add, remove, update quantity, with persistent state via `pinia-plugin-persistedstate`
 - 🔀 **Sort & filter** — sort products by price and rating using a dedicated `SortDropdown` component
 - 📱 **Responsive design** — mobile-friendly layout including hero section
-- ✅ **85 tests** across 7 suites — stores, composables, and components
+- ✅ **104 tests** across 9 suites — stores, composables, and components
 
 ## Key Migration Changes (Vue 2 → Vue 3)
 
@@ -102,12 +102,15 @@ src/
 ```
 File                  | % Stmts | % Branch | % Funcs | % Lines |
 ----------------------|---------|----------|---------|---------|
-All files             |   92.36 |    92.85 |   89.39 |   92.79 |
-components/Cart       |     100 |      100 |     100 |     100 |
+All files             |   98.69 |    93.54 |   98.63 |     100 |
+components/Cart       |   97.67 |    94.59 |     100 |     100 |
+components/Products   |     100 |      100 |     100 |     100 |
 components/UI         |     100 |      100 |     100 |     100 |
 composables           |   97.72 |      100 |   96.42 |     100 |
 stores                |     100 |       80 |     100 |     100 |
 ```
+
+> Note: `productService.ts` is excluded from coverage — it is the infrastructure layer that makes real HTTP calls and is intentionally mocked in all unit tests. Testing it directly would require integration tests with real network calls.
 
 ## Project Setup
 
