@@ -19,7 +19,7 @@
  */
 
 import { setActivePinia, createPinia } from 'pinia';
-import { useProductsStore } from '@/stores/Products';
+import { useProductsStore } from '@/stores/products';
 import * as productService from '@/services/productService';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 

@@ -19,7 +19,7 @@
  */
 
 import { setActivePinia, createPinia } from 'pinia';
-import { useCartStore } from '@/stores/Cart';
+import { useCartStore } from '@/stores/cart';
 import { beforeEach, describe, it, expect } from 'vitest';
 
 // Base mock item — spread and override fields as needed per test
