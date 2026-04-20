@@ -53,16 +53,17 @@
  * AboutView — company about page
  *
  * Displays the company story, stats, team members, and service highlights.
- * Team members are fetched from the DummyJSON users API and mapped to TeamMember format.
+ * Team members are fetched via productService — following clean architecture,
+ * axios is never imported directly in views.
  *
  * State breakdown:
  *   - activeStatIndex: reactive (ref) — changes when user clicks a stat card
- *   - team: reactive (ref) — populated async from API on mount
+ *   - team: reactive (ref) — populated async from productService on mount
  *   - stats, services: static (plain const) — never change at runtime
  */
 
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import * as productService from '@/services/productService';
 import type { StatItem, TeamMember } from '@/types/product';
 import OurStory from '@/components/About/OurStory.vue';
 import StatsBox from '@/components/About/StatsBox.vue';
@@ -77,7 +78,7 @@ interface Service {
 /** activeStatIndex — index of the highlighted stat card (default: 1 = Monthly Sales) */
 const activeStatIndex = ref(1);
 
-/** team — array of team members fetched from DummyJSON users API */
+/** team — array of team members fetched from productService on mount */
 const team = ref<TeamMember[]>([]);
 
 // static data — plain consts instead of ref() since they never change
@@ -100,27 +101,14 @@ function setActiveStatIndex(index: number): void {
 }
 
 /**
- * fetchTeam — fetches 3 users from DummyJSON and maps them to TeamMember format
- * Assigns predefined roles since the API doesn't have role data
+ * onMounted — fetches team members from productService on page load
+ * productService is the only layer that imports axios — views never call axios directly
  */
-async function fetchTeam(): Promise<void> {
+onMounted(async () => {
   try {
-    const res = await axios.get('https://dummyjson.com/users?limit=3');
-    const roles = ['Founder & Chairman', 'Managing Director', 'Product Designer'];
-    team.value = res.data.users.map(
-      (user: { firstName: string; lastName: string; image: string }, i: number) => ({
-        name: `${user.firstName} ${user.lastName}`,
-        role: roles[i],
-        image: user.image,
-      })
-    );
+    team.value = await productService.fetchTeamMembers();
   } catch (err) {
     console.error('Error fetching team:', err);
   }
-}
-
-// onMounted replaces the Vue 2 mounted() lifecycle hook
-onMounted(async () => {
-  await fetchTeam();
 });
 </script>

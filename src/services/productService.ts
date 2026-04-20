@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Product, Category } from '@/types/product';
+import type { Product, Category, TeamMember } from '@/types/product';
 
 /**
  * productService — infrastructure layer for DummyJSON API calls
@@ -74,5 +74,24 @@ export async function fetchBeautyCategories(): Promise<Category[]> {
   const res = await axios.get(`${BASE_URL}/products/categories`);
   return res.data.filter((cat: Category) =>
     BEAUTY_CATEGORY_SLUGS.includes(cat.slug)
+  );
+}
+
+/**
+ * fetchTeamMembers — fetches 3 users from DummyJSON and maps to TeamMember format
+ * Assigns predefined roles since the API doesn't have role data
+ *
+ * @returns Promise<TeamMember[]> — array of 3 team members with name, role, image
+ * @throws Error if the request fails
+ */
+export async function fetchTeamMembers(): Promise<TeamMember[]> {
+  const roles = ['Founder & Chairman', 'Managing Director', 'Product Designer'];
+  const res = await axios.get('https://dummyjson.com/users?limit=3');
+  return res.data.users.map(
+    (user: { firstName: string; lastName: string; image: string }, i: number) => ({
+      name: `${user.firstName} ${user.lastName}`,
+      role: roles[i],
+      image: user.image,
+    })
   );
 }
